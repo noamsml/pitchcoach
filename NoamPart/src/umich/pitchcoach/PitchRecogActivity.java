@@ -1,34 +1,28 @@
 package umich.pitchcoach;
 
+import umich.pitchcoach.shared.*;
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.TextView;
 
-public class PitchRecogActivity extends Activity implements PitchReciever {
+public class PitchRecogActivity extends Activity implements IPitchReciever {
     /** Called when the activity is first created. */
 	TextView pitchDisplay;
-	PitchCollector pitchColl;
+	IPitchServiceController pitchService;
+	Handler handler;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         pitchDisplay = (TextView)findViewById(R.id.pitchText);
-        pitchColl = null;
-       // startPitchColl();
-        
+        pitchService = new PitchThreadSpawn();
+        handler = new Handler();
     }
 	
-
-	private void startPitchColl() {
-		pitchColl = new PitchCollector(this);
-		pitchColl.start();
-		
-	}
-
-
 	@Override
-	public void receivePitch(double pitch) {
+	public void receivePitch(double pitch, double time) {
 		pitchDisplay.setText(Double.toString(pitch));
 	}
 	
@@ -37,18 +31,14 @@ public class PitchRecogActivity extends Activity implements PitchReciever {
 	protected void onDestroy()
 	{
 		super.onDestroy();
-		if (pitchColl != null)
-		{
-			pitchColl.done = true;
-		}
+		pitchService.stopPitchService();
 	}
 	
-	@Override 
+	@Override
 	protected void onResume()
 	{
 		super.onResume();
-		startPitchColl();
-		
+		pitchService.startPitchService(this, handler);
 	}
 	
 
@@ -56,9 +46,6 @@ public class PitchRecogActivity extends Activity implements PitchReciever {
 	protected void onPause()
 	{
 		super.onPause();
-		if (pitchColl != null)
-		{
-			pitchColl.done = true;
-		}
+		pitchService.stopPitchService();
 	}
 }

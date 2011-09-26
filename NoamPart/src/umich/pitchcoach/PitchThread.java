@@ -1,5 +1,6 @@
 package umich.pitchcoach;
 
+import umich.pitchcoach.shared.IPitchReciever;
 import android.app.Activity;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
@@ -7,20 +8,22 @@ import android.media.MediaRecorder;
 import android.os.Handler;
 import android.os.Looper;
 
-public class PitchCollector extends Thread {
-	PitchReciever notifyRecv;
+public class PitchThread extends Thread {
+	IPitchReciever notifyRecv;
 	AudioRecord audioRec;
+	Handler receivingHandler;
+	
 	//float[] dataBuffer;
 	public final int RATE = 44100;
-	//public final int SAMPLERATE = 4; //4 times / sec
 	public final int NUMSAMPLES = 256;
 	public boolean done;
 	
-	public PitchCollector(PitchReciever notifyRecv)	
+	public PitchThread(IPitchReciever notifyRecv, Handler receivingHandler)	
 	{
 		this.notifyRecv = notifyRecv;
 		//this.dataBuffer = new float[NUMSAMPLES];
 		done = false;
+		this.receivingHandler = receivingHandler; 
 	}
 	
 	public void run() {
@@ -38,11 +41,11 @@ public class PitchCollector extends Thread {
 	
 	public void onPitch(final double pitch)
 	{
-		notifyRecv.runOnUiThread(new Runnable() {
+		receivingHandler.post(new Runnable() {
 
 			@Override
 			public void run() {
-				notifyRecv.receivePitch(pitch);
+				notifyRecv.receivePitch(pitch, 0);
 			}
 			
 		});
