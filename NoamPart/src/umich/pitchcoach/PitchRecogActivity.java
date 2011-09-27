@@ -1,6 +1,7 @@
 package umich.pitchcoach;
 
 import umich.pitchcoach.shared.*;
+import umich.pitchcoach.test.MockPitchThreadSpawn;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +19,7 @@ public class PitchRecogActivity extends Activity implements IPitchReciever {
         setContentView(R.layout.main);
         pitchDisplay = (TextView)findViewById(R.id.pitchText);
         pitchService = new PitchThreadSpawn();
+        //pitchService = new MockPitchThreadSpawn(R.xml.replay_values, getResources()); //This is how you use the mock pitch thread spawner
         handler = new Handler();
     }
 	
