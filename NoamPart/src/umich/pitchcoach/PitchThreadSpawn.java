@@ -28,8 +28,15 @@ public class PitchThreadSpawn implements IPitchServiceController {
 	@Override
 	public void stopPitchService() {
 		// TODO Auto-generated method stub
-		thread.done = true;
-		thread = null;
+		if (thread != null)
+		{
+			thread.done = true;
+			thread = null;
+		}
+		else
+		{
+			Log.w("Pitch Service Controller", "No pitch service running while stopPitchService called");
+		}
 
 	}
 

@@ -33,7 +33,7 @@ public class PitchRecogActivity extends Activity implements IPitchReciever {
 	protected void onDestroy()
 	{
 		super.onDestroy();
-		pitchService.stopPitchService();
+		//pitchService.stopPitchService();
 	}
 	
 	@Override
