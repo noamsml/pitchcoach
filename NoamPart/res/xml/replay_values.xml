@@ -9,14 +9,14 @@
 
 <event>
 <type>pitch</type>
-<length>1</length>
+<length>0.5</length>
 <val>235</val>
 </event>
 
 
 <event>
 <type>pitch</type>
-<length>1</length>
+<length>0.5</length>
 <val>250</val>
 </event>
 
