@@ -13,6 +13,12 @@ public class PitchRecogActivity extends Activity implements IPitchReciever {
 	IPitchServiceController pitchService;
 	Handler handler;
 	
+	
+	private double roundToNearest(double val, double to)
+	{
+		return Math.round(val/to) * to;
+	}
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +31,7 @@ public class PitchRecogActivity extends Activity implements IPitchReciever {
 	
 	@Override
 	public void receivePitch(double pitch, double time) {
-		pitchDisplay.setText(Double.toString(pitch));
+		pitchDisplay.setText(Double.toString(roundToNearest(pitch,6)));
 	}
 	
 	

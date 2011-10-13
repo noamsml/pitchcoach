@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent" android:weightSum="1">
+    <EditText android:id="@+id/debugText" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="textMultiLine" android:layout_weight="0.80">
+        <requestFocus></requestFocus>
+    </EditText>
+    <LinearLayout android:layout_width="match_parent" android:id="@+id/linearLayout1" android:layout_height="wrap_content" android:layout_weight="0.80">
+        <Button android:text="Save" android:id="@+id/testbutton_save" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+        <Button android:text="Start" android:id="@+id/testbutton_start" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+    </LinearLayout>
+    
+</LinearLayout>
