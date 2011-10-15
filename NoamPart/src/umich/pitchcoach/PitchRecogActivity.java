@@ -31,7 +31,10 @@ public class PitchRecogActivity extends Activity implements IPitchReciever {
 	
 	@Override
 	public void receivePitch(double pitch, double time) {
-		pitchDisplay.setText(Double.toString(roundToNearest(pitch,6)));
+		pitchDisplay.setText(Double.toString(
+				roundToNearest(pitch,6)
+				//pitch
+		));
 	}
 	
 	

@@ -7,6 +7,7 @@ import edu.emory.mathcs.jtransforms.dct.FloatDCT_1D;
 public class PitchAnalyzerDCT implements IPitchAnalyzer {
 	private FloatDCT_1D dct;
 	private IPeakDetector peakdetect;
+	private static final double MINENERGY = 1000;
 	
 	
 	int size;
@@ -33,6 +34,13 @@ public class PitchAnalyzerDCT implements IPitchAnalyzer {
 		
 		buf.readData(floatbuf);
 		
+		//Optimize this?
+		double sumEnergy = 0;
+		for (int i = 0; i < floatbuf.length; i++)
+		{
+			sumEnergy += Math.abs(floatbuf[i]);
+		}
+		if (sumEnergy / floatbuf.length < MINENERGY) return -1;
 		
 		dct.forward(floatbuf, false);
 		
@@ -50,6 +58,7 @@ public class PitchAnalyzerDCT implements IPitchAnalyzer {
 		peakdetect.prepareData(floatbuf, searchBegin, searchEnd);
 		int peak = peakdetect.findNextPeak();
 		return DCTIndexToFreq(peak, size, sampleRate);
+
 
 	}
 	

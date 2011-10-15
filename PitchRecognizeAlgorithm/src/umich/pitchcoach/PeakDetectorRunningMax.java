@@ -6,7 +6,8 @@ public class PeakDetectorRunningMax implements IPeakDetector {
 	int offset;
 	int endoffset;
 	int currentLoc;
-	//private static final double MIN_RATIO = 0.2;
+	int top;
+	private static final float MIN_RATIO = 0.01f;
 	private static final int SAMPLES_THRES=20;
 	
 	private int sign(float i)
@@ -22,7 +23,13 @@ public class PeakDetectorRunningMax implements IPeakDetector {
 		this.offset = offset;
 		this.endoffset = endoffset;
 		this.currentLoc = offset;
-		
+		top = offset;
+		for (int i = offset; i < endoffset; i++)
+		{
+			if (data[i] > data[top]) {
+				top = i;
+			}
+		}
 	}
 
 	@Override
@@ -35,9 +42,10 @@ public class PeakDetectorRunningMax implements IPeakDetector {
 				currentMax = currentLoc;
 			}
 			
-			if (currentLoc - currentMax > SAMPLES_THRES)
+			if (currentLoc - currentMax > SAMPLES_THRES && data[currentMax]/data[top] >= MIN_RATIO)
 			{
 				return currentMax;
+				
 			}
 			currentLoc++;
 		}
