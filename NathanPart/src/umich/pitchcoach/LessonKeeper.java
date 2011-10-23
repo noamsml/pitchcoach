@@ -1,17 +1,14 @@
 package umich.pitchcoach;
 
+import umich.pitchcoach.data.entity.*;
+
 /*
- * Interface to receive other components' requests for
- * 'lessons' in string representation as well as accept and
- * update performance history of each lesson.
+ * Interface for getting lessons and adding performance data.
  */
 public interface LessonKeeper {
-	// Suggest a lesson based on spaced repetition algorithms
-	public String suggestLesson();
-	// Retrieve human-readable form of the specified lesson
-	public String getLesson(String lesson);
-	// Take performance data and associate with a lesson
-	public void updatePerformanceHistory(String lesson, int rating);
-	// Give performance data for a lesson
-	public String getPerformanceHistory(String lesson);
+	// Suggest a lesson based on spaced repetition algorithm
+	public Lesson getLesson();
+	
+	// Add performance data to history of the specified lesson
+	public void addPerformance(long lesson_id, String timestamp, long rating);
 };
