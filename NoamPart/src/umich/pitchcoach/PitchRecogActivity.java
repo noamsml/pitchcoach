@@ -5,11 +5,14 @@ import umich.pitchcoach.test.MockPitchThreadSpawn;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class PitchRecogActivity extends Activity implements IPitchReciever {
     /** Called when the activity is first created. */
 	TextView pitchDisplay;
+	Button snapshotBtn;
 	IPitchServiceController pitchService;
 	Handler handler;
 	
@@ -24,7 +27,17 @@ public class PitchRecogActivity extends Activity implements IPitchReciever {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         pitchDisplay = (TextView)findViewById(R.id.pitchText);
+        snapshotBtn = (Button)findViewById(R.id.snapshotBtn);
         pitchService = new PitchThreadSpawn();
+        snapshotBtn.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				pitchService.diagnosticDumpSamples("/sdcard/snap.txt");
+				
+			}
+        	
+        });
         //pitchService = new MockPitchThreadSpawn(R.xml.replay_values, getResources()); //This is how you use the mock pitch thread spawner
         handler = new Handler();
     }

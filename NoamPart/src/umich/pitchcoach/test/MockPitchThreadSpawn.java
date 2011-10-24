@@ -38,4 +38,5 @@ public class MockPitchThreadSpawn implements IPitchServiceController {
 		thread = null;
 
 	}
+
 }

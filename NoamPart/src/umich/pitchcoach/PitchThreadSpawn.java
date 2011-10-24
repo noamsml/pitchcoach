@@ -1,5 +1,9 @@
 package umich.pitchcoach;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+
 import android.os.Handler;
 import umich.pitchcoach.shared.IPitchReciever;
 import umich.pitchcoach.shared.IPitchServiceController;
@@ -38,6 +42,41 @@ public class PitchThreadSpawn implements IPitchServiceController {
 			Log.w("Pitch Service Controller", "No pitch service running while stopPitchService called");
 		}
 
+	}
+	
+	
+	//Note: This is not to be used in production code
+	public void diagnosticDumpSamples(final String fname) {
+		thread.buflock.lock();
+			final float[] data = new float[2 * thread.RATE];
+			thread.dumpBuffer.readData(data);
+		thread.buflock.unlock();
+		
+		//Another job for MR THREAD MAN
+		
+		Thread t = new Thread(new Runnable()
+		{
+
+			@Override
+			public void run() {
+				try {
+					PrintWriter outfile = new PrintWriter(new FileOutputStream(fname));
+					for (int i = 0; i < data.length; i ++ )
+					{
+						outfile.format("%s\n", data[i]);
+					}
+					outfile.close();
+				}
+				catch (FileNotFoundException e)
+				{
+					Log.e("WriteDataToFile", "Failed");
+				}
+
+				
+			}
+		});
+		
+		t.start();
 	}
 
 }

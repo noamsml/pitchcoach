@@ -17,6 +17,7 @@ public final class R {
         public static final int debugText=0x7f060000;
         public static final int linearLayout1=0x7f060001;
         public static final int pitchText=0x7f060004;
+        public static final int snapshotBtn=0x7f060005;
         public static final int testbutton_save=0x7f060002;
         public static final int testbutton_start=0x7f060003;
     }
