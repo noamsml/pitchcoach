@@ -12,15 +12,15 @@ public class PitchAnalyzerDCT implements IPitchAnalyzer {
 	
 	int size;
 	float[] floatbuf;
-	private static final double SEARCH_LOW = 80;
-	private static final double SEARCH_HIGH = 1100;
+	private static final double SEARCH_LOW = 1;
+	private static final double SEARCH_HIGH = 5000;
 	
 	public PitchAnalyzerDCT(int size)
 	{
 		dct = new FloatDCT_1D(size);
 		this.size = size;
 		floatbuf = new float[size];
-		peakdetect = new PeakDetectorRunningMax();
+		peakdetect = new PeakDetectorRunningMaxOutlier();
 	}
 
 	

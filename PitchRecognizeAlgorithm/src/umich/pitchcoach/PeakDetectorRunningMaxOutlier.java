@@ -1,15 +1,13 @@
 package umich.pitchcoach;
 
 
-public class PeakDetectorRunningMax implements IPeakDetector {
+public class PeakDetectorRunningMaxOutlier implements IPeakDetector {
 	float[] data;
 	int offset;
 	int endoffset;
 	int currentLoc;
-	int top;
-	
-	
-	private static final float MIN_RATIO = 0.01f;
+	StatisticalData stats;
+	private static final float OUTLIER_RATIO = 3f;
 	private static final int SAMPLES_THRES=20;
 	
 	private int sign(float i)
@@ -25,13 +23,7 @@ public class PeakDetectorRunningMax implements IPeakDetector {
 		this.offset = offset;
 		this.endoffset = endoffset;
 		this.currentLoc = offset;
-		top = offset;
-		for (int i = offset; i < endoffset; i++)
-		{
-			if (data[i] > data[top]) {
-				top = i;
-			}
-		}
+		stats = StatisticalAnalyzer.statAnal(data, offset, endoffset);
 	}
 
 	@Override
@@ -44,7 +36,7 @@ public class PeakDetectorRunningMax implements IPeakDetector {
 				currentMax = currentLoc;
 			}
 			
-			if (currentLoc - currentMax > SAMPLES_THRES && data[currentMax]/data[top] >= MIN_RATIO)
+			if (currentLoc - currentMax > SAMPLES_THRES && isOutlier(data[currentMax]))
 			{
 				return currentMax;
 				
@@ -54,4 +46,9 @@ public class PeakDetectorRunningMax implements IPeakDetector {
 		return -1;
 	}
 
+	
+	private boolean isOutlier(float data)
+	{
+		return (data - stats.thirdQuartile > stats.quartileDiff * OUTLIER_RATIO);
+	}
 }

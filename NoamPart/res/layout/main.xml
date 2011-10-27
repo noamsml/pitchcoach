@@ -3,6 +3,7 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
+    android:weightSum="1">
     <TextView android:layout_height="wrap_content" android:id="@+id/pitchText" android:text="TextView" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_width="wrap_content"></TextView>
+    <Button android:text="Snapshot" android:id="@+id/snapshotBtn" android:layout_weight="0.45" android:layout_height="wrap_content" android:layout_width="204dp"></Button>
 </LinearLayout>

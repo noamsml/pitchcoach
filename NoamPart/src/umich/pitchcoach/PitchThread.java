@@ -1,5 +1,8 @@
 package umich.pitchcoach;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import umich.pitchcoach.shared.IPitchReciever;
 import android.app.Activity;
 import android.media.AudioFormat;
@@ -21,6 +24,10 @@ public class PitchThread extends Thread {
 	public final int BUFSIZE = 8192;
 	public boolean done;
 	
+	//TODO remove these
+	public Lock buflock;
+	public circularShortBuffer dumpBuffer;
+	
 	short[] sampleBuffer;
 	
 	public PitchThread(IPitchReciever notifyRecv, Handler receivingHandler)	
@@ -32,6 +39,10 @@ public class PitchThread extends Thread {
 		persistSampleBuffer  = new circularShortBuffer(BUFSIZE);
 		sampleBuffer = new short[NUMSAMPLES];
 		analyzer = new PitchAnalyzerDCT(BUFSIZE);
+		
+		buflock = new ReentrantLock();
+		dumpBuffer = new circularShortBuffer(RATE * 2); //DELME
+		
 	}
 	
 	public void run() {
@@ -65,8 +76,14 @@ public class PitchThread extends Thread {
 	{
 		
 		int size = audioRec.read(sampleBuffer, 0, NUMSAMPLES);
+		
 		persistSampleBuffer.dumpData(sampleBuffer, size);
 		
+		//DELME
+		buflock.lock();
+		dumpBuffer.dumpData(sampleBuffer, size);
+		buflock.unlock();
+		//DELME
 		
 		double pitch = analyzer.getPitch(persistSampleBuffer, RATE);
 		
