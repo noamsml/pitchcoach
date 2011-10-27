@@ -19,9 +19,9 @@ import umich.pitchcoach.data.entity.*;
  */
 public class PitchCoachDbHelper extends SQLiteOpenHelper {
 
-	private static String DB_PATH = "/data/data/umich.pitchcoach/databases/";
-	private static String DB_NAME = "pitchcoach.db";
-	private final Context context;
+	private static final String DB_PATH = "/data/data/umich.pitchcoach/databases/";
+	private static final String DB_NAME = "pitchcoach.db";
+	private Context context;
 	private SQLiteDatabase pitchcoachdb;
 
 	/*
@@ -38,7 +38,8 @@ public class PitchCoachDbHelper extends SQLiteOpenHelper {
 	 * Create an empty database and overwrite with
 	 * prepared database in /assets
 	 */
-	public void createDatabase() throws Exception {
+	public void createDatabase() throws SQLiteException
+	{
 		boolean dbExists = checkDatabase();
 		if (!dbExists) {
 			SQLiteDatabase dbRead = this.getReadableDatabase();
@@ -51,7 +52,8 @@ public class PitchCoachDbHelper extends SQLiteOpenHelper {
 		}
 	}
 
-	public void openDatabase() throws SQLiteException{
+	public void openDatabase() throws SQLiteException
+	{
 		String myPath = DB_PATH + DB_NAME;
 		pitchcoachdb = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
 	}
@@ -60,7 +62,7 @@ public class PitchCoachDbHelper extends SQLiteOpenHelper {
 	/*
 	 * Return true if the database already exists
 	 */
-	public boolean checkDatabase() throws Exception
+	public boolean checkDatabase() throws SQLiteException
 	{
 		SQLiteDatabase checkDB = null;
 		try{
@@ -101,7 +103,17 @@ public class PitchCoachDbHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
 
-	public Cursor getLessonById(long id) throws Exception{
+	public Cursor getLessonById(long id) throws SQLiteException 
+	{
 		return pitchcoachdb.query("Lesson", Lesson.ALL_COLUMNS, "_id like ?", new String[] {""+id}, null, null, null);
+	}
+	
+	public long insertPerformance(long lesson_id, String dateAccessed, double rating) 
+	{
+		ContentValues values = new ContentValues();
+		values.put("LessonId", lesson_id);
+		values.put("DateAccessed", dateAccessed);
+		values.put("Rating", rating);
+		return pitchcoachdb.insert("Performance", null, values);
 	}
 }

@@ -4,14 +4,20 @@ package umich.pitchcoach.data.entity;
  * Get-Setters for Lesson.
  */
 public class Lesson {
-	private long lesson_id;
+	private long   lesson_id;
 	private String lesson_name;
 	private String lesson_content;
 	private long performance_count;
 	private double average_rating;
 	private String last_accessed; // SQLite supports timestrings
-
-	public static enum e_Indices {ID, NAME, CONTENT, PERFORMANCE_COUNT, AVERAGE_RATING, LAST_ACCESSED};
+	
+	public static final int ID                = 0; 
+	public static final int NAME              = 1;
+	public static final int CONTENT           = 2;
+	public static final int PERFORMANCE_COUNT = 3;
+	public static final int AVERAGE_RATING    = 4;
+	public static final int LAST_ACCESSED     = 5;
+ 
 	public static final String[] ALL_COLUMNS     = {"_id", 
 													"Name", 
 													"Content", 
