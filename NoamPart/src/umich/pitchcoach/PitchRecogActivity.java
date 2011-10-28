@@ -13,7 +13,7 @@ public class PitchRecogActivity extends Activity implements IPitchReciever {
     /** Called when the activity is first created. */
 	TextView pitchDisplay;
 	Button snapshotBtn;
-	IPitchServiceController pitchService;
+	PitchThreadSpawn pitchService;
 	Handler handler;
 	
 	

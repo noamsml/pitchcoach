@@ -7,12 +7,12 @@ import edu.emory.mathcs.jtransforms.dct.FloatDCT_1D;
 public class PitchAnalyzerDCT implements IPitchAnalyzer {
 	private FloatDCT_1D dct;
 	private IPeakDetector peakdetect;
-	private static final double MINENERGY = 1000;
+	private static final double MINENERGY = 700;
 	
 	
 	int size;
 	float[] floatbuf;
-	private static final double SEARCH_LOW = 1;
+	private static final double SEARCH_LOW = 10;
 	private static final double SEARCH_HIGH = 5000;
 	
 	public PitchAnalyzerDCT(int size)

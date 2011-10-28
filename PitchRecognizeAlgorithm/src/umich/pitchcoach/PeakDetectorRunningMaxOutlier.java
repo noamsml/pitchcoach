@@ -7,7 +7,7 @@ public class PeakDetectorRunningMaxOutlier implements IPeakDetector {
 	int endoffset;
 	int currentLoc;
 	StatisticalData stats;
-	private static final float OUTLIER_RATIO = 3f;
+	private static final float OUTLIER_RATIO = 5f;
 	private static final int SAMPLES_THRES=20;
 	
 	private int sign(float i)

@@ -15,6 +15,8 @@ public final class R {
     }
     public static final class id {
         public static final int debugText=0x7f060000;
+        public static final int diagBtn=0x7f060007;
+        public static final int graphview=0x7f060006;
         public static final int linearLayout1=0x7f060001;
         public static final int pitchText=0x7f060004;
         public static final int snapshotBtn=0x7f060005;
@@ -24,9 +26,11 @@ public final class R {
     public static final class layout {
         public static final int debug_util=0x7f030000;
         public static final int main=0x7f030001;
+        public static final int mockui=0x7f030002;
     }
     public static final class string {
         public static final int app_name=0x7f050001;
+        public static final int demo_name=0x7f050003;
         public static final int hello=0x7f050000;
         public static final int test_name=0x7f050002;
     }
