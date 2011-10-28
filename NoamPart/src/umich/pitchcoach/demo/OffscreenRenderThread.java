@@ -7,6 +7,7 @@ import umich.pitchcoach.R;
 import umich.pitchcoach.shared.IPitchReciever;
 import umich.pitchcoach.shared.IPitchServiceController;
 import umich.pitchcoach.test.MockPitchThreadSpawn;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Looper;
 import android.os.Handler;
@@ -17,13 +18,16 @@ public class OffscreenRenderThread extends Thread implements IPitchReciever {
 	PitchThreadSpawn pitchservice;
 	GraphSurface surface;
 	ImageSource image;
-	public OffscreenRenderThread(Context ctx)
+	PitchGraphActivity pitchGraphActivity;
+	
+	
+	public OffscreenRenderThread(PitchGraphActivity a, Context ctx)
 	{
 		this.image = image;
 		this.surface = surface;
 		pitchservice = new PitchThreadSpawn();
 		//pitchservice = new MockPitchThreadSpawn(R.xml.replay_values, ctx.getResources());
-		
+		pitchGraphActivity = a;
 	}
 	
 	@Override
@@ -40,9 +44,17 @@ public class OffscreenRenderThread extends Thread implements IPitchReciever {
 	}
 
 	@Override
-	public synchronized void receivePitch(double pitch, double timeInSeconds) {
+	public synchronized void receivePitch(final double pitch, final double timeInSeconds) {
 		if (image != null) image.addDatapoint(pitch, timeInSeconds);
 		if (surface != null) surface.postInvalidate();
+		pitchGraphActivity.runOnUiThread(new Runnable () {
+
+			@Override
+			public void run() {
+				pitchGraphActivity.updateIncidentalUI(pitch, timeInSeconds);
+			}
+			
+		});
 	}
 	
 	public void diagnostics()

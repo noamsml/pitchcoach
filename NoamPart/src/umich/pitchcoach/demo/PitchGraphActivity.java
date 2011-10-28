@@ -11,7 +11,7 @@ public class PitchGraphActivity extends Activity {
 
 	private void startRenderThread() {
 		stopRenderThread();
-		renderThread = new OffscreenRenderThread(surface.getContext());
+		renderThread = new OffscreenRenderThread(this, getApplicationContext());
 		renderThread.setImage(image);
 		renderThread.setSurface(surface);
 		renderThread.start();
@@ -51,6 +51,11 @@ public class PitchGraphActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onResume();
 		startRenderThread();
+		
+	}
+
+	public void updateIncidentalUI(double pitch, double timeInSeconds) {
+		// TODO Auto-generated method stub
 		
 	}
 
