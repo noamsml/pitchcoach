@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+	
+    	<umich.pitchcoach.demo.GraphSurface
+    	    android:id="@+id/graphview"
+    	    android:layout_width="fill_parent"
+    	    android:layout_height="223dp" >
+
+    	</umich.pitchcoach.demo.GraphSurface>
+
+    	<Button
+    	    android:id="@+id/diagBtn"
+    	    android:layout_width="170dp"
+    	    android:layout_height="wrap_content"
+    	    android:text="Diagnostic" />
+
+</LinearLayout>
