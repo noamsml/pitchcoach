@@ -10,7 +10,11 @@
     	    android:layout_height="223dp" >
 
     	</umich.pitchcoach.demo.GraphSurface>
-
+		
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
     	<Button
     	    android:id="@+id/diagBtn"
     	    android:layout_width="170dp"
@@ -25,5 +29,5 @@
     		android:text="Please start singing to begin"
     		android:textSize="19.5sp"
     	/>    
-
+	</LinearLayout>
 </LinearLayout>

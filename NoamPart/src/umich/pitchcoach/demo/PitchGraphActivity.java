@@ -1,5 +1,6 @@
 package umich.pitchcoach.demo;
 
+import umich.pitchcoach.LetterNotes;
 import umich.pitchcoach.R;
 import android.app.Activity;
 import android.os.Bundle;
@@ -76,7 +77,7 @@ public class PitchGraphActivity extends Activity {
 	public void updateIncidentalUI(double pitch, double timeInSeconds) {
 		// TODO Auto-generated method stub
 	  int intPitch = (int)pitch;
-		feedbackTxt.setText(Integer.toString(intPitch));
+		feedbackTxt.setText(LetterNotes.freqToNoteSpec(intPitch));
 	}
 
 }
