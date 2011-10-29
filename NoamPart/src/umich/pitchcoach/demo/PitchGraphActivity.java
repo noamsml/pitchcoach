@@ -3,11 +3,13 @@ package umich.pitchcoach.demo;
 import umich.pitchcoach.R;
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.TextView;
 
 public class PitchGraphActivity extends Activity {
 	GraphSurface surface;
 	ImageSource image;
 	OffscreenRenderThread renderThread;
+	TextView feedbackTxt;
 
 	private void startRenderThread() {
 		stopRenderThread();
@@ -37,6 +39,7 @@ public class PitchGraphActivity extends Activity {
 		setContentView(R.layout.mockui);
 		surface = (GraphSurface) findViewById(R.id.graphview);
 		surface.setActivity(this);
+		feedbackTxt = (TextView)findViewById(R.id.feedbackTxt);
 	
 	}
 
@@ -56,7 +59,8 @@ public class PitchGraphActivity extends Activity {
 
 	public void updateIncidentalUI(double pitch, double timeInSeconds) {
 		// TODO Auto-generated method stub
-		
+	  int intPitch = (int)pitch;
+		feedbackTxt.setText(Integer.toString(intPitch));
 	}
 
 }

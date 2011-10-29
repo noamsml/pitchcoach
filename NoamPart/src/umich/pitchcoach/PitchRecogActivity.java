@@ -1,6 +1,6 @@
 package umich.pitchcoach;
 
-import umich.pitchcoach.shared.*;
+import umich.pitchcoach.shared.IPitchReciever;
 import umich.pitchcoach.test.MockPitchThreadSpawn;
 import android.app.Activity;
 import android.os.Bundle;
@@ -38,7 +38,7 @@ public class PitchRecogActivity extends Activity implements IPitchReciever {
 			}
         	
         });
-        //pitchService = new MockPitchThreadSpawn(R.xml.replay_values, getResources()); //This is how you use the mock pitch thread spawner
+        //spitchService = new MockPitchThreadSpawn(R.xml.replay_values, getResources()); //This is how you use the mock pitch thread spawner
         handler = new Handler();
     }
 	
