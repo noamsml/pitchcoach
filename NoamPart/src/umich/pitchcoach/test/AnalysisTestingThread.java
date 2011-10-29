@@ -1,6 +1,7 @@
 package umich.pitchcoach.test;
 
 import umich.pitchcoach.IPitchAnalyzer;
+import umich.pitchcoach.NoMoreDataException;
 import umich.pitchcoach.PitchAnalyzerDCT;
 import umich.pitchcoach.SineWave;
 import android.os.Debug;
@@ -50,7 +51,11 @@ public class AnalysisTestingThread extends Thread {
 		//if (sampleSize == 8192) Debug.startMethodTracing("pitchcoach.trace");
 		IPitchAnalyzer analyzer = new PitchAnalyzerDCT(sampleSize);
 		double time  = SystemClock.currentThreadTimeMillis();
-		double pitch = analyzer.getPitch(wave, RATE);
+		try {
+			double pitch = analyzer.getPitch(wave, RATE);
+		} catch (NoMoreDataException e) {
+			//This will never ever occur
+		}
 		time = SystemClock.currentThreadTimeMillis() - time;
 		
 		logString(String.format("%s\t%.2f\t%.2f\t%.2f", sampleSize, 1000 * (float)sampleSize/RATE, time, analyzer.bucketSize(RATE)));

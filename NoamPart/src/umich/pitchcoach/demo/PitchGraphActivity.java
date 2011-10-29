@@ -3,11 +3,14 @@ package umich.pitchcoach.demo;
 import umich.pitchcoach.R;
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 public class PitchGraphActivity extends Activity {
 	GraphSurface surface;
 	ImageSource image;
 	OffscreenRenderThread renderThread;
+	Button diagBtn;
 
 	private void startRenderThread() {
 		stopRenderThread();
@@ -37,6 +40,14 @@ public class PitchGraphActivity extends Activity {
 		setContentView(R.layout.mockui);
 		surface = (GraphSurface) findViewById(R.id.graphview);
 		surface.setActivity(this);
+		diagBtn = (Button)findViewById(R.id.diagBtn);
+		diagBtn.setOnClickListener(new View.OnClickListener () {
+			@Override
+			public void onClick(View v) {
+				renderThread.diagnostics();
+			}
+			
+		});
 	
 	}
 

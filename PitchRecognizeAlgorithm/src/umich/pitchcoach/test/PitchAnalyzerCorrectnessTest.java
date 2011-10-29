@@ -1,6 +1,7 @@
 package umich.pitchcoach.test;
 
 import umich.pitchcoach.IPitchAnalyzer;
+import umich.pitchcoach.NoMoreDataException;
 import umich.pitchcoach.PitchAnalyzerDCT;
 
 public class PitchAnalyzerCorrectnessTest {
@@ -23,7 +24,12 @@ public class PitchAnalyzerCorrectnessTest {
 				for (int noise = 0; noise < 400; noise += 100)
 				{
 					NoisyOvertonePattern pat = new NoisyOvertonePattern(freq, 44100, opattern, noise);
-					double res = pitchanal.getPitch(pat, 44100);
+					double res=0;
+					try {
+						res = pitchanal.getPitch(pat, 44100);
+					} catch (NoMoreDataException e) {
+						//Will never occur
+					}
 					double diff = res - freq;
 					if (Math.abs(diff) < 6)
 					{

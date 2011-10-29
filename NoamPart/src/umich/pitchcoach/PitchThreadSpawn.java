@@ -48,7 +48,7 @@ public class PitchThreadSpawn implements IPitchServiceController {
 	//Note: This is not to be used in production code
 	public void diagnosticDumpSamples(final String fname) {
 		thread.buflock.lock();
-			final float[] data = new float[2 * thread.RATE];
+			final float[] data = new float[2 * Invariants.RATE];
 			thread.dumpBuffer.readData(data);
 		thread.buflock.unlock();
 		

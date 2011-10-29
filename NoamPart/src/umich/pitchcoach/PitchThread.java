@@ -19,9 +19,7 @@ public class PitchThread extends Thread {
 	circularShortBuffer persistSampleBuffer;
 	IPitchAnalyzer analyzer;
 	
-	public final int RATE = 44100;
-	public final int NUMSAMPLES = 1337;
-	public final int BUFSIZE = 8192;
+
 	public boolean done;
 	
 	//TODO remove these
@@ -36,18 +34,18 @@ public class PitchThread extends Thread {
 		//this.dataBuffer = new float[NUMSAMPLES];
 		done = false;
 		this.receivingHandler = receivingHandler; 
-		persistSampleBuffer  = new circularShortBuffer(BUFSIZE);
-		sampleBuffer = new short[NUMSAMPLES];
-		analyzer = new PitchAnalyzerDCT(BUFSIZE);
+		persistSampleBuffer  = new circularShortBuffer(Invariants.BUFSIZE);
+		sampleBuffer = new short[Invariants.NUMSAMPLES];
+		analyzer = new PitchAnalyzerDCT(Invariants.BUFSIZE);
 		
 		buflock = new ReentrantLock();
-		dumpBuffer = new circularShortBuffer(RATE * 2); //DELME
+		dumpBuffer = new circularShortBuffer(Invariants.RATE * 2); //DELME
 		
 	}
 	
 	public void run() {
-		audioRec = new AudioRecord(MediaRecorder.AudioSource.VOICE_RECOGNITION, RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT,
-							4*AudioRecord.getMinBufferSize(RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT));
+		audioRec = new AudioRecord(MediaRecorder.AudioSource.VOICE_RECOGNITION, Invariants.RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT,
+							4*AudioRecord.getMinBufferSize(Invariants.RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT));
 		audioRec.startRecording();
 		
 		while(!done)
@@ -75,7 +73,7 @@ public class PitchThread extends Thread {
 	public void handleAudioData()
 	{
 		
-		int size = audioRec.read(sampleBuffer, 0, NUMSAMPLES);
+		int size = audioRec.read(sampleBuffer, 0, Invariants.NUMSAMPLES);
 		
 		persistSampleBuffer.dumpData(sampleBuffer, size);
 		
@@ -85,7 +83,12 @@ public class PitchThread extends Thread {
 		buflock.unlock();
 		//DELME
 		
-		double pitch = analyzer.getPitch(persistSampleBuffer, RATE);
+		double pitch;
+		try {
+			pitch = analyzer.getPitch(persistSampleBuffer, Invariants.RATE);
+		} catch (NoMoreDataException e) {
+			return;
+		}
 		
 		if (pitch != -1) onPitch(pitch, getTimeDuration(size));
 		
@@ -93,7 +96,7 @@ public class PitchThread extends Thread {
 
 	private double getTimeDuration(int size)
 	{
-		return size/((double)RATE);
+		return size/((double)Invariants.RATE);
 	}
 	
 }

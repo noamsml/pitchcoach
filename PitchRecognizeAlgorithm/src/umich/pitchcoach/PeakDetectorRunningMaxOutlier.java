@@ -7,14 +7,20 @@ public class PeakDetectorRunningMaxOutlier implements IPeakDetector {
 	int endoffset;
 	int currentLoc;
 	StatisticalData stats;
-	private static final float OUTLIER_RATIO = 5f;
-	private static final int SAMPLES_THRES=20;
+	private static final float OUTLIER_RATIO = 7.5f;
+	private static final int SAMPLES_THRES=40;
 	
 	private int sign(float i)
 	{
 		if (i < 0) return -1;
 		else if (i > 0) return 1;
 		return 0;
+	}
+	
+	private int sampthres(int loc)
+	{
+		//return Math.max((int)(loc/1.5), SAMPLES_THRES);
+		return SAMPLES_THRES;
 	}
 	
 	@Override
@@ -36,7 +42,7 @@ public class PeakDetectorRunningMaxOutlier implements IPeakDetector {
 				currentMax = currentLoc;
 			}
 			
-			if (currentLoc - currentMax > SAMPLES_THRES && isOutlier(data[currentMax]))
+			if (currentLoc - currentMax > sampthres(currentMax) && isOutlier(data[currentMax]))
 			{
 				return currentMax;
 				

@@ -25,7 +25,7 @@ public class PitchAnalyzerDCT implements IPitchAnalyzer {
 
 	
 	@Override
-	public double getPitch(ISampleSource buf, int sampleRate) {
+	public double getPitch(ISampleSource buf, int sampleRate) throws NoMoreDataException {
 		//?
 		for (int i = 0; i < size; i++)
 		{
@@ -58,8 +58,6 @@ public class PitchAnalyzerDCT implements IPitchAnalyzer {
 		peakdetect.prepareData(floatbuf, searchBegin, searchEnd);
 		int peak = peakdetect.findNextPeak();
 		return DCTIndexToFreq(peak, size, sampleRate);
-
-
 	}
 	
 	

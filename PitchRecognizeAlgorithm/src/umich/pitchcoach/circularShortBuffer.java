@@ -30,7 +30,7 @@ public class circularShortBuffer implements ISampleSource{
 	public int readData(float[] data)
 	{
 		
-		int startingIndex = (fill < bufferSize) ? 0 : currentIndex; 
+		int startingIndex = (fill < bufferSize) ? 0 : currentIndex;
 		for (int i = 0; i < fill; i++)
 		{
 			data[i] = bufferData[(startingIndex + i) % bufferSize];
@@ -44,4 +44,8 @@ public class circularShortBuffer implements ISampleSource{
 		return bufferSize;
 	}
 	
+	public int getFill()
+	{
+		return fill;
+	}
 }
