@@ -28,7 +28,7 @@ public class PitchGraphActivity extends Activity {
 	public void setImage(ImageSource image)
 	{
 		this.image = image;
-		renderThread.setImage(image);
+		if (this.renderThread != null) renderThread.setImage(image);
 	}
 
 
