@@ -53,7 +53,7 @@ public class GraphSurface extends SurfaceView {
 		{
 			setImageSource(new ImageSource(w,h));
 		}
-		activity.setImage(imagesource);
+		activity.setImage(imagesource, this);
 	}
 	
 	

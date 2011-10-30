@@ -11,8 +11,7 @@ import android.widget.TextView;
 
 
 public class PitchGraphActivity extends Activity {
-	GraphSurface surface;
-	ImageSource image;
+	GraphSurface currentSurface;
 	OffscreenRenderThread renderThread;
 	Button diagBtn;
 	TextView feedbackTxt;
@@ -21,18 +20,24 @@ public class PitchGraphActivity extends Activity {
 	private void startRenderThread() {
 		stopRenderThread();
 		renderThread = new OffscreenRenderThread(this, getApplicationContext());
-		renderThread.setImage(image);
-		renderThread.setSurface(surface);
+		renderThread.setImage(currentSurface.imagesource);
 		renderThread.start();
 	}
 	
-	public void setImage(ImageSource image)
+	public void setImage(ImageSource image, GraphSurface surface)
 	{
-		this.image = image;
-		if (this.renderThread != null) renderThread.setImage(image);
+		if (surface == this.currentSurface)
+		{
+			if (this.renderThread != null) renderThread.setImage(image);	
+		}
 	}
 
-
+	private void setCurrentSurface(GraphSurface surface)
+	{
+		this.currentSurface = surface;
+		setImage(surface.imagesource, surface);
+	}
+	
 	private void stopRenderThread() {
 		if (renderThread != null) renderThread.interrupt();
 		renderThread = null;
@@ -44,9 +49,11 @@ public class PitchGraphActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mockui);
-		surface = (GraphSurface) findViewById(R.id.graphview);
-		surface.setActivity(this);
-
+		
+		currentSurface = (GraphSurface) findViewById(R.id.graphview);
+		currentSurface.setActivity(this);
+		this.setCurrentSurface(currentSurface);
+		
 		diagBtn = (Button)findViewById(R.id.diagBtn);
 		diagBtn.setOnClickListener(new View.OnClickListener () {
 			@Override
@@ -77,7 +84,8 @@ public class PitchGraphActivity extends Activity {
 	public void updateIncidentalUI(double pitch, double timeInSeconds) {
 		// TODO Auto-generated method stub
 	  int intPitch = (int)pitch;
-		feedbackTxt.setText(LetterNotes.freqToNoteSpec(intPitch));
+	  feedbackTxt.setText(LetterNotes.freqToNoteSpec(intPitch));
+	  this.currentSurface.invalidate();
 	}
 
 }
