@@ -7,31 +7,37 @@ import android.os.Bundle;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
-public class PitchGraphActivity extends Activity {
-	GraphSurface surface;
-	ImageSource image;
+public class PitchGraphActivity extends Activity implements IGraphNotifyReceiver {
+	GraphContainer currentGraph;
 	OffscreenRenderThread renderThread;
 	Button diagBtn;
 	TextView feedbackTxt;
-
+	LinearLayout graphLayout;
 
 	private void startRenderThread() {
 		stopRenderThread();
 		renderThread = new OffscreenRenderThread(this, getApplicationContext());
-		renderThread.setImage(image);
-		renderThread.setSurface(surface);
+		imageSourceChanged();
 		renderThread.start();
 	}
 	
-	public void setImage(ImageSource image)
+	private void setCurrentGraph(GraphContainer container)
 	{
-		this.image = image;
-		if (this.renderThread != null) renderThread.setImage(image);
+		this.currentGraph = container;
+		container.makeLive();
+		imageSourceChanged();
 	}
-
+	
+	public void imageSourceChanged() {
+		if (currentGraph != null)
+		{
+			if (this.renderThread != null) renderThread.setImage(currentGraph.getImageSource());	
+		}
+	}
 
 	private void stopRenderThread() {
 		if (renderThread != null) renderThread.interrupt();
@@ -44,9 +50,12 @@ public class PitchGraphActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mockui);
-		surface = (GraphSurface) findViewById(R.id.graphview);
-		surface.setActivity(this);
-
+		View v = findViewById(R.id.graphLinearLayout);
+		graphLayout = (LinearLayout)v;
+		GraphContainer theGraph = new GraphContainer(getApplicationContext(), this, "E4");
+		addGraph(theGraph);
+		setCurrentGraph(theGraph);
+		
 		diagBtn = (Button)findViewById(R.id.diagBtn);
 		diagBtn.setOnClickListener(new View.OnClickListener () {
 			@Override
@@ -58,6 +67,10 @@ public class PitchGraphActivity extends Activity {
 
 		feedbackTxt = (TextView)findViewById(R.id.feedbackTxt);
 	
+	}
+
+	private void addGraph(GraphContainer theGraph) {
+		graphLayout.addView(theGraph, 500, 300);
 	}
 
 	@Override
@@ -77,7 +90,9 @@ public class PitchGraphActivity extends Activity {
 	public void updateIncidentalUI(double pitch, double timeInSeconds) {
 		// TODO Auto-generated method stub
 	  int intPitch = (int)pitch;
-		feedbackTxt.setText(LetterNotes.freqToNoteSpec(intPitch));
+	  feedbackTxt.setText(LetterNotes.freqToNoteSpec(intPitch));
+	  this.currentGraph.updateGraph();
 	}
+
 
 }

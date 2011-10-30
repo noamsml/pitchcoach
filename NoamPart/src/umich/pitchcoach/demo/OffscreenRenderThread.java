@@ -16,7 +16,6 @@ import android.widget.Button;
 
 public class OffscreenRenderThread extends Thread implements IPitchReciever {
 	PitchThreadSpawn pitchservice;
-	GraphSurface surface;
 	ImageSource image;
 	PitchGraphActivity pitchGraphActivity;
 	
@@ -24,7 +23,6 @@ public class OffscreenRenderThread extends Thread implements IPitchReciever {
 	public OffscreenRenderThread(PitchGraphActivity a, Context ctx)
 	{
 		this.image = image;
-		this.surface = surface;
 		pitchservice = new PitchThreadSpawn();
 		//pitchservice = new MockPitchThreadSpawn(R.xml.replay_values, ctx.getResources());
 		pitchGraphActivity = a;
@@ -46,7 +44,6 @@ public class OffscreenRenderThread extends Thread implements IPitchReciever {
 	@Override
 	public synchronized void receivePitch(final double pitch, final double timeInSeconds) {
 		if (image != null) image.addDatapoint(pitch, timeInSeconds);
-		if (surface != null) surface.postInvalidate();
 		pitchGraphActivity.runOnUiThread(new Runnable () {
 
 			@Override
@@ -68,9 +65,5 @@ public class OffscreenRenderThread extends Thread implements IPitchReciever {
 		this.image = image;
 	}
 	
-	public synchronized void setSurface(GraphSurface surface)
-	{
-		this.surface = surface;
-	}
 
 }
