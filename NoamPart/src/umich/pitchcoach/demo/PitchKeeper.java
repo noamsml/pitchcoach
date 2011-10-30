@@ -8,18 +8,18 @@ import java.util.Random;
  */
 public class PitchKeeper {
 	
-	private ArrayList<Double> storedPitches;
+	private ArrayList<String> storedPitches;
 	
-	// Store a List of Doubles
-	public PitchKeeper(ArrayList<Double> pitches){
-		storedPitches =  new ArrayList<Double>(pitches.size());
-		for (Double pitch : pitches) {
-			storedPitches.add(new Double(pitch));
+	// Store a List of Strings
+	public PitchKeeper(ArrayList<String> pitches){
+		storedPitches =  new ArrayList<String>(pitches.size());
+		for (String pitch : pitches) {
+			storedPitches.add(new String(pitch));
 		}
 	}
 	
-	// Return a random Double from the storedPitches
-	public Double getRandomPitch() {
+	// Return a random String from the storedPitches
+	public String getRandomPitch() {
 		Random randomNumGen = new Random();
 		int numPitches = storedPitches.size();
 		int randInt = randomNumGen.nextInt(numPitches);
