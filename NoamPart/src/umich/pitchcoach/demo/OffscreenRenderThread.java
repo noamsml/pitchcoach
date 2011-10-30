@@ -2,6 +2,7 @@ package umich.pitchcoach.demo;
 
 import java.util.Date;
 
+import umich.pitchcoach.LetterNotes;
 import umich.pitchcoach.PitchThreadSpawn;
 import umich.pitchcoach.R;
 import umich.pitchcoach.shared.IPitchReciever;
@@ -18,11 +19,10 @@ public class OffscreenRenderThread extends Thread implements IPitchReciever {
 	PitchThreadSpawn pitchservice;
 	ImageSource image;
 	PitchGraphActivity pitchGraphActivity;
-	
+	private double targetPitch;	
 	
 	public OffscreenRenderThread(PitchGraphActivity a, Context ctx)
 	{
-		this.image = image;
 		pitchservice = new PitchThreadSpawn();
 		//pitchservice = new MockPitchThreadSpawn(R.xml.replay_values, ctx.getResources());
 		pitchGraphActivity = a;
@@ -43,7 +43,7 @@ public class OffscreenRenderThread extends Thread implements IPitchReciever {
 
 	@Override
 	public synchronized void receivePitch(final double pitch, final double timeInSeconds) {
-		if (image != null) image.addDatapoint(pitch, timeInSeconds);
+		if (image != null) image.addDatapoint(pitch, timeInSeconds, targetPitch);
 		pitchGraphActivity.runOnUiThread(new Runnable () {
 
 			@Override
@@ -64,6 +64,8 @@ public class OffscreenRenderThread extends Thread implements IPitchReciever {
 	{
 		this.image = image;
 	}
-	
 
+	public void setTargetPitch(double pitch){
+		targetPitch = pitch;
+	}	
 }

@@ -1,5 +1,8 @@
 package umich.pitchcoach.demo;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import umich.pitchcoach.LetterNotes;
 import umich.pitchcoach.R;
 import android.app.Activity;
@@ -14,9 +17,10 @@ import android.widget.TextView;
 public class PitchGraphActivity extends Activity implements IGraphNotifyReceiver {
 	GraphContainer currentGraph;
 	OffscreenRenderThread renderThread;
-	Button diagBtn;
+	Button diagBtn, nextBtn;
 	TextView feedbackTxt;
 	LinearLayout graphLayout;
+	PitchKeeper myPitchKeeper;
 
 	private void startRenderThread() {
 		stopRenderThread();
@@ -24,7 +28,7 @@ public class PitchGraphActivity extends Activity implements IGraphNotifyReceiver
 		imageSourceChanged();
 		renderThread.start();
 	}
-	
+
 	private void setCurrentGraph(GraphContainer container)
 	{
 		if (this.currentGraph != null) this.currentGraph.makeDead();
@@ -32,7 +36,7 @@ public class PitchGraphActivity extends Activity implements IGraphNotifyReceiver
 		container.makeLive();
 		imageSourceChanged();
 	}
-	
+
 	public void imageSourceChanged() {
 		if (currentGraph != null)
 		{
@@ -43,9 +47,9 @@ public class PitchGraphActivity extends Activity implements IGraphNotifyReceiver
 	private void stopRenderThread() {
 		if (renderThread != null) renderThread.interrupt();
 		renderThread = null;
-		
+
 	}
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -56,18 +60,26 @@ public class PitchGraphActivity extends Activity implements IGraphNotifyReceiver
 		GraphContainer theGraph = new GraphContainer(getApplicationContext(), this, "E4");
 		addGraph(theGraph);
 		setCurrentGraph(theGraph);
-		
+		myPitchKeeper = new PitchKeeper(new ArrayList<String>(Arrays.asList(LetterNotes.steps)));
+
 		diagBtn = (Button)findViewById(R.id.diagBtn);
 		diagBtn.setOnClickListener(new View.OnClickListener () {
 			@Override
 			public void onClick(View v) {
 				renderThread.diagnostics();
 			}
-			
 		});
-
+		nextBtn = (Button)findViewById(R.id.nextBtn);
+		nextBtn.setOnClickListener(new View.OnClickListener () {
+			@Override
+			public void onClick(View v) {
+				String targetPitch = myPitchKeeper.getRandomPitch();
+				currentGraph.setTargetPitch(targetPitch);
+				renderThread.setTargetPitch(LetterNotes.noteSpecToFreq(targetPitch));
+			}
+		});
 		feedbackTxt = (TextView)findViewById(R.id.feedbackTxt);
-	
+
 	}
 
 	private void addGraph(GraphContainer theGraph) {
@@ -85,15 +97,13 @@ public class PitchGraphActivity extends Activity implements IGraphNotifyReceiver
 		// TODO Auto-generated method stub
 		super.onResume();
 		startRenderThread();
-		
+
 	}
 
 	public void updateIncidentalUI(double pitch, double timeInSeconds) {
 		// TODO Auto-generated method stub
-	  int intPitch = (int)pitch;
-	  feedbackTxt.setText(LetterNotes.freqToNoteSpec(intPitch));
-	  this.currentGraph.updateGraph();
+		int intPitch = (int)pitch;
+		feedbackTxt.setText(LetterNotes.freqToNoteSpec(intPitch));
+		this.currentGraph.updateGraph();
 	}
-
-
 }
