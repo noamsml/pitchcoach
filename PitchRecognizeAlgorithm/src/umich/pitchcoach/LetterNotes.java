@@ -27,6 +27,7 @@ public class LetterNotes {
 	
 	public static String freqToNoteSpec(double freq)
 	{
+		if (freq < 0) return "BadNote";
 		int step = stepNum(freq);
 		return letter(step) + scalenum(step);
 	}

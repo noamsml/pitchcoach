@@ -4,12 +4,11 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 	
-    	<umich.pitchcoach.demo.GraphSurface
-    	    android:id="@+id/graphview"
-    	    android:layout_width="fill_parent"
-    	    android:layout_height="223dp" >
-
-    	</umich.pitchcoach.demo.GraphSurface>
+    <LinearLayout android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" android:id="@+id/graphLinearLayout">
+        
+    </LinearLayout>
 		
 		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"

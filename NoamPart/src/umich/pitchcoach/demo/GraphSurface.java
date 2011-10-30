@@ -14,7 +14,18 @@ import android.view.SurfaceView;
 public class GraphSurface extends SurfaceView {
 	protected ImageSource imagesource;
 	protected static final double SECONDS_ONSCREEN = 10;
-	protected PitchGraphActivity activity; //TODO: Make this hack unnecessary
+	protected IGraphNotifyReceiver notifyReceiver; //TODO: Make this hack unnecessary
+	protected boolean isLive;
+	
+	public void makeLive()
+	{
+		isLive = true;
+	}
+	
+	public void makeUnLive()
+	{
+		isLive = false;
+	}
 	
 	public GraphSurface(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -53,13 +64,14 @@ public class GraphSurface extends SurfaceView {
 		{
 			setImageSource(new ImageSource(w,h));
 		}
-		activity.setImage(imagesource, this);
+		notifyReceiver.imageSourceChanged();
 	}
 	
 	
-	public void setActivity(PitchGraphActivity activity)
+	public void setNotifyReceiver(IGraphNotifyReceiver notifyreceiver)
 	{
-		this.activity = activity;
+		this.notifyReceiver = notifyreceiver;
+		
 	}
 
 	@Override
