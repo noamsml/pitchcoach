@@ -27,6 +27,7 @@ public class PitchGraphActivity extends Activity implements IGraphNotifyReceiver
 	
 	private void setCurrentGraph(GraphContainer container)
 	{
+		if (this.currentGraph != null) this.currentGraph.makeDead();
 		this.currentGraph = container;
 		container.makeLive();
 		imageSourceChanged();
