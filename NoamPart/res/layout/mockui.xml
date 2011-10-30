@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:orientation="vertical">
-
 	<HorizontalScrollView android:layout_height="wrap_content"
 		android:layout_width="match_parent">
 		<LinearLayout android:layout_width="fill_parent"
@@ -16,6 +15,8 @@
 		android:orientation="horizontal">
 		<Button android:id="@+id/diagBtn" android:layout_width="170dp"
 			android:layout_height="wrap_content" android:text="Diagnostic" />
+		<Button android:id="@+id/nextBtn" android:layout_width="170dp"
+			android:layout_height="wrap_content" android:text="Next" />
 		<TextView android:id="@+id/feedbackTxt" android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:gravity="center_horizontal"
 			android:text="Please start singing to begin" android:textSize="19.5sp" />

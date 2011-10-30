@@ -17,6 +17,7 @@ public class ImageSource {
 	
 	private Paint bgPaint;
 	private Paint fgPaint;
+	private Paint whitePaint;
 	
 	private final static double SECONDS_TO_SHOW = 10;
 	private final static double MIN_HZ = 70;
@@ -28,8 +29,7 @@ public class ImageSource {
 	
 	private double current_x;
 	private double current_y;
-	
-	
+		
 	public ImageSource(int width, int height)
 	{
 		this.bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -43,6 +43,8 @@ public class ImageSource {
 		this.bgPaint.setColor(Color.BLACK);
 		this.fgPaint = new Paint();
 		this.fgPaint.setColor(Color.GREEN);
+		this.whitePaint = new Paint();
+		this.whitePaint.setColor(Color.WHITE);
 		this.onceAround = false;
 	}
 	
@@ -57,35 +59,37 @@ public class ImageSource {
 		return new RectF((float)left, (float)top, (float) right, (float) bottom);
 	}
 	
-	public synchronized void addDatapoint(double pitch, double time) //Assume time is never greater than width //MAKE SYNC
+	public synchronized void addDatapoint(double pitch, double time, double target) //Assume time is never greater than width //MAKE SYNC
 	{
 		double pixelwidth = getPixelWidth(time);
 		double pixely = getPixelYPos(pitch);
+		double pixeltarget = getPixelYPos(target);
 		if (this.current_x + pixelwidth > this.width)
 		{
-			drawBrokenDatapoint(this.current_x, this.current_x + pixelwidth, this.current_y, pixely);
+			drawBrokenDatapoint(this.current_x, this.current_x + pixelwidth, this.current_y, pixely, pixeltarget);
 			this.current_x = this.current_x + pixelwidth - this.width;
 		}
 		else
 		{
-			drawDatapoint(this.current_x, this.current_x + pixelwidth, this.current_y, pixely);
+			drawDatapoint(this.current_x, this.current_x + pixelwidth, this.current_y, pixely, pixeltarget);
 			this.current_x = this.current_x + pixelwidth;
 		}
 		this.current_y = pixely;
 	}
 	
 	
-	private void drawDatapoint(double curx, double nextx, double cury, double nexty)
+	private void drawDatapoint(double curx, double nextx, double cury, double nexty, double target)
 	{
-		canvas.drawRect(this.makeRectF(curx, 0, nextx, height), this.bgPaint);
-		canvas.drawLine((float)curx, (float)(height-cury), (float)nextx, (float)(height - nexty), this.fgPaint);
+		canvas.drawRect(this.makeRectF(curx, 0, nextx, height), bgPaint);
+		canvas.drawLine((float)curx, (float)(height-cury), (float)nextx, (float)(height - nexty), fgPaint);
+		canvas.drawLine((float)curx, (float)(height-target), (float)nextx, (float)(height-target), whitePaint);
 	}
 	
-	private void drawBrokenDatapoint(double curx, double nextx, double cury, double nexty)
+	private void drawBrokenDatapoint(double curx, double nextx, double cury, double nexty, double target)
 	{
 		double inty = cury  + (width - nextx) * (nexty-cury)/(nextx-curx);
-		drawDatapoint(curx, width, cury, inty);
-		drawDatapoint(0, nextx-width, cury, inty);
+		drawDatapoint(curx, width, cury, inty, target);
+		drawDatapoint(0, nextx-width, cury, inty, target);
 		onceAround = true;
 	}
 	
@@ -95,9 +99,9 @@ public class ImageSource {
 		return time * this.pixel_per_sec;
 	}
 	
-	private double getPixelYPos(double time)
+	private double getPixelYPos(double pitch)
 	{
-		double logtime = Math.log(time) - LOG_MINHZ;
+		double logtime = Math.log(pitch) - LOG_MINHZ;
 		
 		return logtime * (height)/(LOG_MAXHZ - LOG_MINHZ);
 	}
