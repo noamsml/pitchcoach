@@ -70,7 +70,7 @@ public class PitchGraphActivity extends Activity implements IGraphNotifyReceiver
 	}
 
 	private void addGraph(GraphContainer theGraph) {
-		graphLayout.addView(theGraph, 600, 300);
+		graphLayout.addView(theGraph, 500, 300);
 	}
 
 	@Override
