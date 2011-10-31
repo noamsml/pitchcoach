@@ -1,5 +1,8 @@
 package umich.pitchcoach.demo;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import umich.pitchcoach.LetterNotes;
 import umich.pitchcoach.R;
 import android.app.Activity;
@@ -14,9 +17,10 @@ import android.widget.TextView;
 public class PitchGraphActivity extends Activity implements IGraphNotifyReceiver {
 	GraphContainer currentGraph;
 	OffscreenRenderThread renderThread;
-	Button diagBtn;
+	Button diagBtn, nextBtn;
 	TextView feedbackTxt;
 	LinearLayout graphLayout;
+	PitchKeeper myPitchKeeper;
 
 	private void startRenderThread() {
 		stopRenderThread();
@@ -24,14 +28,15 @@ public class PitchGraphActivity extends Activity implements IGraphNotifyReceiver
 		imageSourceChanged();
 		renderThread.start();
 	}
-	
+
 	private void setCurrentGraph(GraphContainer container)
 	{
+		if (this.currentGraph != null) this.currentGraph.makeDead();
 		this.currentGraph = container;
 		container.makeLive();
 		imageSourceChanged();
 	}
-	
+
 	public void imageSourceChanged() {
 		if (currentGraph != null)
 		{
@@ -42,9 +47,9 @@ public class PitchGraphActivity extends Activity implements IGraphNotifyReceiver
 	private void stopRenderThread() {
 		if (renderThread != null) renderThread.interrupt();
 		renderThread = null;
-		
+
 	}
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -52,9 +57,12 @@ public class PitchGraphActivity extends Activity implements IGraphNotifyReceiver
 		setContentView(R.layout.mockui);
 		View v = findViewById(R.id.graphLinearLayout);
 		graphLayout = (LinearLayout)v;
-		GraphContainer theGraph = new GraphContainer(getApplicationContext(), this, "E4");
+		
+		myPitchKeeper = new PitchKeeper(new ArrayList<String>(Arrays.asList(LetterNotes.steps)));
+
+		
+		GraphContainer theGraph = new GraphContainer(getApplicationContext(), this, myPitchKeeper.getRandomPitch());
 		addGraph(theGraph);
-		setCurrentGraph(theGraph);
 		
 		diagBtn = (Button)findViewById(R.id.diagBtn);
 		diagBtn.setOnClickListener(new View.OnClickListener () {
@@ -62,15 +70,25 @@ public class PitchGraphActivity extends Activity implements IGraphNotifyReceiver
 			public void onClick(View v) {
 				renderThread.diagnostics();
 			}
-			
 		});
-
+		nextBtn = (Button)findViewById(R.id.nextBtn);
+		
+		final PitchGraphActivity that = this; //HACK 
+		
+		nextBtn.setOnClickListener(new View.OnClickListener () {
+			@Override
+			public void onClick(View v) {
+				GraphContainer theGraph = new GraphContainer(getApplicationContext(), that, myPitchKeeper.getRandomPitch());
+				addGraph(theGraph);
+			}
+		});
 		feedbackTxt = (TextView)findViewById(R.id.feedbackTxt);
-	
+
 	}
 
 	private void addGraph(GraphContainer theGraph) {
 		graphLayout.addView(theGraph, 500, 300);
+		setCurrentGraph(theGraph);
 	}
 
 	@Override
@@ -84,15 +102,13 @@ public class PitchGraphActivity extends Activity implements IGraphNotifyReceiver
 		// TODO Auto-generated method stub
 		super.onResume();
 		startRenderThread();
-		
+
 	}
 
 	public void updateIncidentalUI(double pitch, double timeInSeconds) {
 		// TODO Auto-generated method stub
-	  int intPitch = (int)pitch;
-	  feedbackTxt.setText(LetterNotes.freqToNoteSpec(intPitch));
-	  this.currentGraph.updateGraph();
+		int intPitch = (int)pitch;
+		feedbackTxt.setText(LetterNotes.freqToNoteSpec(intPitch));
+		this.currentGraph.updateGraph();
 	}
-
-
 }

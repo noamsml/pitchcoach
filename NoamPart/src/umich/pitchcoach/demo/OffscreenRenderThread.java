@@ -2,6 +2,7 @@ package umich.pitchcoach.demo;
 
 import java.util.Date;
 
+import umich.pitchcoach.LetterNotes;
 import umich.pitchcoach.PitchThreadSpawn;
 import umich.pitchcoach.R;
 import umich.pitchcoach.shared.IPitchReciever;
@@ -19,10 +20,8 @@ public class OffscreenRenderThread extends Thread implements IPitchReciever {
 	ImageSource image;
 	PitchGraphActivity pitchGraphActivity;
 	
-	
 	public OffscreenRenderThread(PitchGraphActivity a, Context ctx)
 	{
-		this.image = image;
 		pitchservice = new PitchThreadSpawn();
 		//pitchservice = new MockPitchThreadSpawn(R.xml.replay_values, ctx.getResources());
 		pitchGraphActivity = a;
@@ -64,6 +63,5 @@ public class OffscreenRenderThread extends Thread implements IPitchReciever {
 	{
 		this.image = image;
 	}
-	
 
 }

@@ -6,7 +6,7 @@ public class LetterNotes {
 	public static double stepVal = Math.pow(2.0, 1/12.0);
 	public static double logStep = Math.log(Math.pow(2.0, 1/12.0));
 	public static double logEvalBand = Math.log(Math.pow(2.0, 1/24.0));
-	public static String[] steps = new String[]{"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
+	public static String[] steps = new String[]{"C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3"};
 	public static int[] noteStepVals = new int[]{0, 2, 4, 5, 7, 9, 10};
 	
 	public static int stepNum(double freq) //Steps from C0
@@ -67,6 +67,11 @@ public class LetterNotes {
 	public static double evalNote(String noteSpec, double freq) //0 == correct
 	{
 		double freq_correct = noteSpecToFreq(noteSpec);
+		return evalFreq(freq_correct, freq);
+	}
+	
+	public static double evalFreq(double freq_correct, double freq) //0 == correct
+	{
 		double logError = Math.abs(Math.log(freq_correct/freq));
 		if (logError < logEvalBand)
 		{
