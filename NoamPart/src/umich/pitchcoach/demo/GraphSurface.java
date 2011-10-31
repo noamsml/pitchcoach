@@ -3,6 +3,7 @@ package umich.pitchcoach.demo;
 import java.util.List;
 import java.util.ArrayList;
 
+import umich.pitchcoach.LetterNotes;
 import umich.pitchcoach.shared.IPitchReciever;
 
 import android.content.Context;
@@ -16,6 +17,7 @@ public class GraphSurface extends SurfaceView {
 	protected static final double SECONDS_ONSCREEN = 10;
 	protected IGraphNotifyReceiver notifyReceiver; //TODO: Make this hack unnecessary
 	protected boolean isLive;
+	protected double target;
 	
 	public void makeLive()
 	{
@@ -27,18 +29,10 @@ public class GraphSurface extends SurfaceView {
 		isLive = false;
 	}
 	
-	public GraphSurface(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-		initialize();
-	}
-	
-	public GraphSurface(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		initialize();
-	}
-
-	public GraphSurface(Context context) {
+	public GraphSurface(Context context, double target, IGraphNotifyReceiver notifyreceiver) {
 		super(context);
+		setNotifyReceiver(notifyreceiver);
+		this.target = target;
 		initialize();
 	}
 
@@ -46,13 +40,9 @@ public class GraphSurface extends SurfaceView {
 	protected void initialize()
 	{
 		imagesource = null;
+		isLive = false;
 		setWillNotDraw(false);
 		setKeepScreenOn(true);
-	}
-	
-	public void setImageSource(ImageSource data)
-	{
-		this.imagesource = data;
 	}
 	
 	@Override
@@ -62,7 +52,7 @@ public class GraphSurface extends SurfaceView {
 		if (w == 0 || h == 0) return;
 		if (oldw != w || oldh != h || imagesource == null)
 		{
-			setImageSource(new ImageSource(w,h));
+			this.imagesource = new ImageSource(w,h, this.target);
 		}
 		notifyReceiver.imageSourceChanged();
 	}

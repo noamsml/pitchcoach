@@ -57,11 +57,13 @@ public class PitchGraphActivity extends Activity implements IGraphNotifyReceiver
 		setContentView(R.layout.mockui);
 		View v = findViewById(R.id.graphLinearLayout);
 		graphLayout = (LinearLayout)v;
-		GraphContainer theGraph = new GraphContainer(getApplicationContext(), this, "E4");
-		addGraph(theGraph);
-		setCurrentGraph(theGraph);
+		
 		myPitchKeeper = new PitchKeeper(new ArrayList<String>(Arrays.asList(LetterNotes.steps)));
 
+		
+		GraphContainer theGraph = new GraphContainer(getApplicationContext(), this, myPitchKeeper.getRandomPitch());
+		addGraph(theGraph);
+		
 		diagBtn = (Button)findViewById(R.id.diagBtn);
 		diagBtn.setOnClickListener(new View.OnClickListener () {
 			@Override
@@ -70,12 +72,14 @@ public class PitchGraphActivity extends Activity implements IGraphNotifyReceiver
 			}
 		});
 		nextBtn = (Button)findViewById(R.id.nextBtn);
+		
+		final PitchGraphActivity that = this; //HACK 
+		
 		nextBtn.setOnClickListener(new View.OnClickListener () {
 			@Override
 			public void onClick(View v) {
-				String targetPitch = myPitchKeeper.getRandomPitch();
-				currentGraph.setTargetPitch(targetPitch);
-				renderThread.setTargetPitch(LetterNotes.noteSpecToFreq(targetPitch));
+				GraphContainer theGraph = new GraphContainer(getApplicationContext(), that, myPitchKeeper.getRandomPitch());
+				addGraph(theGraph);
 			}
 		});
 		feedbackTxt = (TextView)findViewById(R.id.feedbackTxt);
@@ -84,6 +88,7 @@ public class PitchGraphActivity extends Activity implements IGraphNotifyReceiver
 
 	private void addGraph(GraphContainer theGraph) {
 		graphLayout.addView(theGraph, 500, 300);
+		setCurrentGraph(theGraph);
 	}
 
 	@Override

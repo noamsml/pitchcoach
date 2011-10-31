@@ -67,6 +67,11 @@ public class LetterNotes {
 	public static double evalNote(String noteSpec, double freq) //0 == correct
 	{
 		double freq_correct = noteSpecToFreq(noteSpec);
+		return evalFreq(freq_correct, freq);
+	}
+	
+	public static double evalFreq(double freq_correct, double freq) //0 == correct
+	{
 		double logError = Math.abs(Math.log(freq_correct/freq));
 		if (logError < logEvalBand)
 		{

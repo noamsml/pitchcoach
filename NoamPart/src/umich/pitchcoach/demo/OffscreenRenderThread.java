@@ -19,7 +19,6 @@ public class OffscreenRenderThread extends Thread implements IPitchReciever {
 	PitchThreadSpawn pitchservice;
 	ImageSource image;
 	PitchGraphActivity pitchGraphActivity;
-	private double targetPitch;	
 	
 	public OffscreenRenderThread(PitchGraphActivity a, Context ctx)
 	{
@@ -43,7 +42,7 @@ public class OffscreenRenderThread extends Thread implements IPitchReciever {
 
 	@Override
 	public synchronized void receivePitch(final double pitch, final double timeInSeconds) {
-		if (image != null) image.addDatapoint(pitch, timeInSeconds, targetPitch);
+		if (image != null) image.addDatapoint(pitch, timeInSeconds);
 		pitchGraphActivity.runOnUiThread(new Runnable () {
 
 			@Override
@@ -65,7 +64,4 @@ public class OffscreenRenderThread extends Thread implements IPitchReciever {
 		this.image = image;
 	}
 
-	public void setTargetPitch(double pitch){
-		targetPitch = pitch;
-	}	
 }

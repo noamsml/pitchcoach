@@ -1,5 +1,6 @@
 package umich.pitchcoach.demo;
 
+import umich.pitchcoach.LetterNotes;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -12,12 +13,14 @@ public class ImageSource {
 	private Canvas canvas;
 	private int width;
 	private int height;
+	private double target;
 	
 	private boolean onceAround;
 	
 	private Paint bgPaint;
 	private Paint fgPaint;
 	private Paint whitePaint;
+	private Paint redPaint;
 	
 	private final static double SECONDS_TO_SHOW = 10;
 	private final static double MIN_HZ = 70;
@@ -30,7 +33,8 @@ public class ImageSource {
 	private double current_x;
 	private double current_y;
 		
-	public ImageSource(int width, int height)
+	private float targetPos;
+	public ImageSource(int width, int height, double target)
 	{
 		this.bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 		this.canvas = new Canvas(this.bitmap);
@@ -38,14 +42,21 @@ public class ImageSource {
 		this.height = height;
 		this.pixel_per_sec = width / SECONDS_TO_SHOW;
 		this.current_x = 0;
+		this.target = target;
+		
 		
 		this.bgPaint = new Paint();
 		this.bgPaint.setColor(Color.BLACK);
 		this.fgPaint = new Paint();
 		this.fgPaint.setColor(Color.GREEN);
+		this.redPaint = new Paint();
+		this.redPaint.setColor(Color.RED);
 		this.whitePaint = new Paint();
 		this.whitePaint.setColor(Color.WHITE);
 		this.onceAround = false;
+		
+		targetPos =  height - (float)(getPixelYPos(target));
+		canvas.drawLine((float)0, targetPos, (float)width, targetPos, whitePaint);
 	}
 	
 	private Rect makeRect(double left, double top, double right, double bottom)
@@ -59,37 +70,41 @@ public class ImageSource {
 		return new RectF((float)left, (float)top, (float) right, (float) bottom);
 	}
 	
-	public synchronized void addDatapoint(double pitch, double time, double target) //Assume time is never greater than width //MAKE SYNC
+	public synchronized void addDatapoint(double pitch, double time) //Assume time is never greater than width //MAKE SYN
 	{
 		double pixelwidth = getPixelWidth(time);
 		double pixely = getPixelYPos(pitch);
-		double pixeltarget = getPixelYPos(target);
+		Paint linePaint;
+		
+		if (LetterNotes.evalFreq(target, pitch) == 0) linePaint = fgPaint;
+		else linePaint = redPaint;
+		
 		if (this.current_x + pixelwidth > this.width)
 		{
-			drawBrokenDatapoint(this.current_x, this.current_x + pixelwidth, this.current_y, pixely, pixeltarget);
+			drawBrokenDatapoint(this.current_x, this.current_x + pixelwidth, this.current_y, pixely, linePaint);
 			this.current_x = this.current_x + pixelwidth - this.width;
 		}
 		else
 		{
-			drawDatapoint(this.current_x, this.current_x + pixelwidth, this.current_y, pixely, pixeltarget);
+			drawDatapoint(this.current_x, this.current_x + pixelwidth, this.current_y, pixely, linePaint);
 			this.current_x = this.current_x + pixelwidth;
 		}
 		this.current_y = pixely;
 	}
 	
 	
-	private void drawDatapoint(double curx, double nextx, double cury, double nexty, double target)
+	private void drawDatapoint(double curx, double nextx, double cury, double nexty, Paint linePaint)
 	{
 		canvas.drawRect(this.makeRectF(curx, 0, nextx, height), bgPaint);
-		canvas.drawLine((float)curx, (float)(height-cury), (float)nextx, (float)(height - nexty), fgPaint);
-		canvas.drawLine((float)curx, (float)(height-target), (float)nextx, (float)(height-target), whitePaint);
+		canvas.drawLine((float)curx, targetPos, (float)nextx, targetPos, whitePaint);
+		canvas.drawLine((float)curx, (float)(height-cury), (float)nextx, (float)(height - nexty), linePaint);	
 	}
 	
-	private void drawBrokenDatapoint(double curx, double nextx, double cury, double nexty, double target)
+	private void drawBrokenDatapoint(double curx, double nextx, double cury, double nexty, Paint linePaint)
 	{
 		double inty = cury  + (width - nextx) * (nexty-cury)/(nextx-curx);
-		drawDatapoint(curx, width, cury, inty, target);
-		drawDatapoint(0, nextx-width, cury, inty, target);
+		drawDatapoint(curx, width, cury, inty, linePaint);
+		drawDatapoint(0, nextx-width, cury, inty, linePaint);
 		onceAround = true;
 	}
 	

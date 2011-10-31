@@ -15,11 +15,11 @@ public class GraphContainer extends LinearLayout {
 	
 	public GraphContainer(Context context, IGraphNotifyReceiver notifyrecv, String targetPitch) {
 		super(context);
-		graph = new GraphSurface(context);
+		graph = new GraphSurface(context, LetterNotes.noteSpecToFreq(targetPitch), notifyrecv);
 		this.setOrientation(LinearLayout.VERTICAL);
 		
 		text = new TextView(context);
-		text.setText(targetPitch + " " + LetterNotes.noteSpecToFreq(targetPitch));
+		text.setText(targetPitch);
 		text.setTextColor(Color.BLACK);
 		text.setGravity(Gravity.CENTER_HORIZONTAL);
 		this.addView(text);
