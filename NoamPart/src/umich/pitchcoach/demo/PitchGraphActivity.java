@@ -45,7 +45,7 @@ public class PitchGraphActivity extends Activity {
 		diagBtn.setOnClickListener(new View.OnClickListener () {
 			@Override
 			public void onClick(View v) {
-				renderThread.diagnostics();
+				uiGlue.diagnostics();
 			}
 		});
 		nextBtn = (Button)findViewById(R.id.nextBtn);

@@ -1,6 +1,10 @@
 package umich.pitchcoach.demo;
 
 import java.util.Date;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.Condition;
+
 
 import umich.pitchcoach.LetterNotes;
 import umich.pitchcoach.PitchThreadSpawn;
@@ -15,28 +19,28 @@ import android.os.Handler;
 import android.view.SurfaceView;
 import android.widget.Button;
 
+
 public class OffscreenRenderThread extends Thread implements IPitchReciever {
-	PitchThreadSpawn pitchservice;
 	ImageSource image;
 	GraphGlue uiGlue;
+	Handler handler;
+	Lock handlerLock;
+	Condition handlerCond;
 	
 	public OffscreenRenderThread(GraphGlue uiGlue, Context ctx)
 	{
-		pitchservice = new PitchThreadSpawn();
 		//pitchservice = new MockPitchThreadSpawn(R.xml.replay_values, ctx.getResources());
 		this.uiGlue = uiGlue;
+		handlerLock = new ReentrantLock();
+		handlerCond = handlerLock.newCondition();
 	}
-	
-	@Override
-	public void interrupt() {
-		super.interrupt();
-		pitchservice.stopPitchService();
-	}
-
-	@Override
+		@Override
 	public void run() {
 		Looper.prepare();
-			pitchservice.startPitchService(this, new Handler());
+		handlerLock.lock();
+		handler = new Handler();
+		handlerCond.signal();
+		handlerLock.unlock();
 		Looper.loop();
 	}
 
@@ -45,12 +49,6 @@ public class OffscreenRenderThread extends Thread implements IPitchReciever {
 		if (image != null) image.addDatapoint(pitch, timeInSeconds);
 		uiGlue.onPitch(pitch, timeInSeconds);
 		
-	}
-	
-	public void diagnostics()
-	{
-		Date d = new Date();
-		pitchservice.diagnosticDumpSamples("/sdcard/diagnostics" + d.getTime());
 	}
 	
 	public synchronized void setImage(ImageSource image)

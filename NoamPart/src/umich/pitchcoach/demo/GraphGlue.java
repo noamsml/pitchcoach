@@ -1,14 +1,28 @@
 package umich.pitchcoach.demo;
 
+import java.util.Date;
+
+import umich.pitchcoach.PitchThreadSpawn;
+import android.util.Log;
+
 public class GraphGlue {
 	protected GraphContainer activeGraphContainer;
 	protected OffscreenRenderThread renderThread;
 	protected PitchGraphActivity activity;
+	PitchThreadSpawn pitchservice;
+
 	
 	
 	public GraphGlue(PitchGraphActivity activity)
 	{
 		this.activity = activity;
+		this.pitchservice = new PitchThreadSpawn();
+	}
+	
+	public void diagnostics()
+	{
+		Date d = new Date();
+		pitchservice.diagnosticDumpSamples("/sdcard/diagnostics" + d.getTime());
 	}
 	
 	public void setActiveGraphCont(GraphContainer cont)
@@ -23,15 +37,31 @@ public class GraphGlue {
 	}
 	
 	public void startRenderThread() {
-		stopRenderThread();
+		Log.v("RenderThread", "started");
+		if (renderThread != null) stopRenderThread();
 		renderThread = new OffscreenRenderThread(this, activity.getApplicationContext());
 		imageChanged();
 		renderThread.start();
+		
+		//ANDROID IS FUCKING RETARDED
+		renderThread.handlerLock.lock();
+		while (renderThread.handler == null) {
+			try {
+				renderThread.handlerCond.await();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		pitchservice.startPitchService(renderThread, renderThread.handler);
+		renderThread.handlerLock.unlock();
 	}
 	
 	public void stopRenderThread() {
+		pitchservice.stopPitchService();
 		if (renderThread != null) renderThread.interrupt();
 		renderThread = null;
+		Log.v("RenderThread", "stopped");
 
 	}
 	
