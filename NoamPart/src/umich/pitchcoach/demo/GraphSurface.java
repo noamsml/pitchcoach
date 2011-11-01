@@ -15,7 +15,7 @@ import android.view.SurfaceView;
 public class GraphSurface extends SurfaceView {
 	protected ImageSource imagesource;
 	protected static final double SECONDS_ONSCREEN = 10;
-	protected IGraphNotifyReceiver notifyReceiver; //TODO: Make this hack unnecessary
+	protected GraphGlue uiGlue; //TODO: Make this hack unnecessary
 	protected boolean isLive;
 	protected double target;
 	
@@ -29,9 +29,9 @@ public class GraphSurface extends SurfaceView {
 		isLive = false;
 	}
 	
-	public GraphSurface(Context context, double target, IGraphNotifyReceiver notifyreceiver) {
+	public GraphSurface(Context context, double target, GraphGlue uiGlue) {
 		super(context);
-		setNotifyReceiver(notifyreceiver);
+		this.uiGlue = uiGlue;
 		this.target = target;
 		initialize();
 	}
@@ -54,15 +54,9 @@ public class GraphSurface extends SurfaceView {
 		{
 			this.imagesource = new ImageSource(w,h, this.target);
 		}
-		notifyReceiver.imageSourceChanged();
+		uiGlue.imageChanged();
 	}
 	
-	
-	public void setNotifyReceiver(IGraphNotifyReceiver notifyreceiver)
-	{
-		this.notifyReceiver = notifyreceiver;
-		
-	}
 
 	@Override
 	protected void onDraw(Canvas c)

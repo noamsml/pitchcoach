@@ -14,41 +14,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
-public class PitchGraphActivity extends Activity implements IGraphNotifyReceiver {
-	GraphContainer currentGraph;
+public class PitchGraphActivity extends Activity {
+	
 	OffscreenRenderThread renderThread;
 	Button diagBtn, nextBtn;
 	TextView feedbackTxt;
 	LinearLayout graphLayout;
 	PitchKeeper myPitchKeeper;
+	
+	GraphGlue uiGlue;
 
-	private void startRenderThread() {
-		stopRenderThread();
-		renderThread = new OffscreenRenderThread(this, getApplicationContext());
-		imageSourceChanged();
-		renderThread.start();
-	}
-
-	private void setCurrentGraph(GraphContainer container)
-	{
-		if (this.currentGraph != null) this.currentGraph.makeDead();
-		this.currentGraph = container;
-		container.makeLive();
-		imageSourceChanged();
-	}
-
-	public void imageSourceChanged() {
-		if (currentGraph != null)
-		{
-			if (this.renderThread != null) renderThread.setImage(currentGraph.getImageSource());	
-		}
-	}
-
-	private void stopRenderThread() {
-		if (renderThread != null) renderThread.interrupt();
-		renderThread = null;
-
-	}
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +33,12 @@ public class PitchGraphActivity extends Activity implements IGraphNotifyReceiver
 		setContentView(R.layout.mockui);
 		View v = findViewById(R.id.graphLinearLayout);
 		graphLayout = (LinearLayout)v;
+		uiGlue = new GraphGlue(this);
 		
 		myPitchKeeper = new PitchKeeper(new ArrayList<String>(Arrays.asList(LetterNotes.steps)));
 
 		
-		GraphContainer theGraph = new GraphContainer(getApplicationContext(), this, myPitchKeeper.getRandomPitch());
+		GraphContainer theGraph = new GraphContainer(getApplicationContext(), uiGlue, myPitchKeeper.getRandomPitch());
 		addGraph(theGraph);
 		
 		diagBtn = (Button)findViewById(R.id.diagBtn);
@@ -78,7 +55,7 @@ public class PitchGraphActivity extends Activity implements IGraphNotifyReceiver
 		nextBtn.setOnClickListener(new View.OnClickListener () {
 			@Override
 			public void onClick(View v) {
-				GraphContainer theGraph = new GraphContainer(getApplicationContext(), that, myPitchKeeper.getRandomPitch());
+				GraphContainer theGraph = new GraphContainer(getApplicationContext(), uiGlue, myPitchKeeper.getRandomPitch());
 				addGraph(theGraph);
 			}
 		});
@@ -88,27 +65,25 @@ public class PitchGraphActivity extends Activity implements IGraphNotifyReceiver
 
 	private void addGraph(GraphContainer theGraph) {
 		graphLayout.addView(theGraph, 500, 300);
-		setCurrentGraph(theGraph);
+		uiGlue.setCurrentGraph(theGraph);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		stopRenderThread();
+		uiGlue.stopRenderThread();
 	}
 
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		startRenderThread();
+		uiGlue.startRenderThread();
 
 	}
 
 	public void updateIncidentalUI(double pitch, double timeInSeconds) {
 		// TODO Auto-generated method stub
-		int intPitch = (int)pitch;
-		feedbackTxt.setText(LetterNotes.freqToNoteSpec(intPitch));
-		this.currentGraph.updateGraph();
+		feedbackTxt.setText(LetterNotes.freqToNoteSpec(pitch));
 	}
 }

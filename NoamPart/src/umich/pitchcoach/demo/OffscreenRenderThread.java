@@ -18,13 +18,13 @@ import android.widget.Button;
 public class OffscreenRenderThread extends Thread implements IPitchReciever {
 	PitchThreadSpawn pitchservice;
 	ImageSource image;
-	PitchGraphActivity pitchGraphActivity;
+	GraphGlue uiGlue;
 	
-	public OffscreenRenderThread(PitchGraphActivity a, Context ctx)
+	public OffscreenRenderThread(GraphGlue uiGlue, Context ctx)
 	{
 		pitchservice = new PitchThreadSpawn();
 		//pitchservice = new MockPitchThreadSpawn(R.xml.replay_values, ctx.getResources());
-		pitchGraphActivity = a;
+		this.uiGlue = uiGlue;
 	}
 	
 	@Override
@@ -43,14 +43,8 @@ public class OffscreenRenderThread extends Thread implements IPitchReciever {
 	@Override
 	public synchronized void receivePitch(final double pitch, final double timeInSeconds) {
 		if (image != null) image.addDatapoint(pitch, timeInSeconds);
-		pitchGraphActivity.runOnUiThread(new Runnable () {
-
-			@Override
-			public void run() {
-				pitchGraphActivity.updateIncidentalUI(pitch, timeInSeconds);
-			}
-			
-		});
+		uiGlue.onPitch(pitch, timeInSeconds);
+		
 	}
 	
 	public void diagnostics()
