@@ -1,6 +1,10 @@
 package umich.pitchcoach.demo;
 
 import java.util.Date;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.Condition;
+
 
 import umich.pitchcoach.LetterNotes;
 import umich.pitchcoach.PitchThreadSpawn;
@@ -15,48 +19,36 @@ import android.os.Handler;
 import android.view.SurfaceView;
 import android.widget.Button;
 
-public class OffscreenRenderThread extends Thread implements IPitchReciever {
-	PitchThreadSpawn pitchservice;
-	ImageSource image;
-	PitchGraphActivity pitchGraphActivity;
-	
-	public OffscreenRenderThread(PitchGraphActivity a, Context ctx)
-	{
-		pitchservice = new PitchThreadSpawn();
-		//pitchservice = new MockPitchThreadSpawn(R.xml.replay_values, ctx.getResources());
-		pitchGraphActivity = a;
-	}
-	
-	@Override
-	public void interrupt() {
-		super.interrupt();
-		pitchservice.stopPitchService();
-	}
 
-	@Override
+public class OffscreenRenderThread extends Thread implements IPitchReciever {
+	ImageSource image;
+	GraphGlue uiGlue;
+	Handler handler;
+	Lock handlerLock;
+	Condition handlerCond;
+	
+	public OffscreenRenderThread(GraphGlue uiGlue, Context ctx)
+	{
+		//pitchservice = new MockPitchThreadSpawn(R.xml.replay_values, ctx.getResources());
+		this.uiGlue = uiGlue;
+		handlerLock = new ReentrantLock();
+		handlerCond = handlerLock.newCondition();
+	}
+		@Override
 	public void run() {
 		Looper.prepare();
-			pitchservice.startPitchService(this, new Handler());
+		handlerLock.lock();
+		handler = new Handler();
+		handlerCond.signal();
+		handlerLock.unlock();
 		Looper.loop();
 	}
 
 	@Override
 	public synchronized void receivePitch(final double pitch, final double timeInSeconds) {
 		if (image != null) image.addDatapoint(pitch, timeInSeconds);
-		pitchGraphActivity.runOnUiThread(new Runnable () {
-
-			@Override
-			public void run() {
-				pitchGraphActivity.updateIncidentalUI(pitch, timeInSeconds);
-			}
-			
-		});
-	}
-	
-	public void diagnostics()
-	{
-		Date d = new Date();
-		pitchservice.diagnosticDumpSamples("/sdcard/diagnostics" + d.getTime());
+		uiGlue.onPitch(pitch, timeInSeconds);
+		
 	}
 	
 	public synchronized void setImage(ImageSource image)

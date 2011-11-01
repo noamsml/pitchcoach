@@ -13,9 +13,9 @@ public class GraphContainer extends LinearLayout {
 	public TextView text;
 	private String targetPitch;
 	
-	public GraphContainer(Context context, IGraphNotifyReceiver notifyrecv, String targetPitch) {
+	public GraphContainer(Context context, GraphGlue uiGlue, String targetPitch) {
 		super(context);
-		graph = new GraphSurface(context, LetterNotes.noteSpecToFreq(targetPitch), notifyrecv);
+		graph = new GraphSurface(context, LetterNotes.noteSpecToFreq(targetPitch), uiGlue);
 		this.setOrientation(LinearLayout.VERTICAL);
 		
 		text = new TextView(context);
@@ -25,7 +25,6 @@ public class GraphContainer extends LinearLayout {
 		this.addView(text);
 		this.addView(graph);
 		
-		graph.setNotifyReceiver(notifyrecv);
 		this.setBackgroundColor(Color.GRAY);
 		this.setPadding(10, 10, 10, 10);
 		this.targetPitch = targetPitch;
