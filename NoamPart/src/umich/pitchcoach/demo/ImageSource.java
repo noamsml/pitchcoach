@@ -95,7 +95,7 @@ public class ImageSource {
 	{
 		canvas.drawRect(this.makeRectF(curx, 0, nextx, height), bgPaint);
 		canvas.drawLine((float)curx, targetPos, (float)nextx, targetPos, targetPaint);
-		canvas.drawLine((float)curx, (float)(height- cury + margin), (float)nextx, (float)(height - nexty + margin), linePaint);	
+		canvas.drawLine((float)curx, (float)(height - cury + margin), (float)nextx, (float)(height - nexty + margin), linePaint);		
 	}
 	
 	private void drawBrokenDatapoint(double curx, double nextx, double cury, double nexty, Paint linePaint)
