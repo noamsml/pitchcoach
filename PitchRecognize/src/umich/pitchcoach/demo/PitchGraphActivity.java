@@ -50,6 +50,7 @@ public class PitchGraphActivity extends Activity {
 		});
 		nextBtn = (Button)findViewById(R.id.nextBtn);
 
+		@SuppressWarnings("unused") // HACK
 		final PitchGraphActivity that = this; //HACK 
 
 		nextBtn.setOnClickListener(new View.OnClickListener () {

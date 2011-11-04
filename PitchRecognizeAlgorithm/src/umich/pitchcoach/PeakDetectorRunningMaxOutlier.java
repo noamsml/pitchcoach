@@ -10,12 +10,14 @@ public class PeakDetectorRunningMaxOutlier implements IPeakDetector {
 	private static final float OUTLIER_RATIO = 7.5f;
 	private static final int SAMPLES_THRES=40;
 	
+	/* An unused method.
 	private int sign(float i)
 	{
 		if (i < 0) return -1;
 		else if (i > 0) return 1;
 		return 0;
 	}
+	*/
 	
 	private int sampthres(int loc)
 	{

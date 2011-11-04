@@ -4,7 +4,7 @@ import umich.pitchcoach.IPitchAnalyzer;
 import umich.pitchcoach.NoMoreDataException;
 import umich.pitchcoach.PitchAnalyzerDCT;
 import umich.pitchcoach.SineWave;
-import android.os.Debug;
+//import android.os.Debug;
 import android.os.Handler;
 import android.os.SystemClock;
 public class AnalysisTestingThread extends Thread {
@@ -46,6 +46,7 @@ public class AnalysisTestingThread extends Thread {
 		});
 	}
 	
+	@SuppressWarnings("unused")
 	private void runTest(int sampleSize)
 	{
 		//if (sampleSize == 8192) Debug.startMethodTracing("pitchcoach.trace");

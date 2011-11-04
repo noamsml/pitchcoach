@@ -2,12 +2,10 @@ package umich.pitchcoach.test;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import umich.pitchcoach.ISampleSource;
-import umich.pitchcoach.Invariants;
 import umich.pitchcoach.NoMoreDataException;
 import umich.pitchcoach.circularShortBuffer;
 

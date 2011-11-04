@@ -1,5 +1,6 @@
 package umich.pitchcoach;
 
+@SuppressWarnings("serial")
 public class NoMoreDataException extends Exception {
 
 	public NoMoreDataException() {
