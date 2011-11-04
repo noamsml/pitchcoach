@@ -21,7 +21,7 @@ public class PitchGraphActivity extends Activity {
 	OffscreenRenderThread renderThread;
 	Button diagBtn, nextBtn;
 	TextView feedbackTxt;
-	LinearLayout graphLayout;
+	AutoScrollingLinearLayout graphLayout;
 	PitchKeeper myPitchKeeper;
 	HorizontalScrollView scrollview;
 	GraphGlue uiGlue;
@@ -34,10 +34,10 @@ public class PitchGraphActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mockui);
 		View v = findViewById(R.id.graphLinearLayout);
-		graphLayout = (LinearLayout)v;
+		graphLayout = (AutoScrollingLinearLayout)v;
 		uiGlue = new GraphGlue(this);
 		scrollview = (HorizontalScrollView)findViewById(R.id.scroller); 
-
+		graphLayout.setScrollView(scrollview);
 		myPitchKeeper = new PitchKeeper(new ArrayList<String>(Arrays.asList(singTheseNotes)));
 
 
@@ -69,7 +69,6 @@ public class PitchGraphActivity extends Activity {
 	private void addGraph(GraphContainer theGraph) {
 		graphLayout.addView(theGraph, 500, 300);
 		uiGlue.setCurrentGraph(theGraph);
-		scrollview.scrollTo(graphLayout.getWidth(), 0);
 	}
 
 	@Override

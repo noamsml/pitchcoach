@@ -4,10 +4,10 @@
 	android:orientation="vertical">
 	<HorizontalScrollView android:layout_height="wrap_content"
 		android:layout_width="match_parent" android:id="@+id/scroller">
-		<LinearLayout android:layout_width="fill_parent"
+		<umich.pitchcoach.demo.AutoScrollingLinearLayout android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:orientation="horizontal"
 			android:id="@+id/graphLinearLayout">
-		</LinearLayout>
+		</umich.pitchcoach.demo.AutoScrollingLinearLayout>
 	</HorizontalScrollView>
 
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
