@@ -14,20 +14,20 @@ public class ImageSource {
 	private int width;
 	private int height;
 	private double target;
+	private double margin; // for centering the target line in the graph
 	
 	private boolean onceAround;
 	
 	private Paint bgPaint;
-	private Paint fgPaint;
-	private Paint whitePaint;
-	private Paint redPaint;
-	
+	private Paint targetPaint;
+	private Paint linePaint;
+
 	private final static double SECONDS_TO_SHOW = 10;
 	private final static double MIN_HZ = 70;
 	private final static double LOG_MINHZ = Math.log(MIN_HZ);
 	private final static double MAX_HZ = 700;
 	private final static double LOG_MAXHZ = Math.log(MAX_HZ);
-	
+		
 	private double pixel_per_sec;
 	
 	private double current_x;
@@ -44,19 +44,20 @@ public class ImageSource {
 		this.current_x = 0;
 		this.target = target;
 		
-		
+		this.linePaint = new Paint();
 		this.bgPaint = new Paint();
 		this.bgPaint.setColor(Color.BLACK);
-		this.fgPaint = new Paint();
-		this.fgPaint.setColor(Color.GREEN);
-		this.redPaint = new Paint();
-		this.redPaint.setColor(Color.RED);
-		this.whitePaint = new Paint();
-		this.whitePaint.setColor(Color.WHITE);
+		this.targetPaint = new Paint();
+		this.targetPaint.setColor(Color.WHITE);
 		this.onceAround = false;
 		
-		targetPos =  height - (float)(getPixelYPos(target));
-		canvas.drawLine((float)0, targetPos, (float)width, targetPos, whitePaint);
+		// Have each targetPitch centered in the graph
+		margin = 0;
+		targetPos = height - (float)(getPixelYPos(target));
+		margin = (height/2) - targetPos;
+		targetPos += margin;
+		
+		canvas.drawLine((float)0, targetPos, (float)width, targetPos, targetPaint);
 	}
 	
 	private Rect makeRect(double left, double top, double right, double bottom)
@@ -74,10 +75,7 @@ public class ImageSource {
 	{
 		double pixelwidth = getPixelWidth(time);
 		double pixely = getPixelYPos(pitch);
-		Paint linePaint;
-		
-		if (LetterNotes.evalFreq(target, pitch) == 0) linePaint = fgPaint;
-		else linePaint = redPaint;
+		updateLineColor(LetterNotes.evalFreq(target, pitch));
 		
 		if (this.current_x + pixelwidth > this.width)
 		{
@@ -96,8 +94,8 @@ public class ImageSource {
 	private void drawDatapoint(double curx, double nextx, double cury, double nexty, Paint linePaint)
 	{
 		canvas.drawRect(this.makeRectF(curx, 0, nextx, height), bgPaint);
-		canvas.drawLine((float)curx, targetPos, (float)nextx, targetPos, whitePaint);
-		canvas.drawLine((float)curx, (float)(height-cury), (float)nextx, (float)(height - nexty), linePaint);	
+		canvas.drawLine((float)curx, targetPos, (float)nextx, targetPos, targetPaint);
+		canvas.drawLine((float)curx, (float)(height - cury + margin), (float)nextx, (float)(height - nexty + margin), linePaint);		
 	}
 	
 	private void drawBrokenDatapoint(double curx, double nextx, double cury, double nexty, Paint linePaint)
@@ -117,7 +115,6 @@ public class ImageSource {
 	private double getPixelYPos(double pitch)
 	{
 		double logtime = Math.log(pitch) - LOG_MINHZ;
-		
 		return logtime * (height)/(LOG_MAXHZ - LOG_MINHZ);
 	}
 	
@@ -130,6 +127,27 @@ public class ImageSource {
 		{
 			c.drawBitmap(bitmap,makeRect(current_x, 0, width, height),makeRectF(0,0,width-current_x,height), null);
 			c.drawBitmap(bitmap, makeRect(0, 0, current_x, height), makeRectF(width-current_x,0,width,height), null);
+		}
+	}
+	
+	/*
+	 * Updates the line color depending on margin of error.
+	 * GREEN good, RED bad, graduate to YELLOW in between.
+	 * For even MORE visual feedback, target line turns BLUE when good
+	 */
+	private void updateLineColor(double logError){
+		targetPaint.setColor(Color.WHITE);
+		if (logError == 0){
+			linePaint.setColor(Color.GREEN);
+			targetPaint.setColor(Color.BLUE);
+		} else if (logError <= 2*LetterNotes.logStep) {
+			int rVal = (int) (255*logError/(2*LetterNotes.logStep));
+			linePaint.setARGB(255, rVal, 255, 0);
+		} else if (logError <= 4*LetterNotes.logStep) {
+			int gVal = (int) (255-(255*(logError - 2*LetterNotes.logStep)/(2*LetterNotes.logStep)));
+			linePaint.setARGB(255, 255, gVal, 0);
+		} else {
+			linePaint.setColor(Color.RED);
 		}
 	}
 

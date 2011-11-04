@@ -15,16 +15,16 @@ import android.widget.TextView;
 
 
 public class PitchGraphActivity extends Activity {
-	
+
 	OffscreenRenderThread renderThread;
 	Button diagBtn, nextBtn;
 	TextView feedbackTxt;
 	LinearLayout graphLayout;
 	PitchKeeper myPitchKeeper;
-	
+
 	GraphGlue uiGlue;
 
-	
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +34,13 @@ public class PitchGraphActivity extends Activity {
 		View v = findViewById(R.id.graphLinearLayout);
 		graphLayout = (LinearLayout)v;
 		uiGlue = new GraphGlue(this);
-		
+
 		myPitchKeeper = new PitchKeeper(new ArrayList<String>(Arrays.asList(LetterNotes.steps)));
 
-		
+
 		GraphContainer theGraph = new GraphContainer(getApplicationContext(), uiGlue, myPitchKeeper.getRandomPitch());
 		addGraph(theGraph);
-		
+
 		diagBtn = (Button)findViewById(R.id.diagBtn);
 		diagBtn.setOnClickListener(new View.OnClickListener () {
 			@Override
@@ -49,9 +49,9 @@ public class PitchGraphActivity extends Activity {
 			}
 		});
 		nextBtn = (Button)findViewById(R.id.nextBtn);
-		
+
 		final PitchGraphActivity that = this; //HACK 
-		
+
 		nextBtn.setOnClickListener(new View.OnClickListener () {
 			@Override
 			public void onClick(View v) {
