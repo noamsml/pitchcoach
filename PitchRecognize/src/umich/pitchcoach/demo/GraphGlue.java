@@ -79,11 +79,16 @@ public class GraphGlue {
 		activity.runOnUiThread(new Runnable () {
 			@Override
 			public void run() {
-				activity.updateIncidentalUI(pitch, time);
 				activeGraphContainer.updateGraph();
 				activeGraphContainer.onPitch(pitch, time);
+				activity.updateIncidentalUI(pitch, time);
 			}
 			
 		});
+	}
+	
+	public GraphContainer getCurrentContainer()
+	{
+		return activeGraphContainer;
 	}
 }

@@ -4,7 +4,6 @@ import umich.pitchcoach.LetterNotes;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.Gravity;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -13,6 +12,7 @@ public class GraphContainer extends LinearLayout {
 	public TextView text;
 	private String targetPitch;
 	private NotePlayer noteplayer;
+	private GraphEvaluator eval;
 	
 	public GraphContainer(Context context, GraphGlue uiGlue, String targetPitch) {
 		super(context);
@@ -29,6 +29,8 @@ public class GraphContainer extends LinearLayout {
 		this.setBackgroundColor(Color.GRAY);
 		this.setPadding(10, 10, 10, 10);
 		this.targetPitch = targetPitch;
+		
+		eval = new GraphEvaluator(this.targetPitch);
 	}
 
 	public void updateGraph() {
@@ -50,12 +52,17 @@ public class GraphContainer extends LinearLayout {
 	
 	public void onPitch(double pitch, double time)
 	{
-		//nada
+		eval.onPitch(pitch, time);
 	}
 	
 	public void setTargetPitch(String pitch){
 		this.targetPitch = pitch;
 		text.setText(targetPitch + " " + LetterNotes.noteSpecToFreq(pitch));
 	}
+	
+	public boolean isDone() {
+		return eval.isDone();
+	}
+	
 	
 }

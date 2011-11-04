@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 
@@ -21,7 +20,7 @@ public class PitchGraphActivity extends Activity {
 	OffscreenRenderThread renderThread;
 	Button diagBtn, nextBtn;
 	TextView feedbackTxt;
-	LinearLayout graphLayout;
+	AutoScrollingLinearLayout graphLayout;
 	PitchKeeper myPitchKeeper;
 	HorizontalScrollView scrollview;
 	GraphGlue uiGlue;
@@ -34,10 +33,10 @@ public class PitchGraphActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mockui);
 		View v = findViewById(R.id.graphLinearLayout);
-		graphLayout = (LinearLayout)v;
+		graphLayout = (AutoScrollingLinearLayout)v;
 		uiGlue = new GraphGlue(this);
 		scrollview = (HorizontalScrollView)findViewById(R.id.scroller); 
-
+		graphLayout.setScrollView(scrollview);
 		myPitchKeeper = new PitchKeeper(new ArrayList<String>(Arrays.asList(singTheseNotes)));
 
 
@@ -53,6 +52,7 @@ public class PitchGraphActivity extends Activity {
 		});
 		nextBtn = (Button)findViewById(R.id.nextBtn);
 
+		@SuppressWarnings("unused") // HACK
 		final PitchGraphActivity that = this; //HACK 
 
 		nextBtn.setOnClickListener(new View.OnClickListener () {
@@ -69,7 +69,6 @@ public class PitchGraphActivity extends Activity {
 	private void addGraph(GraphContainer theGraph) {
 		graphLayout.addView(theGraph, 500, 300);
 		uiGlue.setCurrentGraph(theGraph);
-		scrollview.scrollTo(graphLayout.getWidth(), 0);
 	}
 
 	@Override
@@ -89,5 +88,9 @@ public class PitchGraphActivity extends Activity {
 	public void updateIncidentalUI(double pitch, double timeInSeconds) {
 		// TODO Auto-generated method stub
 		feedbackTxt.setText(LetterNotes.freqToNoteSpec(pitch));
+		if (uiGlue.getCurrentContainer().isDone()) {
+			GraphContainer theGraph = new GraphContainer(getApplicationContext(), uiGlue, myPitchKeeper.getRandomPitch());
+			addGraph(theGraph);
+		}
 	}
 }

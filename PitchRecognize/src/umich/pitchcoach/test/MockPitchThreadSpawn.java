@@ -3,7 +3,7 @@ package umich.pitchcoach.test;
 import android.content.res.Resources;
 import android.os.Handler;
 import android.util.Log;
-import umich.pitchcoach.PitchThread;
+//import umich.pitchcoach.PitchThread;
 import umich.pitchcoach.shared.IPitchReciever;
 import umich.pitchcoach.shared.IPitchServiceController;
 
