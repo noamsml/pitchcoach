@@ -81,6 +81,7 @@ public class GraphGlue {
 			public void run() {
 				activity.updateIncidentalUI(pitch, time);
 				activeGraphContainer.updateGraph();
+				activeGraphContainer.onPitch(pitch, time);
 			}
 			
 		});

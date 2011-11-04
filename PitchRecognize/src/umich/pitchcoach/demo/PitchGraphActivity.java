@@ -10,7 +10,9 @@ import android.os.Bundle;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 
@@ -21,7 +23,7 @@ public class PitchGraphActivity extends Activity {
 	TextView feedbackTxt;
 	LinearLayout graphLayout;
 	PitchKeeper myPitchKeeper;
-
+	HorizontalScrollView scrollview;
 	GraphGlue uiGlue;
 
 	public static String[] singTheseNotes = new String[]{"C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3"};
@@ -34,6 +36,7 @@ public class PitchGraphActivity extends Activity {
 		View v = findViewById(R.id.graphLinearLayout);
 		graphLayout = (LinearLayout)v;
 		uiGlue = new GraphGlue(this);
+		scrollview = (HorizontalScrollView)findViewById(R.id.scroller); 
 
 		myPitchKeeper = new PitchKeeper(new ArrayList<String>(Arrays.asList(singTheseNotes)));
 
@@ -66,6 +69,7 @@ public class PitchGraphActivity extends Activity {
 	private void addGraph(GraphContainer theGraph) {
 		graphLayout.addView(theGraph, 500, 300);
 		uiGlue.setCurrentGraph(theGraph);
+		scrollview.scrollTo(graphLayout.getWidth(), 0);
 	}
 
 	@Override
