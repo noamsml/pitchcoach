@@ -12,6 +12,7 @@ public class GraphContainer extends LinearLayout {
 	public GraphSurface graph;
 	public TextView text;
 	private String targetPitch;
+	private NotePlayer noteplayer;
 	
 	public GraphContainer(Context context, GraphGlue uiGlue, String targetPitch) {
 		super(context);
