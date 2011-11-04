@@ -40,7 +40,7 @@ public class GraphEvaluator {
 		else 
 		{
 			if (timeRight != 0 || timeSinceRight != 0) timeSinceRight += time;
-			timeRight += 0;
+			timeRight = 0;
 		}
 	}
 }
