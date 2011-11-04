@@ -12,12 +12,12 @@ public class GraphEvaluator {
 	private static double timeSpentNeeded = 10.0;
 	private static double timeSpentOK = 2.0;
 	
-	public GraphEvaluator(double freq)
+	public GraphEvaluator(String pitch)
 	{
 		timeSpent = 0;
 		timeRight = 0;
 		timeSinceRight = 0;
-		freqCorrect = freq;
+		freqCorrect = LetterNotes.noteSpecToFreq(pitch);
 	}
 	
 	public boolean isDone() {
@@ -33,6 +33,14 @@ public class GraphEvaluator {
 	
 	public void onPitch(double pitch, double time) {
 		timeSpent += time;
-		if (LetterNotes.evalFreq(pitch, freq));
+		if (LetterNotes.evalFreq(pitch, freqCorrect) == 0) {
+			timeRight += time;
+			timeSinceRight = 0;
+		}
+		else 
+		{
+			if (timeRight != 0 || timeSinceRight != 0) timeSinceRight += time;
+			timeRight += 0;
+		}
 	}
 }
