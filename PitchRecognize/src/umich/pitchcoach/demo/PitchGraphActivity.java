@@ -24,7 +24,7 @@ public class PitchGraphActivity extends Activity {
 
 	GraphGlue uiGlue;
 
-
+	public static String[] singTheseNotes = new String[]{"C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3"};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,7 @@ public class PitchGraphActivity extends Activity {
 		graphLayout = (LinearLayout)v;
 		uiGlue = new GraphGlue(this);
 
-		myPitchKeeper = new PitchKeeper(new ArrayList<String>(Arrays.asList(LetterNotes.steps)));
+		myPitchKeeper = new PitchKeeper(new ArrayList<String>(Arrays.asList(singTheseNotes)));
 
 
 		GraphContainer theGraph = new GraphContainer(getApplicationContext(), uiGlue, myPitchKeeper.getRandomPitch());
