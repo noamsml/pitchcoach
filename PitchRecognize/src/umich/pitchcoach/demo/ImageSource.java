@@ -32,6 +32,9 @@ public class ImageSource {
 	
 	private double current_x;
 	private double current_y;
+	
+	double logErrorOld = 0;
+	
 		
 	private float targetPos;
 	public ImageSource(int width, int height, double target)
@@ -75,8 +78,9 @@ public class ImageSource {
 	{
 		double pixelwidth = getPixelWidth(time);
 		double pixely = getPixelYPos(pitch);
-		updateLineColor(LetterNotes.evalFreq(target, pitch));
-		
+		double logError = LetterNotes.evalFreq(target, pitch);
+		updateLineColor(logError);
+		logErrorOld = logError;
 		if (this.current_x + pixelwidth > this.width)
 		{
 			drawBrokenDatapoint(this.current_x, this.current_x + pixelwidth, this.current_y, pixely, linePaint);
@@ -137,6 +141,7 @@ public class ImageSource {
 	 */
 	private void updateLineColor(double logError){
 		targetPaint.setColor(Color.WHITE);
+		logError = Math.max(logError, logErrorOld);
 		if (logError == 0){
 			linePaint.setColor(Color.GREEN);
 			targetPaint.setColor(Color.BLUE);
