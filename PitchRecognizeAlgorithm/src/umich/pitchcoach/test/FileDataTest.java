@@ -11,9 +11,9 @@ public class FileDataTest {
 	 */
 	public static void main(String[] args) {
 		FileSampleSource dataSource = new FileSampleSource("/home/noam/Schoolwork/MDE/Samples/diag2.txt", Invariants.NUMSAMPLES, Invariants.BUFSIZE);
-		float data[] = new float[Invariants.BUFSIZE];
+		//#NOT USED# float data[] = new float[Invariants.BUFSIZE];
 		PitchAnalyzerDCT anal = new PitchAnalyzerDCT(Invariants.BUFSIZE);
-		int size = 0;
+		//#NOT USED# int size = 0;
 		boolean done = false;
 		while(!done)
 		{

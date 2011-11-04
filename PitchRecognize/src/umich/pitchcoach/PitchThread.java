@@ -4,12 +4,10 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import umich.pitchcoach.shared.IPitchReciever;
-import android.app.Activity;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Handler;
-import android.os.Looper;
 
 
 public class PitchThread extends Thread {

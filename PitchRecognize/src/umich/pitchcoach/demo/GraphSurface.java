@@ -1,15 +1,7 @@
 package umich.pitchcoach.demo;
 
-import java.util.List;
-import java.util.ArrayList;
-
-import umich.pitchcoach.LetterNotes;
-import umich.pitchcoach.shared.IPitchReciever;
-
 import android.content.Context;
 import android.graphics.Canvas;
-import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.SurfaceView;
 
 public class GraphSurface extends SurfaceView {

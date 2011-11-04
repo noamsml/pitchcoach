@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 
@@ -53,6 +52,7 @@ public class PitchGraphActivity extends Activity {
 		});
 		nextBtn = (Button)findViewById(R.id.nextBtn);
 
+		@SuppressWarnings("unused") // HACK
 		final PitchGraphActivity that = this; //HACK 
 
 		nextBtn.setOnClickListener(new View.OnClickListener () {

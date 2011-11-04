@@ -1,24 +1,13 @@
 package umich.pitchcoach.demo;
 
-import java.util.Date;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.Condition;
 
-
-import umich.pitchcoach.LetterNotes;
-import umich.pitchcoach.PitchThreadSpawn;
-import umich.pitchcoach.R;
 import umich.pitchcoach.shared.IPitchReciever;
-import umich.pitchcoach.shared.IPitchServiceController;
-import umich.pitchcoach.test.MockPitchThreadSpawn;
-import android.app.Activity;
 import android.content.Context;
 import android.os.Looper;
 import android.os.Handler;
-import android.view.SurfaceView;
-import android.widget.Button;
-
 
 public class OffscreenRenderThread extends Thread implements IPitchReciever {
 	ImageSource image;
