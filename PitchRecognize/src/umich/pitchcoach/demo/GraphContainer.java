@@ -25,7 +25,7 @@ public class GraphContainer extends LinearLayout {
 		this.addView(text);
 		this.addView(graph);
 		
-		this.setBackgroundColor(Color.GRAY);
+		this.setBackgroundColor(Color.WHITE);
 		this.setPadding(10, 10, 10, 10);
 		this.targetPitch = targetPitch;
 		
@@ -63,5 +63,27 @@ public class GraphContainer extends LinearLayout {
 		return eval.isDone();
 	}
 	
+	public void finalize()
+	{
+		int color;
+		int evalVal;
+		evalVal = eval.getFinalEvaluation();
+		if (evalVal == 0) {
+			color = 0xffffdddd;
+		}
+		else if (evalVal == 1) {
+			color = 0xffffffdd;
+		}
+		else {
+			color = 0xffddffdd;
+		}
+		
+			
+		this.setBackgroundColor(color);
+	}
+	
+	public int getFinalEvaluation() {
+		return eval.getFinalEvaluation();
+	}
 	
 }

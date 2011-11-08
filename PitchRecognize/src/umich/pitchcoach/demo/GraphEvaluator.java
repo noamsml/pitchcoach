@@ -21,13 +21,13 @@ public class GraphEvaluator {
 	}
 	
 	public boolean isDone() {
-		return (timeRight > timeRightNeeded) || (timeSpent > timeSpentNeeded);
+		return (timeRight > timeRightNeeded) || (timeSpent > timeSpentNeeded && timeRight == 0);
 	}
 	
 	//Bigger is better
 	public int getFinalEvaluation() {
 		if (timeRight < timeRightNeeded) return 0;
-		else if (timeSpent < timeSpentOK) return 1;
+		else if (timeSpent > timeSpentOK) return 1;
 		return 2;
 	}
 	

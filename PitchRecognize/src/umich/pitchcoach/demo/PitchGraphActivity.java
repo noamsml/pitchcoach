@@ -89,6 +89,7 @@ public class PitchGraphActivity extends Activity {
 		// TODO Auto-generated method stub
 		feedbackTxt.setText(LetterNotes.freqToNoteSpec(pitch));
 		if (uiGlue.getCurrentContainer().isDone()) {
+			uiGlue.getCurrentContainer().finalize();
 			GraphContainer theGraph = new GraphContainer(getApplicationContext(), uiGlue, myPitchKeeper.getRandomPitch());
 			addGraph(theGraph);
 		}
