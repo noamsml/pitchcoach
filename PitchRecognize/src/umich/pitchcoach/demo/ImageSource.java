@@ -14,7 +14,6 @@ public class ImageSource {
 	private int width;
 	private int height;
 	private double target;
-	private double margin; // for centering the target line in the graph
 	
 	private boolean onceAround;
 	
@@ -54,11 +53,7 @@ public class ImageSource {
 		this.targetPaint.setColor(Color.WHITE);
 		this.onceAround = false;
 		
-		// Have each targetPitch centered in the graph
-		margin = 0;
 		targetPos = height - (float)(getPixelYPos(target));
-		margin = (height/2) - targetPos;
-		targetPos += margin;
 		
 		canvas.drawLine((float)0, targetPos, (float)width, targetPos, targetPaint);
 	}
@@ -99,7 +94,7 @@ public class ImageSource {
 	{
 		canvas.drawRect(this.makeRectF(curx, 0, nextx, height), bgPaint);
 		canvas.drawLine((float)curx, targetPos, (float)nextx, targetPos, targetPaint);
-		canvas.drawLine((float)curx, (float)(height - cury + margin), (float)nextx, (float)(height - nexty + margin), linePaint);		
+		canvas.drawLine((float)curx, (float)(height - cury), (float)nextx, (float)(height - nexty), linePaint);		
 	}
 	
 	private void drawBrokenDatapoint(double curx, double nextx, double cury, double nexty, Paint linePaint)
