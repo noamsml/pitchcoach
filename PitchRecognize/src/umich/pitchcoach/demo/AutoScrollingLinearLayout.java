@@ -17,6 +17,7 @@ public class AutoScrollingLinearLayout extends LinearLayout {
 		this.scrollview = scrollview;
 	}
 
+
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		// TODO Auto-generated method stub

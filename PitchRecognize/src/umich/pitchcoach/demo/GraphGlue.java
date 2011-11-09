@@ -5,18 +5,19 @@ import java.util.Date;
 import umich.pitchcoach.PitchThreadSpawn;
 import android.util.Log;
 
-public class GraphGlue {
+public class GraphGlue implements OnScrollListener {
 	protected GraphContainer activeGraphContainer;
 	protected OffscreenRenderThread renderThread;
 	protected PitchGraphActivity activity;
 	PitchThreadSpawn pitchservice;
-
+	boolean scrollAtEnd;
 	
 	
 	public GraphGlue(PitchGraphActivity activity)
 	{
 		this.activity = activity;
 		this.pitchservice = new PitchThreadSpawn();
+		scrollAtEnd = true;
 	}
 	
 	public void diagnostics()
@@ -90,5 +91,25 @@ public class GraphGlue {
 	public GraphContainer getCurrentContainer()
 	{
 		return activeGraphContainer;
+	}
+
+	@Override
+	public void scrollEnd() {
+		if (this.scrollAtEnd == false)
+		{
+			this.scrollAtEnd = true;
+			this.startRenderThread();
+			this.activity.renderUnPause();
+		}
+		
+	}
+
+	@Override
+	public void scrollBack() {
+		if (this.scrollAtEnd == true) {
+			this.scrollAtEnd = false;
+			this.stopRenderThread();
+			this.activity.renderPause();
+		}
 	}
 }

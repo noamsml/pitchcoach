@@ -2,13 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:orientation="vertical">
-	<HorizontalScrollView android:layout_height="wrap_content"
+	<umich.pitchcoach.demo.LocationAwareScrollView android:layout_height="wrap_content"
 		android:layout_width="match_parent" android:id="@+id/scroller">
 		<umich.pitchcoach.demo.AutoScrollingLinearLayout android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:orientation="horizontal"
 			android:id="@+id/graphLinearLayout">
 		</umich.pitchcoach.demo.AutoScrollingLinearLayout>
-	</HorizontalScrollView>
+	</umich.pitchcoach.demo.LocationAwareScrollView>
 
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"

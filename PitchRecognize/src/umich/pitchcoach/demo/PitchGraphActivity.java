@@ -22,9 +22,10 @@ public class PitchGraphActivity extends Activity {
 	TextView feedbackTxt;
 	AutoScrollingLinearLayout graphLayout;
 	PitchKeeper myPitchKeeper;
-	HorizontalScrollView scrollview;
+	LocationAwareScrollView scrollview;
 	GraphGlue uiGlue;
-
+	CharSequence lastPitchSung;
+	
 	public static String[] singTheseNotes = new String[]{"C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3"};
 
 	@Override
@@ -35,10 +36,11 @@ public class PitchGraphActivity extends Activity {
 		View v = findViewById(R.id.graphLinearLayout);
 		graphLayout = (AutoScrollingLinearLayout)v;
 		uiGlue = new GraphGlue(this);
-		scrollview = (HorizontalScrollView)findViewById(R.id.scroller); 
+		scrollview = (LocationAwareScrollView)findViewById(R.id.scroller); 
+		scrollview.setOnScrollListener(uiGlue);
 		graphLayout.setScrollView(scrollview);
 		myPitchKeeper = new PitchKeeper(new ArrayList<String>(Arrays.asList(singTheseNotes)));
-
+		
 
 		GraphContainer theGraph = new GraphContainer(getApplicationContext(), uiGlue, myPitchKeeper.getRandomPitch());
 		addGraph(theGraph);
@@ -93,5 +95,15 @@ public class PitchGraphActivity extends Activity {
 			GraphContainer theGraph = new GraphContainer(getApplicationContext(), uiGlue, myPitchKeeper.getRandomPitch());
 			addGraph(theGraph);
 		}
+	}
+
+	public void renderPause() {
+		lastPitchSung = this.feedbackTxt.getText();
+		this.feedbackTxt.setText("Pasued");
+		
+	}
+	
+	public void renderUnPause() {
+		this.feedbackTxt.setText(lastPitchSung);
 	}
 }
