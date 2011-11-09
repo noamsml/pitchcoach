@@ -6,6 +6,7 @@
 		android:layout_width="match_parent" android:id="@+id/scroller">
 		<umich.pitchcoach.demo.AutoScrollingLinearLayout android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:orientation="horizontal"
+			android:scrollbarStyle="outsideOverlay" android:scrollbars="horizontal"
 			android:id="@+id/graphLinearLayout">
 		</umich.pitchcoach.demo.AutoScrollingLinearLayout>
 	</umich.pitchcoach.demo.LocationAwareScrollView>
