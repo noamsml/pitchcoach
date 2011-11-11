@@ -1,0 +1,9 @@
+VirtualBox (XP)COM Server 4.1.2 r73507 win.amd64 (Aug 15 2011 14:29:50) release log
+00:00:00.063 main     Log opened 2011-10-08T02:19:50.330604200Z
+00:00:00.063 main     OS Product: Windows 7
+00:00:00.063 main     OS Release: 6.1.7601
+00:00:00.063 main     Executable: C:\Program Files\Oracle\VirtualBox\VBoxSVC.exe
+00:00:00.063 main     Process ID: 8636
+00:00:00.063 main     Package type: WINDOWS_64BITS_GENERIC
+00:00:00.546          usbLibDevCfgDrGet: DeviceIoControl 1 fail winEr (31)
+00:00:02.184          VDInit finished

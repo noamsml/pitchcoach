@@ -22,12 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".demo.PitchGraphActivity" android:screenOrientation="landscape" android:label="@string/demo_name">
+        <activity android:name=".demo.StartScreen" android:screenOrientation="portrait" android:label="@string/demo_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".demo.PitchGraphActivity"
+        android:screenOrientation="landscape"></activity>
 
     </application>
 </manifest>

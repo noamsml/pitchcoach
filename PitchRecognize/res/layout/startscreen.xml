@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:background="@drawable/background">
+  
+  <Button android:text="Pitch Mode"
+   android:id="@+id/PitchMButton"
+   android:layout_centerHorizontal="true"
+   android:layout_marginTop="40dp"
+   android:layout_width="wrap_content"
+   android:textSize="24px"
+   android:layout_height="wrap_content"></Button>
+</RelativeLayout>

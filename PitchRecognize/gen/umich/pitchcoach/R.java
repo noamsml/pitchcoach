@@ -11,9 +11,11 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int icon=0x7f020000;
+        public static final int background=0x7f020000;
+        public static final int icon=0x7f020001;
     }
     public static final class id {
+        public static final int PitchMButton=0x7f06000b;
         public static final int debugText=0x7f060000;
         public static final int diagBtn=0x7f060008;
         public static final int feedbackTxt=0x7f06000a;
@@ -30,6 +32,7 @@ public final class R {
         public static final int debug_util=0x7f030000;
         public static final int main=0x7f030001;
         public static final int mockui=0x7f030002;
+        public static final int startscreen=0x7f030003;
     }
     public static final class string {
         public static final int app_name=0x7f050001;
