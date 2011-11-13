@@ -15,13 +15,9 @@ public class StartScreen extends Activity {
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.startscreen);
-    final Button pitchMode = (Button) findViewById(R.id.PitchMButton);
-    pitchMode.setBackgroundColor(Color.TRANSPARENT);
-    pitchMode.setTextColor(Color.argb(255, 109, 207, 246));
-    
+    final Button pitchMode = (Button) findViewById(R.id.PitchMButton);    
     pitchMode.setOnClickListener(new View.OnClickListener() {
       public void onClick(View view) {
-    	pitchMode.setTextColor(Color.RED);
         Intent myIntent = new Intent(view.getContext(), PitchGraphActivity.class);
         startActivityForResult(myIntent, 0);
       }

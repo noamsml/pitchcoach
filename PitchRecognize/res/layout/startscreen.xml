@@ -14,7 +14,9 @@
         android:layout_marginBottom="19dp"
         android:text="Pitch Mode"
         android:textSize="30px"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/buttontext"
+        android:background="@android:color/transparent" />
     <ImageView
         android:layout_width="154dp"
         android:layout_height="170dp"
