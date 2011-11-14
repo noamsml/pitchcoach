@@ -1,6 +1,7 @@
 package umich.pitchcoach;
 
 import umich.pitchcoach.shared.IPitchReciever;
+import umich.pitchcoach.threadman.PitchThreadSpawn;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +29,7 @@ public class PitchRecogActivity extends Activity implements IPitchReciever {
         pitchDisplay = (TextView)findViewById(R.id.pitchText);
         snapshotBtn = (Button)findViewById(R.id.snapshotBtn);
         pitchService = new PitchThreadSpawn();
+       
         snapshotBtn.setOnClickListener(new View.OnClickListener() {
 
 			@Override

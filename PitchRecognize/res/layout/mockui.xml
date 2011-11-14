@@ -2,14 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:orientation="vertical">
-	<umich.pitchcoach.demo.LocationAwareScrollView android:layout_height="wrap_content"
-		android:layout_width="match_parent" android:id="@+id/scroller">
-		<umich.pitchcoach.demo.AutoScrollingLinearLayout android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:orientation="horizontal"
-			android:scrollbarStyle="outsideOverlay" android:scrollbars="horizontal"
-			android:id="@+id/graphLinearLayout">
-		</umich.pitchcoach.demo.AutoScrollingLinearLayout>
-	</umich.pitchcoach.demo.LocationAwareScrollView>
+	<umich.pitchcoach.demo.ScrollContainer android:layout_height="wrap_content"
+		android:layout_width="match_parent" android:scrollbarStyle="outsideOverlay" android:id="@+id/scroller" android:layout_weight="1">
+	    
+	</umich.pitchcoach.demo.ScrollContainer>
 
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"

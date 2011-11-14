@@ -34,7 +34,7 @@ public class PitchThread extends Thread {
 		this.receivingHandler = receivingHandler; 
 		persistSampleBuffer  = new circularShortBuffer(Invariants.BUFSIZE);
 		sampleBuffer = new short[Invariants.NUMSAMPLES];
-		analyzer = new PitchAnalyzerDCT(Invariants.BUFSIZE);
+		analyzer = new PitchAnalyzerDCT_HPS(Invariants.BUFSIZE);
 		
 		buflock = new ReentrantLock();
 		dumpBuffer = new circularShortBuffer(Invariants.RATE * 2); //DELME

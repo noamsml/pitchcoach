@@ -1,10 +1,12 @@
-package umich.pitchcoach;
+package umich.pitchcoach.threadman;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 
 import android.os.Handler;
+import umich.pitchcoach.Invariants;
+import umich.pitchcoach.PitchThread;
 import umich.pitchcoach.shared.IPitchReciever;
 import umich.pitchcoach.shared.IPitchServiceController;
 import android.util.Log;

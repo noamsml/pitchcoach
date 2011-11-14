@@ -7,7 +7,6 @@ import android.view.SurfaceView;
 public class GraphSurface extends SurfaceView {
 	protected ImageSource imagesource;
 	protected static final double SECONDS_ONSCREEN = 10;
-	protected GraphGlue uiGlue; //TODO: Make this hack unnecessary
 	protected boolean isLive;
 	protected double target;
 	
@@ -21,9 +20,8 @@ public class GraphSurface extends SurfaceView {
 		isLive = false;
 	}
 	
-	public GraphSurface(Context context, double target, GraphGlue uiGlue) {
+	public GraphSurface(Context context, double target) {
 		super(context);
-		this.uiGlue = uiGlue;
 		this.target = target;
 		initialize();
 	}
@@ -37,16 +35,8 @@ public class GraphSurface extends SurfaceView {
 		setKeepScreenOn(true);
 	}
 	
-	@Override
-	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-		super.onSizeChanged(w, h, oldw, oldh);
-		
-		if (w == 0 || h == 0) return;
-		if (oldw != w || oldh != h || imagesource == null)
-		{
+	protected void sizeSet(int w, int h) {
 			this.imagesource = new ImageSource(w,h, this.target);
-		}
-		uiGlue.imageChanged();
 	}
 	
 

@@ -1,44 +1,35 @@
 package umich.pitchcoach.demo;
 
 import umich.pitchcoach.LetterNotes;
+import umich.pitchcoach.listeners.IImageSourceSource;
+import umich.pitchcoach.listeners.SizableElement;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class GraphContainer extends LinearLayout {
+public class GraphContainer extends SizableElement implements IImageSourceSource {
 	public GraphSurface graph;
-	public TextView text;
 	private String targetPitch;
 	private NotePlayer noteplayer;
 	private GraphEvaluator eval;
 	
-	public GraphContainer(Context context, GraphGlue uiGlue, String targetPitch) {
+	public GraphContainer(Context context, String targetPitch) {
 		super(context);
-		graph = new GraphSurface(context, LetterNotes.noteSpecToFreq(targetPitch), uiGlue);
+		graph = new GraphSurface(context, LetterNotes.noteSpecToFreq(targetPitch));
 		this.setOrientation(LinearLayout.VERTICAL);
-		
-		text = new TextView(context);
-		text.setText(targetPitch);
-		text.setTextColor(Color.BLACK);
-		text.setGravity(Gravity.CENTER_HORIZONTAL);
-		this.addView(text);
 		this.addView(graph);
-		
-		this.setBackgroundColor(Color.WHITE);
-		this.setPadding(10, 10, 10, 10);
 		this.targetPitch = targetPitch;
 		
 		eval = new GraphEvaluator(this.targetPitch);
 	}
 
-	public void updateGraph() {
+	public void updateImage() {
 		this.graph.invalidate();
 	}
 
-	public ImageSource getImageSource() {
-		// TODO Auto-generated method stub
+	public synchronized ImageSource getImageSource() {
 		return graph.imagesource;
 	}
 	
@@ -55,11 +46,6 @@ public class GraphContainer extends LinearLayout {
 		eval.onPitch(pitch, time);
 	}
 	
-	public void setTargetPitch(String pitch){
-		this.targetPitch = pitch;
-		text.setText(targetPitch + " " + LetterNotes.noteSpecToFreq(pitch));
-	}
-	
 	public boolean isDone() {
 		return eval.isDone();
 	}
@@ -69,6 +55,7 @@ public class GraphContainer extends LinearLayout {
 		int color;
 		int evalVal;
 		evalVal = eval.getFinalEvaluation();
+		/*
 		if (evalVal == 0) {
 			color = 0xffffdddd;
 		}
@@ -78,13 +65,19 @@ public class GraphContainer extends LinearLayout {
 		else {
 			color = 0xffddffdd;
 		}
-		
+		*/
 			
-		this.setBackgroundColor(color);
+		//this.setBackgroundColor(color);
+		//Do something
 	}
 	
 	public int getFinalEvaluation() {
 		return eval.getFinalEvaluation();
+	}
+
+	@Override
+	public synchronized void sizeSet(int w, int h) {
+		graph.sizeSet(w,h);
 	}
 	
 }

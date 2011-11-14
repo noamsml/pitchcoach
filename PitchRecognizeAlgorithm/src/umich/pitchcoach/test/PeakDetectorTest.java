@@ -10,7 +10,7 @@ public class PeakDetectorTest {
 	 */
 	public static void main(String[] args) {
 		SineWave sampleSource = new SineWave(300, 100);
-		IPeakDetector detector = new PeakDetectorRunningMax();
+		IPeakDetector detector = new PeakDetectorRunningMaxRMS();
 		float[] data = new float[1002];
 		sampleSource.readData(data);
 		int peak;
