@@ -1,11 +1,13 @@
 package umich.pitchcoach.demo;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import java.util.LinkedList;
 
+import umich.pitchcoach.listeners.OnScrollListener;
 import umich.pitchcoach.listeners.SizableElement;
 
 public class ScrollContainer extends HorizontalScrollView {
@@ -19,13 +21,26 @@ public class ScrollContainer extends HorizontalScrollView {
 	public ScrollContainer(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		final ScrollContainer that = this;
+		final Handler uiThreadHandler = new Handler();
+		final Runnable scrollABit = new Runnable() {
+
+			@Override
+			public void run() {
+				if (!scrollAtEnd) {
+					that.scrollBy(that.getWidth()/(3 * 10), 0);
+					uiThreadHandler.postDelayed(this, 30);
+				}
+			}
+			
+		};
 		this.layout = new LinearLayout(context) {
 			@Override
 			protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 				// TODO Auto-generated method stub
 				super.onSizeChanged(w, h, oldw, oldh);
 				if (that.scrollAtEnd) {
-					that.scrollTo(this.getWidth(), 0);
+					that.scrollAtEnd = false;
+					uiThreadHandler.postDelayed(scrollABit, 30);
 				}
 			}
 		};
@@ -59,6 +74,7 @@ public class ScrollContainer extends HorizontalScrollView {
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		// TODO Auto-generated method stub
+		this.layout.setPadding(this.getWidth()/3, 0,0,0);
 		super.onSizeChanged(w, h, oldw, oldh);
 		if (w != 0 && h != 0)
 		{

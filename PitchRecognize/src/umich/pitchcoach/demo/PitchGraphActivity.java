@@ -7,6 +7,7 @@ import umich.pitchcoach.LetterNotes;
 import umich.pitchcoach.R;
 import umich.pitchcoach.threadman.RenderThreadManager;
 import android.app.Activity;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -16,6 +17,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import umich.pitchcoach.listeners.IRenderNotify;
+import umich.pitchcoach.listeners.OnScrollListener;
 
 public class PitchGraphActivity extends Activity {
 
@@ -24,9 +26,11 @@ public class PitchGraphActivity extends Activity {
 	PitchKeeper myPitchKeeper;
 	CharSequence lastPitchSung; //CRUFT
 	GraphContainer currentGraph;
+	GraphContainer nextGraph;
 	
 	ScrollContainer graphcont;
 	RenderThreadManager renderThreadManager;
+	
 	
 	public static String[] singTheseNotes = new String[]{"C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3"};
 
@@ -61,7 +65,8 @@ public class PitchGraphActivity extends Activity {
 		});
 		
 		addGraph();
-
+		addGraph(); //current and next
+		
 		diagBtn = (Button)findViewById(R.id.diagBtn);
 		diagBtn.setOnClickListener(new View.OnClickListener () {
 			@Override
@@ -74,6 +79,7 @@ public class PitchGraphActivity extends Activity {
 		nextBtn.setOnClickListener(new View.OnClickListener () {
 			@Override
 			public void onClick(View v) {
+				if (currentGraph != null) currentGraph.finalize();
 				addGraph();
 			}
 		});
@@ -84,8 +90,12 @@ public class PitchGraphActivity extends Activity {
 	private void addGraph() {
 		GraphContainer theGraph = new GraphContainer(getApplicationContext(), myPitchKeeper.getRandomPitch());
 		graphcont.addElement(theGraph);
-		this.currentGraph = theGraph;
-		renderThreadManager.setRenderElement(theGraph);
+		this.currentGraph = this.nextGraph;
+		this.nextGraph = theGraph;
+		if (this.currentGraph != null) {
+			this.currentGraph.setActive();
+			renderThreadManager.setRenderElement(this.currentGraph); //FIXME
+		}
 	}
 
 	@Override
