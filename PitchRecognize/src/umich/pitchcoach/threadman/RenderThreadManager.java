@@ -32,11 +32,10 @@ public class RenderThreadManager {
 		
 	}
 
-	public void startRenderThread() {
+	public void startRenderThread(IImageSourceSource sourceSource) {
 		Log.v("RenderThread", "started");
 		if (renderThread != null) stopRenderThread();
-		renderThread = new OffscreenRenderThread(this.appHandler, this.renderNotify);
-		renderThread.setRenderElement(sourceSource);
+		renderThread = new OffscreenRenderThread(this.appHandler, this.renderNotify, sourceSource);
 		renderThread.start();
 		
 		//ANDROID IS FUCKING RETARDED

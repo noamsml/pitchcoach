@@ -19,12 +19,13 @@ public class OffscreenRenderThread extends Thread implements IPitchReciever {
 	public Handler receivingHandler;
 	public IRenderNotify renderNotify; 
 	
-	public OffscreenRenderThread(Handler receivingHandler, IRenderNotify renderNotify)
+	public OffscreenRenderThread(Handler receivingHandler, IRenderNotify renderNotify, IImageSourceSource sourceSource)
 	{
 		handlerLock = new ReentrantLock();
 		handlerCond = handlerLock.newCondition();
 		this.receivingHandler = receivingHandler;
 		this.renderNotify = renderNotify;
+		this.sourceSource = sourceSource;
 	}
 		@Override
 	public void run() {

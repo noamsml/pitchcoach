@@ -10,6 +10,8 @@ import java.util.LinkedList;
 import umich.pitchcoach.listeners.OnScrollListener;
 import umich.pitchcoach.listeners.SizableElement;
 
+//BUG BUG BUG ALERT: ON TASK CHANGE, RENDER THREAD SOMETIME BREAKS
+
 public class ScrollContainer extends HorizontalScrollView {
 
 
@@ -17,6 +19,7 @@ public class ScrollContainer extends HorizontalScrollView {
 	private LinearLayout layout;
 	private LinkedList<SizableElement> toAdd;
 	private boolean scrollAtEnd;
+	private boolean autoScrolling;
 	
 	public ScrollContainer(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -27,8 +30,13 @@ public class ScrollContainer extends HorizontalScrollView {
 			@Override
 			public void run() {
 				if (!scrollAtEnd) {
+					autoScrolling = true;
 					that.scrollBy(that.getWidth()/(3 * 10), 0);
 					uiThreadHandler.postDelayed(this, 30);
+				}
+				else {
+					autoScrolling = false;
+					that.handleDoneScrolling();
 				}
 			}
 			
@@ -49,9 +57,14 @@ public class ScrollContainer extends HorizontalScrollView {
 		this.addView(this.layout);
 		toAdd = new LinkedList<SizableElement>();
 		scrollAtEnd = true;
+		autoScrolling = false;
 	
 	}
 	
+	protected void handleDoneScrolling() {
+		if (onscroll != null) onscroll.doneAutoScrolling();
+	}
+
 	public void addElement(SizableElement elem) {
 		if (this.getWidth() == 0 || this.getHeight() == 0)
 		{
@@ -91,14 +104,14 @@ public class ScrollContainer extends HorizontalScrollView {
 		if (l < maxScroll)
 		{
 			if (scrollAtEnd) {
-				if (onscroll != null) onscroll.scrollBack();
+				if (onscroll != null && !autoScrolling) onscroll.scrollBack();
 				scrollAtEnd = false;
 			}
 		}
 		else
 		{
 			if (!scrollAtEnd) {
-				if (onscroll != null) onscroll.scrollEnd();
+				if (onscroll != null && !autoScrolling) onscroll.scrollEnd();
 				scrollAtEnd = true;
 			}
 		}

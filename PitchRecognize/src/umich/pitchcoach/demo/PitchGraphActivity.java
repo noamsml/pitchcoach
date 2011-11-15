@@ -44,7 +44,7 @@ public class PitchGraphActivity extends Activity {
 
 			@Override
 			public void scrollEnd() {
-				renderThreadManager.startRenderThread();
+				renderThreadManager.startRenderThread(currentGraph);
 				renderUnPause();
 			}
 
@@ -53,6 +53,11 @@ public class PitchGraphActivity extends Activity {
 				renderThreadManager.stopRenderThread();
 				renderPause();
 			}
+
+			@Override
+			public void doneAutoScrolling() {
+				renderThreadManager.startRenderThread(currentGraph); //??
+			}
 			
 		});
 		myPitchKeeper = new PitchKeeper(new ArrayList<String>(Arrays.asList(singTheseNotes)));
@@ -60,7 +65,8 @@ public class PitchGraphActivity extends Activity {
 			@Override
 			public void renderIsDone(double pitch, double time) {
 				updateIncidentalUI(pitch, time);
-			}
+			}		//renderThread.setRenderElement(sourceSource);
+
 			
 		});
 		
@@ -88,13 +94,13 @@ public class PitchGraphActivity extends Activity {
 	}
 
 	private void addGraph() {
+		renderThreadManager.stopRenderThread();
 		GraphContainer theGraph = new GraphContainer(getApplicationContext(), myPitchKeeper.getRandomPitch());
 		graphcont.addElement(theGraph);
 		this.currentGraph = this.nextGraph;
 		this.nextGraph = theGraph;
 		if (this.currentGraph != null) {
 			this.currentGraph.setActive();
-			renderThreadManager.setRenderElement(this.currentGraph); //FIXME
 		}
 	}
 
@@ -108,7 +114,7 @@ public class PitchGraphActivity extends Activity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		renderThreadManager.startRenderThread();
+		renderThreadManager.startRenderThread(currentGraph);
 	}
 
 	public void updateIncidentalUI(double pitch, double timeInSeconds) {
