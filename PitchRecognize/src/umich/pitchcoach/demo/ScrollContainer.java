@@ -14,24 +14,27 @@ import umich.pitchcoach.listeners.SizableElement;
 
 public class ScrollContainer extends HorizontalScrollView {
 
-
+	private static int MAX_CHILDREN = 5;
 	private OnScrollListener onscroll;
 	private LinearLayout layout;
 	private LinkedList<SizableElement> toAdd;
 	private boolean scrollAtEnd;
 	private boolean autoScrolling;
 	
+	private Runnable scrollABit; //TODO: Figure out more elegan way to do this
+	Handler uiThreadHandler;
+	
 	public ScrollContainer(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		final ScrollContainer that = this;
-		final Handler uiThreadHandler = new Handler();
-		final Runnable scrollABit = new Runnable() {
+		uiThreadHandler  = new Handler();
+		scrollABit = new Runnable() {
 
 			@Override
 			public void run() {
 				if (!scrollAtEnd) {
 					autoScrolling = true;
-					that.scrollBy(that.getWidth()/(3 * 10), 0);
+					that.scrollBy(that.getWidth()/(3 * 5), 0);
 					uiThreadHandler.postDelayed(this, 30);
 				}
 				else {
@@ -46,9 +49,10 @@ public class ScrollContainer extends HorizontalScrollView {
 			protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 				// TODO Auto-generated method stub
 				super.onSizeChanged(w, h, oldw, oldh);
-				if (that.scrollAtEnd) {
+				if (w > oldw)
+				{
 					that.scrollAtEnd = false;
-					uiThreadHandler.postDelayed(scrollABit, 30);
+					uiThreadHandler.postDelayed(scrollABit, 200);
 				}
 			}
 		};
@@ -77,6 +81,15 @@ public class ScrollContainer extends HorizontalScrollView {
 
 	private void addElementInternal(SizableElement elem) {
 		elem.sizeSet(this.getWidth()/3, this.getHeight());
+		if (this.layout.getChildCount() > MAX_CHILDREN)
+		{
+			this.autoScrolling = true;
+			this.layout.removeViewAt(0);
+			this.scrollBy(- this.getWidth()/3, 0);
+			this.autoScrolling = false;
+			uiThreadHandler.postDelayed(scrollABit, 200);
+			
+		}
 		this.layout.addView(elem, this.getWidth()/3, this.getHeight());
 	}
 	
