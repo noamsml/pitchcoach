@@ -1,6 +1,7 @@
 package umich.pitchcoach.demo;
 
 import umich.pitchcoach.LetterNotes;
+import umich.pitchcoach.R;
 import umich.pitchcoach.listeners.IImageSourceSource;
 import umich.pitchcoach.listeners.SizableElement;
 import android.content.Context;
@@ -56,19 +57,17 @@ public class GraphContainer extends SizableElement implements IImageSourceSource
 		int color;
 		int evalVal;
 		evalVal = eval.getFinalEvaluation();
-		/*
+		graph.setTint(0x88ffffff);
+		
 		if (evalVal == 0) {
-			color = 0xffffdddd;
+			graph.setPatch(R.drawable.ex);
 		}
 		else if (evalVal == 1) {
-			color = 0xffffffdd;
+			graph.setPatch(R.drawable.vee);
 		}
 		else {
-			color = 0xffddffdd;
+			graph.setPatch(R.drawable.vee);
 		}
-		*/
-		
-		graph.setTint(0x88ffffff);
 			
 		//this.setBackgroundColor(color);
 		//Do something
