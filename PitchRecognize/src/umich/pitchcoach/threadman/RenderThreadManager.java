@@ -34,7 +34,8 @@ public class RenderThreadManager {
 
 	public void startRenderThread(IImageSourceSource sourceSource) {
 		Log.v("RenderThread", "started");
-		if (renderThread != null) stopRenderThread();
+		if (renderThread != null) 
+			stopRenderThread();
 		renderThread = new OffscreenRenderThread(this.appHandler, this.renderNotify, sourceSource);
 		renderThread.start();
 		
@@ -53,6 +54,7 @@ public class RenderThreadManager {
 	}
 	
 	public void stopRenderThread() {
+		Log.v("RenderThread", "stopped");
 		pitchservice.stopPitchService();
 		if (renderThread != null) renderThread.interrupt();
 		renderThread = null;

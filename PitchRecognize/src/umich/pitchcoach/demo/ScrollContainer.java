@@ -38,8 +38,10 @@ public class ScrollContainer extends HorizontalScrollView {
 					uiThreadHandler.postDelayed(this, 30);
 				}
 				else {
-					autoScrolling = false;
-					that.handleDoneScrolling();
+					if (autoScrolling) {
+						autoScrolling = false;
+						that.handleDoneScrolling();
+					}
 				}
 			}
 			
