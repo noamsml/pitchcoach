@@ -1,5 +1,10 @@
 package umich.pitchcoach.demo;
 
+/*
+ * http://en.wikipedia.org/wiki/Scientific_pitch_notation for pitch values
+ * 
+ */
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -16,22 +21,35 @@ import android.widget.TextView;
 
 public class RangeSelect extends Activity {
     /** Called when the activity is first created. */
-  FileOutputStream fos;
-  String FILENAME="singing_range.txt";
+  private FileOutputStream fos;
+  private String FILENAME="singing_range.txt";
+  private int minFreq, maxFreq;
+  TextView thisTxt;
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.rangeselect);
     
-    final TextView thisTxt = (TextView) findViewById(R.id.changeTxt);
+    thisTxt = (TextView) findViewById(R.id.changeTxt);
+    
+    Button bassSelect = (Button) findViewById(R.id.bassBtn);    
+    bassSelect.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        minFreq = 82; // E2
+        maxFreq = 330; // E4
+        writeContent(minFreq, maxFreq);
+      }
+    });
     
     Button tenorSelect = (Button) findViewById(R.id.tenorBtn);    
     tenorSelect.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View view) {
-        writeContent("tenor");
-        thisTxt.setText("'tenor' written to file");
+        minFreq = 130; // C3
+        maxFreq = 523; // C5
+        writeContent(minFreq, maxFreq);
       }
     });
     
@@ -39,8 +57,9 @@ public class RangeSelect extends Activity {
     altoSelect.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View view) {
-        writeContent("alto");
-        thisTxt.setText("'alto' written to file");
+        minFreq = 196; // G3
+        maxFreq = 660; // E5
+        writeContent(minFreq, maxFreq);
       }
     });
     
@@ -48,8 +67,9 @@ public class RangeSelect extends Activity {
     sopranoSelect.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View view) {
-        writeContent("soprano");
-        thisTxt.setText("'soprano' written to file");
+        minFreq = 262; // C4
+        maxFreq = 1047; // C6
+        writeContent(minFreq, maxFreq);
       }
     });
     
@@ -63,7 +83,7 @@ public class RangeSelect extends Activity {
           int ch;
           while((ch = fis.read()) != -1)
             inb.append((char)ch);
-          thisTxt.setText(inb);
+          thisTxt.setText("'"+inb+"'"+" was read from file");
         } catch (FileNotFoundException e) {
           // TODO Auto-generated catch block
           e.printStackTrace();
@@ -74,8 +94,10 @@ public class RangeSelect extends Activity {
       }
     });
   }
-  private void writeContent(String toWrite) {
+  private void writeContent(int minFreq, int maxFreq) {
     try {
+      String toWrite = Integer.toString(minFreq)+" "+Integer.toString(maxFreq);
+      thisTxt.setText("'"+toWrite+"' written to file");
       fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
       fos.write(toWrite.getBytes());
       fos.close();

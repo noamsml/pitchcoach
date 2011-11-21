@@ -18,6 +18,12 @@
   	android:layout_width="fill_parent"
   	android:layout_height="wrap_content">
 	  <Button
+	  	android:id="@+id/bassBtn"
+	  	android:layout_height="wrap_content"
+	  	android:layout_width="wrap_content"
+	  	android:layout_weight="1"
+	  	android:text="Bass"/>
+	  <Button
 	  	android:id="@+id/tenorBtn"
 	  	android:layout_height="wrap_content"
 	  	android:layout_width="wrap_content"
