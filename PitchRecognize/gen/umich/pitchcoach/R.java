@@ -25,6 +25,7 @@ public final class R {
         public static final int PitchMButton=0x7f07000a;
         public static final int debugText=0x7f070000;
         public static final int diagBtn=0x7f070007;
+        public static final int eventText=0x7f07000b;
         public static final int feedbackTxt=0x7f070009;
         public static final int linearLayout1=0x7f070001;
         public static final int nextBtn=0x7f070008;
@@ -39,6 +40,7 @@ public final class R {
         public static final int main=0x7f030001;
         public static final int mockui=0x7f030002;
         public static final int startscreen=0x7f030003;
+        public static final int testevent=0x7f030004;
     }
     public static final class string {
         public static final int app_name=0x7f050001;
