@@ -24,9 +24,20 @@ public class PitchGraphActivity extends Activity {
 	TextView feedbackTxt;
 	AutoScrollingLinearLayout graphLayout;
 	PitchKeeper myPitchKeeper;
+<<<<<<< HEAD
 	LocationAwareScrollView scrollview;
 	GraphGlue uiGlue;
 	CharSequence lastPitchSung;
+=======
+	GraphContainer currentGraph;
+	GraphContainer nextGraph;
+	
+	ScrollContainer graphcont;
+	RenderThreadManager renderThreadManager;
+	
+	LifeBar lifebar;
+
+>>>>>>> cb02f382e01bfcf91a2049910a3cea1d1907852f
 	
 	public static String[] singTheseNotes = new String[]{"C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3"};
 	NotePlayer noteplayer;
@@ -76,7 +87,16 @@ public class PitchGraphActivity extends Activity {
 				
 			}
 		});
+<<<<<<< HEAD
 		feedbackTxt = (TextView)findViewById(R.id.feedbackTxt);
+=======
+		myPitchKeeper = new PitchKeeper(new ArrayList<String>(Arrays.asList(singTheseNotes)));
+		renderThreadManager = new RenderThreadManager(new Handler(), new IRenderNotify() {
+			@Override
+			public void renderIsDone(double pitch, double time) {
+				updateIncidentalUI(pitch, time);
+			}		
+>>>>>>> cb02f382e01bfcf91a2049910a3cea1d1907852f
 
 	}
 

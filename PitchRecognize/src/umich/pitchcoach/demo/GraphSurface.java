@@ -67,7 +67,7 @@ public class GraphSurface extends SurfaceView {
 		isLive = false;
 		whitePaint = new Paint();
 		whitePaint.setColor(Color.WHITE);
-		whitePaint.setTextSize(16);
+		whitePaint.setTextSize(24);
 		
 		setWillNotDraw(false);
 		setKeepScreenOn(true);
@@ -98,7 +98,7 @@ public class GraphSurface extends SurfaceView {
 			patch.draw(c);
 		}
 		
-		c.drawText(this.targetNoteName, 10, 10, whitePaint);
+		c.drawText(this.targetNoteName, 30, 30, whitePaint);
 		
 	}
 	
