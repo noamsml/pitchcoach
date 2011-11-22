@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import umich.pitchcoach.LetterNotes;
 import umich.pitchcoach.R;
+import umich.pitchcoach.NotePlayer.Note;
 import android.app.Activity;
 import android.os.Bundle;
 
@@ -14,6 +15,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import umich.pitchcoach.NotePlayer.*;
 
 public class PitchGraphActivity extends Activity {
 
@@ -27,7 +29,8 @@ public class PitchGraphActivity extends Activity {
 	CharSequence lastPitchSung;
 	
 	public static String[] singTheseNotes = new String[]{"C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3"};
-
+	NotePlayer noteplayer;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -40,6 +43,7 @@ public class PitchGraphActivity extends Activity {
 		scrollview.setOnScrollListener(uiGlue);
 		graphLayout.setScrollView(scrollview);
 		myPitchKeeper = new PitchKeeper(new ArrayList<String>(Arrays.asList(singTheseNotes)));
+		noteplayer = new NotePlayer();
 		
 
 		GraphContainer theGraph = new GraphContainer(getApplicationContext(), uiGlue, myPitchKeeper.getRandomPitch());
@@ -62,6 +66,14 @@ public class PitchGraphActivity extends Activity {
 			public void onClick(View v) {
 				GraphContainer theGraph = new GraphContainer(getApplicationContext(), uiGlue, myPitchKeeper.getRandomPitch());
 				addGraph(theGraph);
+			
+				// Play frequency of target
+				// sample code usage
+				noteplayer.setFrequency( 880 );
+				noteplayer.setDuration( 1 );
+				noteplayer.playNote();
+	
+				
 			}
 		});
 		feedbackTxt = (TextView)findViewById(R.id.feedbackTxt);
