@@ -25,6 +25,18 @@
         <activity android:name=".demo.PitchGraphActivity"
         	android:screenOrientation="landscape">
         </activity>
-
+        <activity android:name=".data.TestEventStream" android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".demo.RangeSelect"
+        	android:screenOrientation="landscape">
+        	<intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>>
+        </activity>
     </application>
 </manifest>
