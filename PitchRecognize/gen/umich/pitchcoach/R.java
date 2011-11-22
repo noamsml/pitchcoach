@@ -22,15 +22,21 @@ public final class R {
         public static final int vee=0x7f020005;
     }
     public static final class id {
-        public static final int PitchMButton=0x7f07000a;
+        public static final int PitchMButton=0x7f070010;
+        public static final int SelectRangeAltTxt=0x7f07000d;
+        public static final int SelectRangeTxt=0x7f070008;
+        public static final int altoBtn=0x7f07000b;
+        public static final int changeTxt=0x7f07000e;
         public static final int debugText=0x7f070000;
-        public static final int diagBtn=0x7f070007;
-        public static final int feedbackTxt=0x7f070009;
+        public static final int lifebar=0x7f070007;
         public static final int linearLayout1=0x7f070001;
-        public static final int nextBtn=0x7f070008;
+        public static final int loadMe=0x7f07000f;
         public static final int pitchText=0x7f070004;
         public static final int scroller=0x7f070006;
+        public static final int selectRangesll=0x7f070009;
         public static final int snapshotBtn=0x7f070005;
+        public static final int sopranoBtn=0x7f07000c;
+        public static final int tenorBtn=0x7f07000a;
         public static final int testbutton_save=0x7f070002;
         public static final int testbutton_start=0x7f070003;
     }
@@ -38,7 +44,8 @@ public final class R {
         public static final int debug_util=0x7f030000;
         public static final int main=0x7f030001;
         public static final int mockui=0x7f030002;
-        public static final int startscreen=0x7f030003;
+        public static final int rangeselect=0x7f030003;
+        public static final int startscreen=0x7f030004;
     }
     public static final class string {
         public static final int app_name=0x7f050001;

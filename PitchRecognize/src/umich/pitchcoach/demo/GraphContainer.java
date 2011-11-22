@@ -18,7 +18,7 @@ public class GraphContainer extends SizableElement implements IImageSourceSource
 	
 	public GraphContainer(Context context, String targetPitch) {
 		super(context);
-		graph = new GraphSurface(context, LetterNotes.noteSpecToFreq(targetPitch));
+		graph = new GraphSurface(context, LetterNotes.noteSpecToFreq(targetPitch), targetPitch);
 		graph.setTint(0x88bbbbbb);
 		this.setOrientation(LinearLayout.VERTICAL);
 		this.addView(graph);
@@ -68,9 +68,6 @@ public class GraphContainer extends SizableElement implements IImageSourceSource
 		else {
 			graph.setPatch(R.drawable.vee);
 		}
-			
-		//this.setBackgroundColor(color);
-		//Do something
 	}
 	
 	public int getFinalEvaluation() {

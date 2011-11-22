@@ -1,12 +1,16 @@
 package umich.pitchcoach.demo;
 
 import java.util.ArrayList;
+
+import android.content.DialogInterface;
 import java.util.Arrays;
 
 import umich.pitchcoach.LetterNotes;
 import umich.pitchcoach.R;
 import umich.pitchcoach.threadman.RenderThreadManager;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,24 +25,22 @@ import umich.pitchcoach.listeners.OnScrollListener;
 
 public class PitchGraphActivity extends Activity {
 
-	Button diagBtn, nextBtn; //DIAG
-	TextView feedbackTxt; //DEP
 	PitchKeeper myPitchKeeper;
-	CharSequence lastPitchSung; //CRUFT
 	GraphContainer currentGraph;
 	GraphContainer nextGraph;
 	
 	ScrollContainer graphcont;
 	RenderThreadManager renderThreadManager;
 	
+	LifeBar lifebar;
 	
 	public static String[] singTheseNotes = new String[]{"C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3"};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mockui);
+		lifebar = (LifeBar)findViewById(R.id.lifebar);
 		graphcont = (ScrollContainer)findViewById(R.id.scroller);
 		this.graphcont.setOnScrollListener(new OnScrollListener() {
 
@@ -73,28 +75,9 @@ public class PitchGraphActivity extends Activity {
 		addGraph();
 		addGraph(); //current and next
 		
-		diagBtn = (Button)findViewById(R.id.diagBtn);
-		diagBtn.setOnClickListener(new View.OnClickListener () {
-			@Override
-			public void onClick(View v) {
-				renderThreadManager.diagnostics();
-			}
-		});
-		nextBtn = (Button)findViewById(R.id.nextBtn);
-
-		nextBtn.setOnClickListener(new View.OnClickListener () {
-			@Override
-			public void onClick(View v) {
-				if (currentGraph != null) currentGraph.finalize();
-				addGraph();
-			}
-		});
-		feedbackTxt = (TextView)findViewById(R.id.feedbackTxt);
-
 	}
 
 	private void addGraph() {
-		renderThreadManager.stopRenderThread();
 		GraphContainer theGraph = new GraphContainer(getApplicationContext(), myPitchKeeper.getRandomPitch());
 		graphcont.addElement(theGraph);
 		this.currentGraph = this.nextGraph;
@@ -112,28 +95,81 @@ public class PitchGraphActivity extends Activity {
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		renderThreadManager.startRenderThread(currentGraph);
 	}
 
 	public void updateIncidentalUI(double pitch, double timeInSeconds) {
-		// TODO Auto-generated method stub
-		feedbackTxt.setText(LetterNotes.freqToNoteSpec(pitch));
+		
 		currentGraph.onPitch(pitch, timeInSeconds);
 		if (currentGraph.isDone()) {
+			renderThreadManager.stopRenderThread();
 			currentGraph.finalize();
-			addGraph();
+			if (currentGraph.getFinalEvaluation() > 0) this.lifebar.addLives(25);
+			else this.lifebar.addLives(-5);
+			
+			if (this.lifebar.isWin()) this.onWin();
+			else if (this.lifebar.isDeath()) this.onDeath();
+			else addGraph();
 		}
 	}
 
-	public void renderPause() {
-		lastPitchSung = this.feedbackTxt.getText();
-		this.feedbackTxt.setText("Pasued");
+	private void onDeath() {
+		AlertDialog deathAlert;
+		deathAlert = new AlertDialog.Builder(this).create();
+		deathAlert.setMessage("You ran out of life. Might wanna keep that day job.");
+		deathAlert.setTitle("You died");
+
+		buttonify(deathAlert, "Try Again");
+		deathAlert.show();
 		
 	}
 	
+	private void buttonify(AlertDialog dialog, String againMessage) {
+		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+
+			@Override
+			public void onDismiss(DialogInterface arg0) {
+				finish();
+				
+			}
+		});
+		dialog.setButton(dialog.BUTTON_POSITIVE, againMessage, new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				 Intent myIntent = new Intent(getApplicationContext(), PitchGraphActivity.class);
+			     startActivity(myIntent);
+				}
+			}
+		);
+		
+	
+		dialog.setButton(dialog.BUTTON_NEGATIVE, "Back to Menu", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				 finish();
+			}
+		});
+	}
+
+	private void onWin() {
+		AlertDialog winAlert;
+		winAlert = new AlertDialog.Builder(this).create();
+		winAlert.setMessage("Yay! You won!");
+		winAlert.setTitle("You won");
+
+		buttonify(winAlert, "Do it again!");
+		winAlert.show();
+		
+	}
+
+	public void renderPause() {
+		//TODO: Manually generated method stub
+	}
+	
 	public void renderUnPause() {
-		this.feedbackTxt.setText(lastPitchSung);
+		//TODO: Manually generated method stub
 	}
 }

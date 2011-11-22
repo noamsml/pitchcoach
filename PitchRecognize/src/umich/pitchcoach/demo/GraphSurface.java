@@ -2,6 +2,7 @@ package umich.pitchcoach.demo;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -14,6 +15,8 @@ public class GraphSurface extends SurfaceView {
 	protected double target;
 	protected Paint tint;
 	protected Drawable patch;
+	protected String targetNoteName;
+	protected Paint whitePaint;
 	
 	
 	public void makeLive()
@@ -26,9 +29,10 @@ public class GraphSurface extends SurfaceView {
 		isLive = false;
 	}
 	
-	public GraphSurface(Context context, double target) {
+	public GraphSurface(Context context, double target, String targetNoteName) {
 		super(context);
 		this.target = target;
+		this.targetNoteName = targetNoteName;
 		initialize();
 	}
 
@@ -61,6 +65,10 @@ public class GraphSurface extends SurfaceView {
 	{
 		imagesource = null;
 		isLive = false;
+		whitePaint = new Paint();
+		whitePaint.setColor(Color.WHITE);
+		whitePaint.setTextSize(16);
+		
 		setWillNotDraw(false);
 		setKeepScreenOn(true);
 	}
@@ -89,6 +97,9 @@ public class GraphSurface extends SurfaceView {
 					this.getWidth()/2 + 50, this.getHeight()/2 + 50));
 			patch.draw(c);
 		}
+		
+		c.drawText(this.targetNoteName, 10, 10, whitePaint);
+		
 	}
 	
 }
