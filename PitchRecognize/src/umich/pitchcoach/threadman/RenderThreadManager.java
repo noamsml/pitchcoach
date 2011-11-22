@@ -33,24 +33,24 @@ public class RenderThreadManager {
 	}
 
 	public void startRenderThread(IImageSourceSource sourceSource) {
-		Log.v("RenderThread", "started");
-		if (renderThread != null) 
-			stopRenderThread();
-		renderThread = new OffscreenRenderThread(this.appHandler, this.renderNotify, sourceSource);
-		renderThread.start();
-		
-		//ANDROID IS FUCKING RETARDED
-		renderThread.handlerLock.lock();
-		while (renderThread.handler == null) {
-			try {
-				renderThread.handlerCond.await();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		Log.v("RenderThread", "started " + sourceSource.toString());
+		//Figure out this clusterfuck sometime
+		if (renderThread == null)  { //LAMEFIX: Starting render thread multiple times doesn't work
+			renderThread = new OffscreenRenderThread(this.appHandler, this.renderNotify, sourceSource);
+			renderThread.start();
+			
+			//ANDROID IS FUCKING RETARDED
+			renderThread.handlerLock.lock();
+			while (renderThread.handler == null) {
+				try {
+					renderThread.handlerCond.await();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
+			pitchservice.startPitchService(renderThread, renderThread.handler);
+			renderThread.handlerLock.unlock();
 		}
-		pitchservice.startPitchService(renderThread, renderThread.handler);
-		renderThread.handlerLock.unlock();
 	}
 	
 	public void stopRenderThread() {

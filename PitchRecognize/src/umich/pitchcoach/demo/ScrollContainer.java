@@ -51,7 +51,10 @@ public class ScrollContainer extends HorizontalScrollView {
 			protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 				// TODO Auto-generated method stub
 				super.onSizeChanged(w, h, oldw, oldh);
-				if (w > oldw)
+				if (oldw == 0 && w > 0) {
+					that.handleDoneScrolling();
+				}
+				else if (w > oldw)
 				{
 					that.scrollAtEnd = false;
 					uiThreadHandler.postDelayed(scrollABit, 200);
