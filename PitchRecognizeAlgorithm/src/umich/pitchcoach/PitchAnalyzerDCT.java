@@ -20,7 +20,7 @@ public class PitchAnalyzerDCT implements IPitchAnalyzer {
 		dct = new FloatDCT_1D(size);
 		this.size = size;
 		floatbuf = new float[size];
-		peakdetect = new PeakDetectorRunningMaxOutlier();
+		peakdetect = new PeakDetectorRunningMaxQuartile();
 	}
 
 	

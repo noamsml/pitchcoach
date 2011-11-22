@@ -3,6 +3,7 @@ package umich.pitchcoach.demo;
 import umich.pitchcoach.LetterNotes;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint.Cap;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Paint;
@@ -22,9 +23,9 @@ public class ImageSource {
 	private Paint linePaint;
 
 	private final static double SECONDS_TO_SHOW = 10;
-	private final static double MIN_HZ = 70;
+	private final static double MIN_HZ = 100;
 	private final static double LOG_MINHZ = Math.log(MIN_HZ);
-	private final static double MAX_HZ = 700;
+	private final static double MAX_HZ = 600;
 	private final static double LOG_MAXHZ = Math.log(MAX_HZ);
 		
 	private double pixel_per_sec;
@@ -51,6 +52,12 @@ public class ImageSource {
 		this.bgPaint.setColor(Color.BLACK);
 		this.targetPaint = new Paint();
 		this.targetPaint.setColor(Color.WHITE);
+		this.targetPaint.setStrokeWidth(3);
+		this.linePaint.setStrokeWidth(3);
+		this.targetPaint.setStrokeCap(Cap.ROUND);
+		this.linePaint.setStrokeCap(Cap.ROUND);
+		
+		
 		this.onceAround = false;
 		
 		targetPos = height - (float)(getPixelYPos(target));

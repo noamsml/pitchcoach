@@ -17,6 +17,17 @@ public class StatisticalAnalyzer {
 		return retval;
 	}
 	
+	public static float getTopNthSafe(float[] data, int start, int end, int n)
+	{
+		float[] data_copy = new float[end-start];
+		for (int i = start; i < end; i++)
+		{
+			data_copy[i-start] = data[i];
+		}
+		
+		return getNth(data_copy, end-start-n);
+	}
+	
 	public static float getNth(float[] data, int n)
 	{
 		return getNth(data, n, 0, data.length);

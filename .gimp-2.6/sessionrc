@@ -6,7 +6,7 @@
 # you quit GIMP.  If this file isn't found, defaults are used.
 
 (session-info "dock" "dock"
-    (position 1150 382)
+    (position 1150 18)
     (size 210 750)
     (open-on-exit)
     (aux-info
@@ -36,7 +36,7 @@
             (dockable "gimp-gradient-list"
                 (tab-style preview)))))
 (session-info "toolbox" "dock"
-    (position 0 376)
+    (position 0 18)
     (size 160 750)
     (open-on-exit)
     (dock
@@ -44,10 +44,12 @@
             (current-page 0)
             (dockable "gimp-tool-options"
                 (tab-style icon)))))
+(session-info "toplevel" "gimp-image-new-dialog"
+    (position 130 130))
 (session-info "display" "gimp-empty-image-window"
-    (position 443 294)
+    (position 257 74)
     (size 479 180))
 
-(last-tip-shown 1)
+(last-tip-shown 2)
 
 # end of sessionrc

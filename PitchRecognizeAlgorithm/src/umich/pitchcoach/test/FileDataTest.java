@@ -3,6 +3,7 @@ package umich.pitchcoach.test;
 import umich.pitchcoach.Invariants;
 import umich.pitchcoach.NoMoreDataException;
 import umich.pitchcoach.PitchAnalyzerDCT;
+import umich.pitchcoach.PitchAnalyzerDCT_HPS;
 
 public class FileDataTest {
 
@@ -10,9 +11,9 @@ public class FileDataTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		FileSampleSource dataSource = new FileSampleSource("/home/noam/Schoolwork/MDE/Samples/diag2.txt", Invariants.NUMSAMPLES, Invariants.BUFSIZE);
+		FileSampleSource dataSource = new FileSampleSource("/home/noam/Schoolwork/MDE/Samples/NikolaVoice.txt", Invariants.NUMSAMPLES, Invariants.BUFSIZE);
 		//#NOT USED# float data[] = new float[Invariants.BUFSIZE];
-		PitchAnalyzerDCT anal = new PitchAnalyzerDCT(Invariants.BUFSIZE);
+		PitchAnalyzerDCT_HPS anal = new PitchAnalyzerDCT_HPS(Invariants.BUFSIZE);
 		//#NOT USED# int size = 0;
 		boolean done = false;
 		while(!done)

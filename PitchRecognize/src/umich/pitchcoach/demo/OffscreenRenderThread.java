@@ -4,24 +4,28 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.Condition;
 
+import umich.pitchcoach.listeners.IImageSourceSource;
+import umich.pitchcoach.listeners.IRenderNotify;
 import umich.pitchcoach.shared.IPitchReciever;
 import android.content.Context;
 import android.os.Looper;
 import android.os.Handler;
 
 public class OffscreenRenderThread extends Thread implements IPitchReciever {
-	ImageSource image;
-	GraphGlue uiGlue;
-	Handler handler;
-	Lock handlerLock;
-	Condition handlerCond;
+	IImageSourceSource sourceSource;
+	public Handler handler;
+	public Lock handlerLock;
+	public Condition handlerCond;
+	public Handler receivingHandler;
+	public IRenderNotify renderNotify; 
 	
-	public OffscreenRenderThread(GraphGlue uiGlue, Context ctx)
+	public OffscreenRenderThread(Handler receivingHandler, IRenderNotify renderNotify, IImageSourceSource sourceSource)
 	{
-		//pitchservice = new MockPitchThreadSpawn(R.xml.replay_values, ctx.getResources());
-		this.uiGlue = uiGlue;
 		handlerLock = new ReentrantLock();
 		handlerCond = handlerLock.newCondition();
+		this.receivingHandler = receivingHandler;
+		this.renderNotify = renderNotify;
+		this.sourceSource = sourceSource;
 	}
 		@Override
 	public void run() {
@@ -35,14 +39,32 @@ public class OffscreenRenderThread extends Thread implements IPitchReciever {
 
 	@Override
 	public synchronized void receivePitch(final double pitch, final double timeInSeconds) {
-		if (image != null) image.addDatapoint(pitch, timeInSeconds);
-		uiGlue.onPitch(pitch, timeInSeconds);
+		final ImageSource image = getImage();
+		if (image != null) 
+		{
+			image.addDatapoint(pitch, timeInSeconds);
+		}
+		
+		receivingHandler.post(new Runnable() {
+
+			@Override
+			public void run() {
+				sourceSource.updateImage();
+				renderNotify.renderIsDone(pitch, timeInSeconds);
+			}
+			
+		});
 		
 	}
 	
-	public synchronized void setImage(ImageSource image)
-	{
-		this.image = image;
+	private ImageSource getImage() {
+		if (this.sourceSource == null) return null;
+		return this.sourceSource.getImageSource();
+	}
+	
+	public synchronized void setRenderElement(IImageSourceSource imageSourceSource) {
+		this.sourceSource =  imageSourceSource;
+		
 	}
 
 }
