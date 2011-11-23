@@ -2,6 +2,7 @@ package umich.pitchcoach.threadman;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import umich.pitchcoach.demo.GraphContainer;
 import umich.pitchcoach.demo.OffscreenRenderThread;
@@ -20,6 +21,7 @@ public class RenderThreadManager {
 		this.appHandler = h;
 		this.renderNotify = r;
 		this.pitchservice = new PitchThreadSpawn();
+		renderThread = null;
 	}
 	
 	public void setRenderElement(IImageSourceSource sourceSource) {
@@ -36,6 +38,7 @@ public class RenderThreadManager {
 		Log.v("RenderThread", "started " + sourceSource.toString());
 		//Figure out this clusterfuck sometime
 		if (renderThread == null)  { //LAMEFIX: Starting render thread multiple times doesn't work
+			Log.v("RenderThread", "start allowed");
 			renderThread = new OffscreenRenderThread(this.appHandler, this.renderNotify, sourceSource);
 			renderThread.start();
 			
@@ -56,7 +59,14 @@ public class RenderThreadManager {
 	public void stopRenderThread() {
 		Log.v("RenderThread", "stopped");
 		pitchservice.stopPitchService();
-		if (renderThread != null) renderThread.interrupt();
+		if (renderThread != null) renderThread.handler.post(new Runnable () {
+
+			@Override
+			public void run() {
+				Looper.myLooper().quit();
+			}
+			
+		});
 		renderThread = null;
 	}
 }

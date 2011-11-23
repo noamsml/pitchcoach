@@ -26,6 +26,7 @@ public class OffscreenRenderThread extends Thread implements IPitchReciever {
 		this.receivingHandler = receivingHandler;
 		this.renderNotify = renderNotify;
 		this.sourceSource = sourceSource;
+		this.setName("Render Thread " + this.getId());
 	}
 		@Override
 	public void run() {

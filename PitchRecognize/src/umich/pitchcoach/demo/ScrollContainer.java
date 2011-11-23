@@ -3,6 +3,7 @@ package umich.pitchcoach.demo;
 import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import java.util.LinkedList;
@@ -20,9 +21,12 @@ public class ScrollContainer extends HorizontalScrollView {
 	private LinkedList<SizableElement> toAdd;
 	private boolean scrollAtEnd;
 	private boolean autoScrolling;
+	private boolean expectAutoScroll = false;
+
 	
 	private Runnable scrollABit; //TODO: Figure out more elegan way to do this
 	Handler uiThreadHandler;
+	boolean firstTime = true; //HACK
 	
 	public ScrollContainer(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -51,13 +55,18 @@ public class ScrollContainer extends HorizontalScrollView {
 			protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 				// TODO Auto-generated method stub
 				super.onSizeChanged(w, h, oldw, oldh);
-				if (oldw == 0 && w > 0) {
-					that.handleDoneScrolling();
-				}
-				else if (w > oldw)
-				{
-					that.scrollAtEnd = false;
-					uiThreadHandler.postDelayed(scrollABit, 200);
+				if (expectAutoScroll) {
+					Log.v("PitchCoach", "OnSizeChange called with " + w + " from " + oldw);
+					if (oldw == 0 && w > 0) {
+							expectAutoScroll = false;
+							that.handleDoneScrolling();
+					}
+					else if (w > oldw)
+					{
+						expectAutoScroll = false;
+						that.scrollAtEnd = false;
+						uiThreadHandler.postDelayed(scrollABit, 200);
+					}
 				}
 			}
 		};
@@ -96,6 +105,7 @@ public class ScrollContainer extends HorizontalScrollView {
 			
 		}
 		this.layout.addView(elem, this.getWidth()/3, this.getHeight());
+		this.expectAutoScroll = true;
 	}
 	
 	public void setOnScrollListener(OnScrollListener l) {

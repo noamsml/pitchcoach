@@ -37,6 +37,7 @@ public class PitchThreadSpawn implements IPitchServiceController {
 		if (thread != null)
 		{
 			thread.done = true;
+			thread.interrupt();
 			thread = null;
 		}
 		else

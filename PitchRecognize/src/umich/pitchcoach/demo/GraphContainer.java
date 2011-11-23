@@ -6,6 +6,8 @@ import umich.pitchcoach.listeners.IImageSourceSource;
 import umich.pitchcoach.listeners.SizableElement;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,20 +15,33 @@ import android.widget.TextView;
 public class GraphContainer extends SizableElement implements IImageSourceSource {
 	public GraphSurface graph;
 	private String targetPitch;
-	private NotePlayer noteplayer;
 	private GraphEvaluator eval;
+	private double targetFreq;
 	
 	public GraphContainer(Context context, String targetPitch) {
 		super(context);
-		graph = new GraphSurface(context, LetterNotes.noteSpecToFreq(targetPitch), targetPitch);
-		graph.setTint(0x88bbbbbb);
+		targetFreq = LetterNotes.noteSpecToFreq(targetPitch);
+		graph = new GraphSurface(context, targetFreq, targetPitch);
+		graph.setTint(0x88000000);
 		this.setOrientation(LinearLayout.VERTICAL);
 		this.addView(graph);
 		this.targetPitch = targetPitch;
 		
 		eval = new GraphEvaluator(this.targetPitch);
 	}
-
+	/*
+	public GraphContainer(Context context, Bundle restoreState)
+	{
+		super(context);
+	}
+	
+	
+	public Bundle saveState() {
+		Bundle b = new Bundle();
+		b.putDouble("target", targetFreq);
+		return b;
+	}
+	*/
 	public void updateImage() {
 		this.graph.invalidate();
 	}
@@ -43,6 +58,7 @@ public class GraphContainer extends SizableElement implements IImageSourceSource
 		this.graph.makeUnLive();
 	}
 	
+	
 	public void onPitch(double pitch, double time)
 	{
 		eval.onPitch(pitch, time);
@@ -51,6 +67,7 @@ public class GraphContainer extends SizableElement implements IImageSourceSource
 	public boolean isDone() {
 		return eval.isDone();
 	}
+	
 	
 	public void finalize()
 	{
@@ -81,6 +98,16 @@ public class GraphContainer extends SizableElement implements IImageSourceSource
 
 	public void setActive() {
 		graph.unsetTint();
+		graph.unsetPatch();
+	}
+	
+	public void setListening() {
+		graph.setTint(0x88bbbbff);
+		graph.setPatch(R.drawable.ex);
+	}
+
+	public double getFrequency() {
+		return targetFreq;
 	}
 	
 }

@@ -15,11 +15,13 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import umich.pitchcoach.NotePlayer.NotePlayer;
 import umich.pitchcoach.listeners.IRenderNotify;
 import umich.pitchcoach.listeners.OnScrollListener;
 
@@ -33,7 +35,8 @@ public class PitchGraphActivity extends Activity {
 	RenderThreadManager renderThreadManager;
 	
 	LifeBar lifebar;
-
+	NotePlayer noteplayer;
+	boolean returning = false;
 	
 	public static String[] singTheseNotes = new String[]{"C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3"};
 
@@ -43,26 +46,37 @@ public class PitchGraphActivity extends Activity {
 		setContentView(R.layout.mockui);
 		lifebar = (LifeBar)findViewById(R.id.lifebar);
 		graphcont = (ScrollContainer)findViewById(R.id.scroller);
+	
+		
+		noteplayer = new NotePlayer( 
+			new Runnable () {
+
+				@Override
+				public void run() {
+					currentGraph.setActive();
+					renderThreadManager.startRenderThread(currentGraph);
+				}
+			
+			}
+		);
+		
 		this.graphcont.setOnScrollListener(new OnScrollListener() {
 
 			@Override
 			public void scrollEnd() {
-				renderThreadManager.startRenderThread(currentGraph);
-				renderUnPause();
 			}
 
 			@Override
 			public void scrollBack() {
-				renderThreadManager.stopRenderThread();
-				renderPause();
 			}
 
 			@Override
 			public void doneAutoScrolling() {
-				renderThreadManager.startRenderThread(currentGraph); //??
+				playCurrentGraph();
 			}
 			
 		});
+		
 		myPitchKeeper = new PitchKeeper(new ArrayList<String>(Arrays.asList(singTheseNotes)));
 		renderThreadManager = new RenderThreadManager(new Handler(), new IRenderNotify() {
 			@Override
@@ -73,8 +87,11 @@ public class PitchGraphActivity extends Activity {
 			
 		});
 		
-		addGraph();
-		addGraph(); //current and next
+		
+		
+			addGraph();
+			addGraph(); //current and next
+		
 		
 	}
 
@@ -83,9 +100,6 @@ public class PitchGraphActivity extends Activity {
 		graphcont.addElement(theGraph);
 		this.currentGraph = this.nextGraph;
 		this.nextGraph = theGraph;
-		if (this.currentGraph != null) {
-			this.currentGraph.setActive();
-		}
 	}
 
 	@Override
@@ -93,11 +107,23 @@ public class PitchGraphActivity extends Activity {
 		super.onPause();
 		renderThreadManager.stopRenderThread();
 	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		renderThreadManager.stopRenderThread();
+	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		renderThreadManager.startRenderThread(currentGraph);
+		
+		
+		
+		if (returning)
+			renderThreadManager.startRenderThread(currentGraph);
+		//else playCurrentGraph();
+		returning = true;
 	}
 
 	public void updateIncidentalUI(double pitch, double timeInSeconds) {
@@ -114,7 +140,14 @@ public class PitchGraphActivity extends Activity {
 			else addGraph();
 		}
 	}
-
+	
+	private void playCurrentGraph() {
+		currentGraph.setListening();
+		noteplayer.setFrequency(currentGraph.getFrequency());
+		noteplayer.setDuration(1);
+		noteplayer.playNote();
+	}
+	
 	private void onDeath() {
 		AlertDialog deathAlert;
 		deathAlert = new AlertDialog.Builder(this).create();
