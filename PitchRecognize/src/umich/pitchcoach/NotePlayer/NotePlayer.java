@@ -1,6 +1,9 @@
 package umich.pitchcoach.NotePlayer;
 
 import umich.pitchcoach.HammingWindow;
+import umich.pitchcoach.synth.SineWave;
+import umich.pitchcoach.synth.SquareWave;
+import umich.pitchcoach.synth.Wave;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -16,7 +19,6 @@ public class NotePlayer extends MediaPlayer {
 	private int duration = 3; // seconds
 	private final int sampleRate = 44100;
 	private final int numSamples = duration * sampleRate;
-	private final float[] sample = new float[numSamples];
 	private double freqOfTone = 440; // hz
 
 	private final byte generatedSnd[] = new byte[2 * numSamples];
@@ -77,28 +79,10 @@ public class NotePlayer extends MediaPlayer {
 	//##################
 	
 	void genTone() {
-		int ATTACK_SIZE = 400;
 		// fill out the array
-		for (int i = 0; i < numSamples; ++i) {
-			sample[i] = (float)(Math.sin(2 * Math.PI * i / (sampleRate / freqOfTone)));
-			
-			if (i < ATTACK_SIZE) sample[i] *= ((float)i)/ATTACK_SIZE;
-			if (i > numSamples - ATTACK_SIZE) sample[i] *= ((float)numSamples-i)/ATTACK_SIZE; 
-		}
-		
-		
-
-		// convert to 16 bit pcm sound array
-		// assumes the sample buffer is normalised.
-		int idx = 0;
-		for (final double dVal : sample) {
-			// scale to maximum amplitude
-			final short val = (short) ((dVal * 32767));
-			// in 16 bit wav PCM, first byte is the low order byte
-			generatedSnd[idx++] = (byte) (val & 0x00ff);
-			generatedSnd[idx++] = (byte) ((val & 0xff00) >>> 8);
-
-		}
+		Wave w;
+		w = new SquareWave(sampleRate, 1.0, freqOfTone);
+		w.synthWave(generatedSnd, duration);
 	}
 
 	void playSound() {
