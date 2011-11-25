@@ -64,7 +64,7 @@ public class NotePlayer extends MediaPlayer {
 								else thingsToDo.add(callback);
 							}
 							
-						}, duration*1000+1000);
+						}, duration*1000+300);
 					}
 				});
 			}
