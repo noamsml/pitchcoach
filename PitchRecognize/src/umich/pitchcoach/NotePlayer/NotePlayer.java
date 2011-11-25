@@ -1,5 +1,8 @@
 package umich.pitchcoach.NotePlayer;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 import umich.pitchcoach.HammingWindow;
 import umich.pitchcoach.synth.SineWave;
 import umich.pitchcoach.synth.SquareWave;
@@ -20,12 +23,15 @@ public class NotePlayer extends MediaPlayer {
 	private final int sampleRate = 44100;
 	private final int numSamples = duration * sampleRate;
 	private double freqOfTone = 440; // hz
+	private boolean paused = false;
 
 	private final byte generatedSnd[] = new byte[2 * numSamples];
 
 	Handler handler = new Handler();
 	Handler uiHandler;
 	Runnable callback;
+	
+	LinkedList<Runnable> thingsToDo = new LinkedList<Runnable>(); //HACK
 	
 	public NotePlayer(Runnable callback){
 		super();
@@ -49,7 +55,16 @@ public class NotePlayer extends MediaPlayer {
 
 					public void run() {
 						playSound();
-						handler.postDelayed(callback, duration*1000+1000);
+						//Someone kill me now
+						handler.postDelayed(new Runnable() {
+
+							@Override
+							public void run() {
+								if (!paused) callback.run();
+								else thingsToDo.add(callback);
+							}
+							
+						}, duration*1000+1000);
 					}
 				});
 			}
@@ -93,7 +108,18 @@ public class NotePlayer extends MediaPlayer {
 		audioTrack.write(generatedSnd, 0, generatedSnd.length);
 		audioTrack.play();
 	}
-
+	
+	public void die() {
+		paused = true;
+	}
+	
+	public void riseFromDead() {
+		paused = false;
+		while (thingsToDo.size() > 0)
+		{
+			thingsToDo.removeFirst().run();
+		}
+	}
 	
 }
 

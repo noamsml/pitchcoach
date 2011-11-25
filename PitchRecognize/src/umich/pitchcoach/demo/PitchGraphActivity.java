@@ -105,7 +105,9 @@ public class PitchGraphActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		noteplayer.die();
 		renderThreadManager.stopRenderThread();
+		
 	}
 	
 	@Override
@@ -119,7 +121,7 @@ public class PitchGraphActivity extends Activity {
 		super.onResume();
 		
 		
-		
+		noteplayer.riseFromDead();
 		if (returning)
 			renderThreadManager.startRenderThread(currentGraph);
 		//else playCurrentGraph();
