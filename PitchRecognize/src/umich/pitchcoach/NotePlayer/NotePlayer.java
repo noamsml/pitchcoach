@@ -96,7 +96,7 @@ public class NotePlayer extends MediaPlayer {
 	void genTone() {
 		// fill out the array
 		Wave w;
-		w = new SquareWave(sampleRate, 1.0, freqOfTone);
+		w = new SquareWave(sampleRate, 0.4, freqOfTone).add(new SineWave(sampleRate, 0.6, freqOfTone));
 		w.synthWave(generatedSnd, duration);
 	}
 

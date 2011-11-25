@@ -8,6 +8,10 @@ public abstract class Wave {
 		this.rate = rate;
 	}
 	
+	public int getRate() {
+		return rate;
+	}
+	
 	public void synthWave(byte[] dataField, double lenInSeconds) {
 		int numSamples = getNumSamples(lenInSeconds);
 		for (int i = 0; i < numSamples; i++)
@@ -25,6 +29,11 @@ public abstract class Wave {
 	
 	public int getByteLenarray(double lenInSeconds) {
 		return getNumSamples(lenInSeconds)*2; 
+	}
+	
+	public Wave add(Wave wave2)
+	{
+		return new SumWave(this, wave2);
 	}
 	
 	public abstract double getSample(int sampleNum);
