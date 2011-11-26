@@ -21,9 +21,10 @@ public final class R {
         public static final int orange_progress=0x7f020004;
         public static final int pitchcoachlogo=0x7f020005;
         public static final int red_progress=0x7f020006;
-        public static final int startscreenbackground=0x7f020007;
-        public static final int vee=0x7f020008;
-        public static final int yellow_progress=0x7f020009;
+        public static final int speaker=0x7f020007;
+        public static final int startscreenbackground=0x7f020008;
+        public static final int vee=0x7f020009;
+        public static final int yellow_progress=0x7f02000a;
     }
     public static final class id {
         public static final int PitchMButton=0x7f080011;

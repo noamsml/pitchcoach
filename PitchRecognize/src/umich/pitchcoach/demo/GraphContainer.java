@@ -103,7 +103,7 @@ public class GraphContainer extends SizableElement implements IImageSourceSource
 	
 	public void setListening() {
 		graph.setTint(0x88bbbbff);
-		graph.setPatch(R.drawable.ex);
+		graph.setPatch(R.drawable.speaker);
 	}
 
 	public double getFrequency() {
