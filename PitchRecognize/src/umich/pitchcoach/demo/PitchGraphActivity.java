@@ -131,11 +131,13 @@ public class PitchGraphActivity extends Activity {
 	public void updateIncidentalUI(double pitch, double timeInSeconds) {
 		
 		currentGraph.onPitch(pitch, timeInSeconds);
+		
+		if (currentGraph.isCurrentlyCorrect()) this.lifebar.addLives(timeInSeconds * 15);
+		else this.lifebar.addLives(timeInSeconds * -5);
 		if (currentGraph.isDone()) {
 			renderThreadManager.stopRenderThread();
 			currentGraph.finalize();
-			if (currentGraph.getFinalEvaluation() > 0) this.lifebar.addLives(25);
-			else this.lifebar.addLives(-5);
+			
 			
 			if (this.lifebar.isWin()) this.onWin();
 			else if (this.lifebar.isDeath()) this.onDeath();

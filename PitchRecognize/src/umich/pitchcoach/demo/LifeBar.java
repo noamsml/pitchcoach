@@ -12,10 +12,13 @@ import android.widget.ProgressBar;
 public class LifeBar extends ProgressBar {
 
 	
+	private double lives;
+
 	public LifeBar(Context context, AttributeSet attributes) {
 		super(context, attributes);
 		this.setMax(100);
 		this.setIndeterminate(false);
+		this.lives = 50;
 		this.setProgress(50);
 	}
 
@@ -50,8 +53,11 @@ public class LifeBar extends ProgressBar {
 		return this.getProgress() <= 0;
 	}
 	
-	public void addLives(int lives)
+	public void addLives(double d)
 	{
-		this.setProgress(this.getProgress() + lives);
+		this.lives += d;
+		if (this.lives < 0) this.lives = 0;
+		else if (this.lives > 100) this.lives = 100;
+		this.setProgress((int)this.lives);
 	}
 }

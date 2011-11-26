@@ -31,6 +31,7 @@ public class GraphEvaluator {
 		return 2;
 	}
 	
+	
 	public void onPitch(double pitch, double time) {
 		timeSpent += time;
 		if (LetterNotes.evalFreq(pitch, freqCorrect) == 0) {
@@ -42,5 +43,9 @@ public class GraphEvaluator {
 			if (timeRight != 0 || timeSinceRight != 0) timeSinceRight += time;
 			timeRight = 0;
 		}
+	}
+	
+	public boolean isCurrentlyCorrect() {
+		return timeRight != 0;
 	}
 }

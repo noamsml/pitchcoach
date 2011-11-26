@@ -110,4 +110,8 @@ public class GraphContainer extends SizableElement implements IImageSourceSource
 		return targetFreq;
 	}
 	
+	public boolean isCurrentlyCorrect() {
+		return eval.isCurrentlyCorrect();
+	}
+	
 }
