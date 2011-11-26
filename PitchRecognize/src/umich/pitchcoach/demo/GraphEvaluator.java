@@ -9,8 +9,8 @@ public class GraphEvaluator {
 	double freqCorrect;
 	
 	private static double timeRightNeeded = 1.0;
-	private static double timeSpentNeeded = 10.0;
-	private static double timeSpentOK = 2.0;
+	private static double timeSpentNeeded = 3.0;
+	private static double timeSpentOK = 1.0;
 	
 	public GraphEvaluator(String pitch)
 	{

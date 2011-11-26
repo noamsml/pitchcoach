@@ -6,7 +6,6 @@ abstract public class PeakDetectorRunningMaxOutlier implements IPeakDetector {
 	int offset;
 	int endoffset;
 	int currentLoc;
-	StatisticalData stats;
 	private static final int SAMPLES_THRES=20;
 	
 	private int sampthres(int loc)
@@ -20,8 +19,6 @@ abstract public class PeakDetectorRunningMaxOutlier implements IPeakDetector {
 		this.offset = offset;
 		this.endoffset = endoffset;
 		this.currentLoc = offset;
-		stats = StatisticalAnalyzer.statAnal(data, offset, endoffset);
-		//threshold = StatisticalAnalyzer.getTopNthSafe(data, offset, endoffset, numPeakElems);
 	}
 
 	@Override
@@ -32,6 +29,7 @@ abstract public class PeakDetectorRunningMaxOutlier implements IPeakDetector {
 			if (data[currentLoc] >= data[currentMax])
 			{
 				currentMax = currentLoc;
+				
 			}
 			
 			if (currentLoc - currentMax > sampthres(currentMax) && isOutlier(data[currentMax]))
