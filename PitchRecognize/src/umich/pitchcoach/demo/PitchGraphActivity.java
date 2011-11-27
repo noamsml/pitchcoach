@@ -137,15 +137,7 @@ public class PitchGraphActivity extends Activity {
 			else addGraph();
 		}
 	}
-	
-	/*
-	private void playCurrentGraph() {
-		currentGraph.setListening();
-		noteplayer.setFrequency(currentGraph.getFrequency());
-		noteplayer.setDuration(1);
-		noteplayer.playNote();
-	}*/
-	
+		
 	private void onDeath() {
 		AlertDialog deathAlert;
 		deathAlert = new AlertDialog.Builder(this).create();
