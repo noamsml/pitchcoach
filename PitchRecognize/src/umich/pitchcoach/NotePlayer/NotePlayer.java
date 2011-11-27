@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import umich.pitchcoach.HammingWindow;
+import umich.pitchcoach.flow.Promise;
 import umich.pitchcoach.synth.SineWave;
 import umich.pitchcoach.synth.SquareWave;
 import umich.pitchcoach.synth.Wave;
@@ -29,13 +30,11 @@ public class NotePlayer extends MediaPlayer {
 
 	Handler handler = new Handler();
 	Handler uiHandler;
-	Runnable callback;
 	
-	LinkedList<Runnable> thingsToDo = new LinkedList<Runnable>(); //HACK
+	LinkedList<Promise> thingsToDo = new LinkedList<Promise>(); //HACK
 	
-	public NotePlayer(Runnable callback){
+	public NotePlayer(){
 		super();
-		this.callback = callback;
 	}
 	
 	
@@ -46,38 +45,45 @@ public class NotePlayer extends MediaPlayer {
 		this.duration = duration;
 	}
 
-	public void playNote(){
-		// Use a new tread as this can take a while
-		final Thread thread = new Thread(new Runnable() {
-			public void run() {
-				genTone();
-				handler.post(new Runnable() {
-
+	public Promise playNote(){
+		Promise p = new Promise() {
+			public void go() {
+				final Promise that = this; //Don't ask why this is necessary, it's a braindead reason
+				final Thread thread = new Thread(new Runnable() {
 					public void run() {
-						playSound();
-						//Someone kill me now
-						handler.postDelayed(new Runnable() {
+						genTone();
+						handler.post(new Runnable() {
 
-							@Override
 							public void run() {
-								if (!paused) callback.run();
-								else thingsToDo.add(callback);
+								playSound();
+								//Someone kill me now
+								handler.postDelayed(new Runnable() {
+
+									@Override
+									public void run() {
+										if (!paused) 
+											done();
+										else thingsToDo.add(that);
+									}
+									
+								}, duration*1000+300);
 							}
-							
-						}, duration*1000+300);
+						});
 					}
 				});
+				thread.setName("Play Thread");
+				thread.start();
 			}
-		});
-		thread.setName("Play Thread");
-		thread.start();
+		};
+		
+		return p;
 	}
 	
 	
-	public void playNote(double frequency, Integer duration){
+	public Promise playNote(double frequency, Integer duration){
 		this.setFrequency(frequency);
 		this.setDuration(duration);
-		this.playNote();
+		return this.playNote();
 	}
 	
 	//##################
@@ -117,7 +123,7 @@ public class NotePlayer extends MediaPlayer {
 		paused = false;
 		while (thingsToDo.size() > 0)
 		{
-			thingsToDo.removeFirst().run();
+			thingsToDo.removeFirst().done();
 		}
 	}
 	

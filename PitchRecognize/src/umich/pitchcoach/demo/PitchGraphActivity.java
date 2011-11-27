@@ -22,6 +22,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import umich.pitchcoach.NotePlayer.NotePlayer;
+import umich.pitchcoach.flow.Promise;
 import umich.pitchcoach.listeners.IRenderNotify;
 import umich.pitchcoach.listeners.OnScrollListener;
 
@@ -48,34 +49,7 @@ public class PitchGraphActivity extends Activity {
 		graphcont = (ScrollContainer)findViewById(R.id.scroller);
 	
 		
-		noteplayer = new NotePlayer( 
-			new Runnable () {
-
-				@Override
-				public void run() {
-					currentGraph.setActive();
-					renderThreadManager.startRenderThread(currentGraph);
-				}
-			
-			}
-		);
-		
-		this.graphcont.setOnScrollListener(new OnScrollListener() {
-
-			@Override
-			public void scrollEnd() {
-			}
-
-			@Override
-			public void scrollBack() {
-			}
-
-			@Override
-			public void doneAutoScrolling() {
-				playCurrentGraph();
-			}
-			
-		});
+		noteplayer = new NotePlayer();
 		
 		myPitchKeeper = new PitchKeeper(new ArrayList<String>(Arrays.asList(singTheseNotes)));
 		renderThreadManager = new RenderThreadManager(new Handler(), new IRenderNotify() {
@@ -83,23 +57,42 @@ public class PitchGraphActivity extends Activity {
 			public void renderIsDone(double pitch, double time) {
 				updateIncidentalUI(pitch, time);
 			}		
-
 			
 		});
 		
 		
 		
-			addGraph();
+			addGraphInitial();
 			addGraph(); //current and next
 		
 		
 	}
 
-	private void addGraph() {
+	private void addGraphInitial() {
 		GraphContainer theGraph = new GraphContainer(getApplicationContext(), myPitchKeeper.getRandomPitch());
-		graphcont.addElement(theGraph);
+		Promise todo = graphcont.addElement(theGraph);
+		this.nextGraph = theGraph;
+		todo.go();
+		
+	}
+	
+	private void addGraph() {
+		final GraphContainer theGraph = new GraphContainer(getApplicationContext(), myPitchKeeper.getRandomPitch());
+		Promise todo = graphcont.addElement(theGraph).then(new Runnable() {
+			public void run() {
+				currentGraph.setListening();
+				noteplayer.setFrequency(currentGraph.getFrequency());
+				noteplayer.setDuration(1);
+			}
+		}).then(this.noteplayer.playNote()).then(new Runnable() {
+			public void run() {
+				currentGraph.setActive();
+				renderThreadManager.startRenderThread(currentGraph);
+			}
+		});
 		this.currentGraph = this.nextGraph;
 		this.nextGraph = theGraph;
+		todo.go();
 	}
 
 	@Override
@@ -145,12 +138,13 @@ public class PitchGraphActivity extends Activity {
 		}
 	}
 	
+	/*
 	private void playCurrentGraph() {
 		currentGraph.setListening();
 		noteplayer.setFrequency(currentGraph.getFrequency());
 		noteplayer.setDuration(1);
 		noteplayer.playNote();
-	}
+	}*/
 	
 	private void onDeath() {
 		AlertDialog deathAlert;
