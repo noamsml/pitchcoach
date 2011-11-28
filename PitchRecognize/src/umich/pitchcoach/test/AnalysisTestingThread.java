@@ -1,12 +1,14 @@
 package umich.pitchcoach.test;
 
 import umich.pitchcoach.IPitchAnalyzer;
+
 import umich.pitchcoach.NoMoreDataException;
 import umich.pitchcoach.PitchAnalyzerDCT;
 import umich.pitchcoach.SineWave;
 //import android.os.Debug;
 import android.os.Handler;
 import android.os.SystemClock;
+
 public class AnalysisTestingThread extends Thread {
 	ILogReceiver logger;
 	Handler handler;

@@ -12,7 +12,7 @@ public class Promise {
 	}
 	
 	
-	public Promise setNext(Promise p)
+	private Promise setNext(Promise p)
 	{
 		if (getDone()) {
 			p.go();
@@ -30,7 +30,9 @@ public class Promise {
 	
 	public Promise then(Promise p)
 	{
-		this.last = this.last.setNext(p);
+		if (this.last == this) this.setNext(p);
+		else this.last.then(p);
+		this.last = p;
 		return this;
 	}
 	

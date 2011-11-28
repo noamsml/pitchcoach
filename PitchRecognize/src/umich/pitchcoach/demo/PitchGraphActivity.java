@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import umich.pitchcoach.LetterNotes;
 import umich.pitchcoach.R;
+import umich.pitchcoach.shared.IPitchReciever;
 import umich.pitchcoach.threadman.RenderThreadManager;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,6 +23,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import umich.pitchcoach.NotePlayer.NotePlayer;
+import umich.pitchcoach.flow.PlayManagerScroll;
 import umich.pitchcoach.flow.Promise;
 import umich.pitchcoach.listeners.IRenderNotify;
 import umich.pitchcoach.listeners.OnScrollListener;
@@ -29,14 +31,11 @@ import umich.pitchcoach.listeners.OnScrollListener;
 public class PitchGraphActivity extends Activity {
 
 	PitchKeeper myPitchKeeper;
-	GraphContainer currentGraph;
-	GraphContainer nextGraph;
-	
 	ScrollContainer graphcont;
-	RenderThreadManager renderThreadManager;
-	
+	PlayManagerScroll playmanager;
 	LifeBar lifebar;
 	NotePlayer noteplayer;
+	
 	boolean returning = false;
 	
 	public static String[] singTheseNotes = new String[]{"C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3"};
@@ -52,61 +51,62 @@ public class PitchGraphActivity extends Activity {
 		noteplayer = new NotePlayer();
 		
 		myPitchKeeper = new PitchKeeper(new ArrayList<String>(Arrays.asList(singTheseNotes)));
-		renderThreadManager = new RenderThreadManager(new Handler(), new IRenderNotify() {
+		playmanager = new PlayManagerScroll(getApplicationContext(), myPitchKeeper, graphcont);
+		
+		playmanager.setCallback(new IPitchReciever() {
+			
 			@Override
-			public void renderIsDone(double pitch, double time) {
-				updateIncidentalUI(pitch, time);
+			public void receivePitch(double pitch, double timeInSeconds) {
+				updateIncidentalUI(pitch, timeInSeconds);
 			}		
 			
 		});
 		
 		
-		
-			addGraphInitial();
-			addGraph(); //current and next
-		
+		playmanager.begin().then(this.play()).then(new Runnable() {
+			public void run() {
+				playLoop();
+			}
+		}).go();
 		
 	}
 
-	private void addGraphInitial() {
-		GraphContainer theGraph = new GraphContainer(getApplicationContext(), myPitchKeeper.getRandomPitch());
-		Promise todo = graphcont.addElement(theGraph);
-		this.nextGraph = theGraph;
-		todo.go();
-		
-	}
 	
-	private void addGraph() {
-		final GraphContainer theGraph = new GraphContainer(getApplicationContext(), myPitchKeeper.getRandomPitch());
-		Promise todo = graphcont.addElement(theGraph).then(new Runnable() {
-			public void run() {
-				currentGraph.setListening();
-				noteplayer.setFrequency(currentGraph.getFrequency());
+	private Promise play() {
+		return new Promise() {
+			public void go() {
+				playmanager.currentGraph().setListening();
+				noteplayer.setFrequency(playmanager.currentGraph().getFrequency());
 				noteplayer.setDuration(1);
+				done();
 			}
-		}).then(this.noteplayer.playNote()).then(new Runnable() {
-			public void run() {
-				currentGraph.setActive();
-				renderThreadManager.startRenderThread(currentGraph);
-			}
-		});
-		this.currentGraph = this.nextGraph;
-		this.nextGraph = theGraph;
-		todo.go();
+		}.then(noteplayer.playNote()).then(playmanager.play());
+	}
+
+
+	private void playLoop() {
+		if (lifebar.isWin()) onWin();
+		else if (lifebar.isDeath()) onDeath();
+		else {
+			playmanager.addGraph().then(this.play()).then(new Runnable() {
+				public void run() {
+					playLoop();
+				}
+			}).go();
+		}
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 		noteplayer.die();
-		renderThreadManager.stopRenderThread();
-		
+		playmanager.pause();
 	}
 	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		renderThreadManager.stopRenderThread();
+		playmanager.pause();
 	}
 
 	@Override
@@ -115,27 +115,15 @@ public class PitchGraphActivity extends Activity {
 		
 		
 		noteplayer.riseFromDead();
-		if (returning)
-			renderThreadManager.startRenderThread(currentGraph);
+		playmanager.unpause();
 		//else playCurrentGraph();
 		returning = true;
 	}
 
 	public void updateIncidentalUI(double pitch, double timeInSeconds) {
-		
-		currentGraph.onPitch(pitch, timeInSeconds);
-		
-		if (currentGraph.isCurrentlyCorrect()) this.lifebar.addLives(timeInSeconds * 15);
+		if (playmanager.currentGraph().isCurrentlyCorrect()) this.lifebar.addLives(timeInSeconds * 15);
 		else this.lifebar.addLives(timeInSeconds * -5);
-		if (currentGraph.isDone()) {
-			renderThreadManager.stopRenderThread();
-			currentGraph.finalize();
-			
-			
-			if (this.lifebar.isWin()) this.onWin();
-			else if (this.lifebar.isDeath()) this.onDeath();
-			else addGraph();
-		}
+		
 	}
 		
 	private void onDeath() {
