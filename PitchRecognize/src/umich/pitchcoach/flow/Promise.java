@@ -53,4 +53,19 @@ public class Promise {
 	synchronized public boolean getDone() {
 		return isDone;
 	}
+	
+	
+	
+	public static Promise nTimes(int n, IPromiseFactory promiseFactory)
+	{
+		if (n <= 0) return new Promise();
+		Promise p = promiseFactory.getPromise();
+		
+		while (n > 1) {
+			p.then(promiseFactory.getPromise());
+			n--;
+		}
+		
+		return p;
+	}
 }

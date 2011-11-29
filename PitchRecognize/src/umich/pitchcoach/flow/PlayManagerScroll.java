@@ -1,6 +1,7 @@
 package umich.pitchcoach.flow;
 
 import android.content.Context;
+import umich.pitchcoach.dataAdapt.IPitchSource;
 import umich.pitchcoach.demo.GraphContainer;
 import umich.pitchcoach.demo.PitchKeeper;
 import umich.pitchcoach.demo.ScrollContainer;
@@ -11,7 +12,7 @@ public class PlayManagerScroll extends PlayManager {
 	private GraphContainer currentGraph;
 	private GraphContainer nextGraph;
 		
-	public PlayManagerScroll(Context ctx, PitchKeeper keeper, ScrollContainer scroller)
+	public PlayManagerScroll(Context ctx, IPitchSource keeper, ScrollContainer scroller)
 	{
 		super(ctx, keeper);
 		this.scroller = scroller; 
@@ -24,14 +25,39 @@ public class PlayManagerScroll extends PlayManager {
 
 	@Override
 	public Promise addGraph() {
-		final GraphContainer next = new GraphContainer(context, this.pitchkeeper.getRandomPitch());
-		return scroller.addElement(next).then(new Runnable() {
-			public void run()
-			{
-				currentGraph = nextGraph;
-				nextGraph = next;
+		//Hack
+		return new Promise() {
+			public void go() {
+				String nextPitch = pitchkeeper.getNextPitch();
+				
+				if (nextPitch == null) new Promise() {
+					public void go() {
+						currentGraph = nextGraph;
+						nextGraph = null;
+						done();
+					}
+				}.then(new Runnable() {
+					public void run() {
+						done();
+					}
+				}).go();
+				else {
+					final GraphContainer next = new GraphContainer(context, nextPitch);
+					
+					scroller.addElement(next).then(new Runnable() {
+						public void run()
+						{
+							currentGraph = nextGraph;
+							nextGraph = next;
+						}
+					}).then(new Runnable() {
+						public void run() {
+							done();
+						}
+					}).go();
+				}
 			}
-		});
+		};
 	}
 
 	@Override

@@ -27,6 +27,12 @@
         	android:configChanges="keyboardHidden|orientation"
         	>
         </activity>
+        
+        <activity android:name=".demo.TutorialActivity"
+        	android:screenOrientation="landscape"
+        	android:configChanges="keyboardHidden|orientation"
+        	>
+        </activity>
         <activity android:name=".data.TestEventStream" android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

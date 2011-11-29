@@ -14,10 +14,20 @@ public class StartScreen extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.startscreen);
-		final Button pitchMode = (Button) findViewById(R.id.PitchMButton);    
-		pitchMode.setOnClickListener(new View.OnClickListener() {
+		final Button pitchMode = (Button) findViewById(R.id.PitchMButton);
+		linkToActivity(pitchMode, PitchGraphActivity.class);
+		
+		final Button tutorial = (Button) findViewById(R.id.tutMButton);    
+		linkToActivity(tutorial, TutorialActivity.class);
+		
+		
+	}
+	
+	public void linkToActivity(Button b, final Class c)
+	{
+		b.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				Intent myIntent = new Intent(view.getContext(), PitchGraphActivity.class);
+				Intent myIntent = new Intent(view.getContext(), c);
 				startActivityForResult(myIntent, 0);
 			}
 		});

@@ -69,7 +69,7 @@ public class GraphContainer extends SizableElement implements IImageSourceSource
 	}
 	
 	
-	public void finalize()
+	public void makeDone()
 	{
 		int color;
 		int evalVal;

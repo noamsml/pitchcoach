@@ -27,18 +27,19 @@ public final class R {
         public static final int yellow_progress=0x7f02000a;
     }
     public static final class id {
-        public static final int PitchMButton=0x7f080011;
+        public static final int PitchMButton=0x7f080013;
         public static final int SelectRangeAltTxt=0x7f08000e;
         public static final int SelectRangeTxt=0x7f080008;
         public static final int altoBtn=0x7f08000c;
         public static final int bassBtn=0x7f08000a;
         public static final int changeTxt=0x7f08000f;
         public static final int debugText=0x7f080000;
-        public static final int eventText=0x7f080012;
+        public static final int eventText=0x7f080014;
+        public static final int imageView1=0x7f080011;
         public static final int lifebar=0x7f080007;
         public static final int linearLayout1=0x7f080001;
         public static final int loadMe=0x7f080010;
-        public static final int nextBtn=0x7f080013;
+        public static final int nextBtn=0x7f080015;
         public static final int pitchText=0x7f080004;
         public static final int scroller=0x7f080006;
         public static final int selectRangesll=0x7f080009;
@@ -47,6 +48,7 @@ public final class R {
         public static final int tenorBtn=0x7f08000b;
         public static final int testbutton_save=0x7f080002;
         public static final int testbutton_start=0x7f080003;
+        public static final int tutMButton=0x7f080012;
     }
     public static final class layout {
         public static final int debug_util=0x7f030000;
