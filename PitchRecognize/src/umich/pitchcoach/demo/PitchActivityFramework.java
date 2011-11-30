@@ -6,6 +6,7 @@ import java.util.Arrays;
 import umich.pitchcoach.R;
 import umich.pitchcoach.NotePlayer.NotePlayer;
 import umich.pitchcoach.dataAdapt.IPitchSource;
+import umich.pitchcoach.flow.IPromiseFactory;
 import umich.pitchcoach.flow.PlayManagerScroll;
 import umich.pitchcoach.flow.Promise;
 import umich.pitchcoach.shared.IPitchReciever;
@@ -69,14 +70,21 @@ public class PitchActivityFramework extends Activity {
 		//else playCurrentGraph();
 	}
 	
-	protected Promise play() {
+	protected Promise setListening() {
 		return new Promise() {
 			public void go() {
 				playmanager.currentGraph().setListening();
-				noteplayer.setFrequency(playmanager.currentGraph().getFrequency());
-				noteplayer.setDuration(1);
 				done();
 			}
-		}.then(noteplayer.playNote()).then(playmanager.play());
+		};
+	}
+	
+	
+	protected Promise play() {
+		return setListening().then(new IPromiseFactory() {
+			public Promise getPromise() {
+				return noteplayer.playNote(playmanager.currentGraph().getFrequency(), 1);
+			}
+		}).then(playmanager.play());
 	}
 }

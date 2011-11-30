@@ -36,6 +36,11 @@ public class Promise {
 		return this;
 	}
 	
+	public Promise then(IPromiseFactory pf)
+	{
+		return this.then(new PromiseFactoryPromise(pf));
+	}
+	
 	//Remember to call super
 	public void done() {
 		this.setDone();
@@ -43,7 +48,7 @@ public class Promise {
 	}
 	
 	public void go() {
-		
+		done();
 	}
 	
 	synchronized private void setDone() {
@@ -68,4 +73,5 @@ public class Promise {
 		
 		return p;
 	}
+	
 }

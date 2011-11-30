@@ -3,6 +3,7 @@ package umich.pitchcoach.demo;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import umich.pitchcoach.LetterNotes;
 import umich.pitchcoach.dataAdapt.PitchSequence;
 import umich.pitchcoach.flow.DialogPromise;
 import umich.pitchcoach.flow.IPromiseFactory;
@@ -22,10 +23,39 @@ public class TutorialActivity extends PitchActivityFramework{
 		tutorial().go();
 	}
 	
+	public Promise playScale()
+	{
+		class playNoteRelative implements IPromiseFactory {
+			int steps;
+			private double duration;
+			public playNoteRelative(int steps, double duration)
+			{
+				this.steps = steps;
+				this.duration = duration;
+			}
+			
+			@Override
+			public Promise getPromise() {
+				return noteplayer.playNote(playmanager.currentGraph().getFrequency() * Math.pow(LetterNotes.stepVal, steps), duration);
+			}
+			
+		}
+		
+		Promise first = new Promise(); //easiest to do
+		
+		for (int i : new int[]{0,2,4,5,7,9,11,12})
+		{
+			first = first.then(new playNoteRelative(i, 1/4.0));
+		}
+		
+		return first.then(new playNoteRelative(0,1/2.0));
+		
+	}
+	
 	public Promise tutorial() {
 		return playmanager.begin().then(
 			new DialogPromise(this, "Welcome to pitchcoach!")	
-		).then(this.play()).then(Promise.nTimes(3, new IPromiseFactory() {
+		).then(setListening()).then(this.playScale()).then(playmanager.play()).then(Promise.nTimes(3, new IPromiseFactory() {
 			public Promise getPromise() {
 				return playmanager.addGraph().then(play());
 			}

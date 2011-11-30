@@ -26,38 +26,27 @@ public class PlayManagerScroll extends PlayManager {
 	@Override
 	public Promise addGraph() {
 		//Hack
-		return new Promise() {
-			public void go() {
-				String nextPitch = pitchkeeper.getNextPitch();
-				
-				if (nextPitch == null) new Promise() {
-					public void go() {
-						currentGraph = nextGraph;
-						nextGraph = null;
-						done();
-					}
-				}.then(new Runnable() {
-					public void run() {
-						done();
-					}
-				}).go();
-				else {
+		return new PromiseFactoryPromise(new IPromiseFactory() {
+			public Promise getPromise() {
+					String nextPitch = pitchkeeper.getNextPitch();	
+					if (nextPitch == null) return new Promise() {
+						public void go() {
+							currentGraph = nextGraph;
+							nextGraph = null;
+							done();
+						}
+					};
 					final GraphContainer next = new GraphContainer(context, nextPitch);
 					
-					scroller.addElement(next).then(new Runnable() {
+					return scroller.addElement(next).then(new Runnable() {
 						public void run()
 						{
 							currentGraph = nextGraph;
 							nextGraph = next;
 						}
-					}).then(new Runnable() {
-						public void run() {
-							done();
-						}
-					}).go();
+					});
 				}
-			}
-		};
+		});
 	}
 
 	@Override

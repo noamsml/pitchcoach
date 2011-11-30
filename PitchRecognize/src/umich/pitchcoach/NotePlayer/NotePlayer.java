@@ -20,13 +20,13 @@ public class NotePlayer extends MediaPlayer {
 	// http://marblemice.blogspot.com/2010/04/generate-and-play-tone-in-android.html
 	// and modified by Steve Pomeroy <steve@staticfree.info>
 	
-	private int duration = 3; // seconds
+	private double duration; // seconds
 	private final int sampleRate = 44100;
-	private final int numSamples = duration * sampleRate;
+	private int numSamples;
 	private double freqOfTone = 440; // hz
 	private boolean paused = false;
 
-	private final byte generatedSnd[] = new byte[2 * numSamples];
+	private byte[] generatedSnd;
 
 	Handler handler = new Handler();
 	Handler uiHandler;
@@ -41,7 +41,7 @@ public class NotePlayer extends MediaPlayer {
 	public void setFrequency(double frequency){
 		this.freqOfTone = frequency;
 	}
-	public void setDuration(int duration){
+	public void setDuration(double duration){
 		this.duration = duration;
 	}
 
@@ -66,7 +66,7 @@ public class NotePlayer extends MediaPlayer {
 										else thingsToDo.add(that);
 									}
 									
-								}, duration*1000+300);
+								}, (int)(duration*1000));
 							}
 						});
 					}
@@ -80,7 +80,7 @@ public class NotePlayer extends MediaPlayer {
 	}
 	
 	
-	public Promise playNote(double frequency, Integer duration){
+	public Promise playNote(double frequency, double duration){
 		this.setFrequency(frequency);
 		this.setDuration(duration);
 		return this.playNote();
@@ -101,8 +101,13 @@ public class NotePlayer extends MediaPlayer {
 	
 	void genTone() {
 		// fill out the array
+		
 		Wave w;
-		w = new SquareWave(sampleRate, 0.4, freqOfTone).add(new SineWave(sampleRate, 0.6, freqOfTone));
+		//w = new SquareWave(sampleRate, 0.4, freqOfTone).add(new SineWave(sampleRate, 0.6, freqOfTone));
+		w = new SineWave(sampleRate, 0.5, freqOfTone).add(new SineWave(sampleRate, 0.25, freqOfTone * 2)).add(
+				new SineWave(sampleRate, 0.2, freqOfTone * 3)).add(new SineWave(sampleRate, 0.05, freqOfTone * 4));
+		this.numSamples = w.getByteLenarray(duration);
+		this.generatedSnd = new byte[numSamples];
 		w.synthWave(generatedSnd, duration);
 	}
 
