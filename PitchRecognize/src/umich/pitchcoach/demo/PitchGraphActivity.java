@@ -42,13 +42,7 @@ public class PitchGraphActivity extends PitchActivityFramework {
 		myPitchKeeper = new PitchKeeper(new ArrayList<String>(Arrays.asList(singTheseNotes)));
 
 		super.onCreate(savedInstanceState);
-		pauseButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View view) {
-				renderPause();
-			}
-		});		
-
-
+		
 		playmanager.begin().then(this.play()).then(new Runnable() {
 			public void run() {
 				playLoop();
@@ -124,38 +118,5 @@ public class PitchGraphActivity extends PitchActivityFramework {
 		buttonify(winAlert, "Do it again!");
 		winAlert.show();
 
-	}
-
-	public void renderPause() { // Use DialogFragments, perhaps?
-		super.onPause();
-		final AlertDialog pauseAlert;
-		pauseAlert = new AlertDialog.Builder(this).create();
-		pauseAlert.setTitle("Paused");
-		pauseAlert.setButton(AlertDialog.BUTTON_POSITIVE, "Restart" , new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface arg0, int arg1) {
-				finish();
-				Intent myIntent = new Intent(getApplicationContext(), PitchGraphActivity.class);
-				startActivity(myIntent);
-			}
-		});
-		pauseAlert.setButton(AlertDialog.BUTTON_NEUTRAL, "Resume" , new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface arg0, int arg1) {
-				pauseAlert.cancel();
-				renderUnPause();
-			}
-		});
-		pauseAlert.setButton(AlertDialog.BUTTON_NEGATIVE, "Back to Menu" , new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface arg0, int arg1) {
-				finish();
-			}
-		});
-		pauseAlert.show();
-	}
-
-	public void renderUnPause() {
-		super.onResume();
 	}
 }

@@ -45,6 +45,12 @@ public class PitchActivityFramework extends Activity {
 			}		
 			
 		});
+		
+		pauseButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				renderPause();
+			}
+		});		
 
 	}
 	
@@ -91,5 +97,51 @@ public class PitchActivityFramework extends Activity {
 				return noteplayer.playNote(playmanager.currentGraph().getFrequency(), 1);
 			}
 		}).then(playmanager.play());
+	}
+	
+	public void renderPause() { // Use DialogFragments, perhaps?
+		
+		noteplayer.die();
+		playmanager.pause();
+		
+		final AlertDialog pauseAlert;
+		pauseAlert = new AlertDialog.Builder(this).create();
+		pauseAlert.setTitle("Paused");
+		final Activity that = this;
+		pauseAlert.setButton(AlertDialog.BUTTON_POSITIVE, "Restart" , new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				finish();
+				Intent myIntent = new Intent(getApplicationContext(), that.getClass());
+				startActivity(myIntent);
+			}
+		});
+		pauseAlert.setButton(AlertDialog.BUTTON_NEUTRAL, "Resume" , new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				pauseAlert.cancel();
+				renderUnPause();
+			}
+		});
+		pauseAlert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+			
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				renderUnPause();
+			}
+		});
+		
+		pauseAlert.setButton(AlertDialog.BUTTON_NEGATIVE, "Back to Menu" , new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				finish();
+			}
+		});
+		pauseAlert.show();
+	}
+
+	public void renderUnPause() {
+		noteplayer.riseFromDead();
+		playmanager.unpause();
 	}
 }

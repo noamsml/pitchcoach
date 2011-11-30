@@ -22,6 +22,8 @@ public class StartScreen extends Activity {
 				
 		final Button learn = (Button) findViewById(R.id.learnBtn);    
 		
+		linkToActivity(learn, TutorialActivity.class);
+		
 		final Button tune = (Button) findViewById(R.id.tuneBtn);    
 		
 	}
