@@ -99,17 +99,9 @@ public class PitchAnalyzerDCT_HPS implements IPitchAnalyzer {
 
 
 	private float sample_compressed(float[] buffer, int offset, int compression, int loc) {
-		/*float result = 0;
-		for (int i =0; i < compression; i++)
-		{
-			if (loc * compression + i < buffer.length)
-				result += buffer[loc * compression + i];
-		}
-		result /= compression;*/
-		
+
 		if (offset + loc * compression < buffer.length) return buffer[offset + loc*compression];
 		return 0;
-		//return result;
 	}
 
 

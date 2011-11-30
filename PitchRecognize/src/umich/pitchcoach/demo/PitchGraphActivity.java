@@ -64,8 +64,8 @@ public class PitchGraphActivity extends PitchActivityFramework {
 	}
 
 	public void updateIncidentalUI(double pitch, double timeInSeconds) {
-		if (playmanager.currentGraph().isCurrentlyCorrect()) this.lifebar.addLives(timeInSeconds * 15);
-		else this.lifebar.addLives(timeInSeconds * -5);
+		if (playmanager.currentGraph().isCurrentlyCorrect()) this.lifebar.addLives(timeInSeconds * 3);
+		else this.lifebar.addLives(timeInSeconds * -1);
 
 	}
 

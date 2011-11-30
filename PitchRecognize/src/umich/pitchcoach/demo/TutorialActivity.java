@@ -22,6 +22,7 @@ public class TutorialActivity extends PitchActivityFramework{
 		myPitchKeeper = new PitchSequence(new String[]{"C#3", "E3", "C4", "C3"});
 
 		super.onCreate(savedInstanceState);
+		lifebar.setVisibility(lifebar.INVISIBLE);
 		tutorial().go();
 	}
 	
