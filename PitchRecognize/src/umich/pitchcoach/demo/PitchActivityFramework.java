@@ -11,7 +11,12 @@ import umich.pitchcoach.flow.PlayManagerScroll;
 import umich.pitchcoach.flow.Promise;
 import umich.pitchcoach.shared.IPitchReciever;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 public class PitchActivityFramework extends Activity {
 	protected ScrollContainer graphcont;
@@ -19,7 +24,7 @@ public class PitchActivityFramework extends Activity {
 	protected LifeBar lifebar;
 	protected NotePlayer noteplayer;
 	protected IPitchSource myPitchKeeper; //for now
-
+	protected Button pauseButton;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -28,7 +33,8 @@ public class PitchActivityFramework extends Activity {
 		setContentView(R.layout.mockui);
 		lifebar = (LifeBar)findViewById(R.id.lifebar);
 		graphcont = (ScrollContainer)findViewById(R.id.scroller);
-	
+		pauseButton = (Button) findViewById(R.id.pauseBtn);		
+		
 		noteplayer = new NotePlayer();
 		playmanager = new PlayManagerScroll(getApplicationContext(), myPitchKeeper, graphcont);	
 		playmanager.setCallback(new IPitchReciever() {
@@ -51,6 +57,7 @@ public class PitchActivityFramework extends Activity {
 		super.onPause();
 		noteplayer.die();
 		playmanager.pause();
+		
 	}
 	
 	@Override
@@ -63,8 +70,6 @@ public class PitchActivityFramework extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
-		
 		noteplayer.riseFromDead();
 		playmanager.unpause();
 		//else playCurrentGraph();

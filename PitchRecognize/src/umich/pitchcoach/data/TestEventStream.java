@@ -19,7 +19,6 @@ public class TestEventStream extends Activity {
 		setContentView(R.layout.testevent);
 		final TextView pitchText = (TextView) findViewById(R.id.eventText);
 		final Button nextEvent = (Button) findViewById(R.id.nextBtn);
-		
 		final EventStream myStream = new EventStream(this);
 		
 		nextEvent.setOnClickListener(new View.OnClickListener() {

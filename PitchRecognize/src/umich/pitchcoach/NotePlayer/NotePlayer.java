@@ -14,8 +14,9 @@ import android.media.AudioTrack;
 import android.media.MediaPlayer;
 import android.os.Handler;
 
+
 public class NotePlayer {
-	
+
 	// originally from
 	// http://marblemice.blogspot.com/2010/04/generate-and-play-tone-in-android.html
 	// and modified by Steve Pomeroy <steve@staticfree.info>
@@ -138,7 +139,7 @@ public class NotePlayer {
 			thingsToDo.removeFirst().done();
 		}
 	}
-	
+
 }
 
 	
