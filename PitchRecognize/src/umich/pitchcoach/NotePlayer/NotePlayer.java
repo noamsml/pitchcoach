@@ -103,9 +103,9 @@ public class NotePlayer extends MediaPlayer {
 		// fill out the array
 		
 		Wave w;
-		//w = new SquareWave(sampleRate, 0.4, freqOfTone).add(new SineWave(sampleRate, 0.6, freqOfTone));
 		w = new SineWave(sampleRate, 0.5, freqOfTone).add(new SineWave(sampleRate, 0.25, freqOfTone * 2)).add(
-				new SineWave(sampleRate, 0.2, freqOfTone * 3)).add(new SineWave(sampleRate, 0.05, freqOfTone * 4));
+				new SineWave(sampleRate, 0.2, freqOfTone * 3)).add(new SineWave(sampleRate, 0.05, freqOfTone * 4)
+				).envelope(duration, 0.1);
 		this.numSamples = w.getByteLenarray(duration);
 		this.generatedSnd = new byte[numSamples];
 		w.synthWave(generatedSnd, duration);

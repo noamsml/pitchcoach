@@ -37,4 +37,9 @@ public abstract class Wave {
 	}
 	
 	public abstract double getSample(int sampleNum);
+	
+	public Wave envelope(double len, double lenEnv)
+	{
+		return new Envelope(this, len, lenEnv);
+	}
 }

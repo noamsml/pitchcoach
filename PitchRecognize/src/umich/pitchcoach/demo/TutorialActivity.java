@@ -45,10 +45,10 @@ public class TutorialActivity extends PitchActivityFramework{
 		
 		for (int i : new int[]{0,2,4,5,7,9,11,12})
 		{
-			first = first.then(new playNoteRelative(i, 1/4.0));
+			first = first.then(new playNoteRelative(i, 0.4));
 		}
 		
-		return first.then(new playNoteRelative(0,1/2.0));
+		return first.then(new playNoteRelative(0,0.8));
 		
 	}
 	
