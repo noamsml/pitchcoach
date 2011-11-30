@@ -14,16 +14,14 @@ import android.media.AudioTrack;
 import android.media.MediaPlayer;
 import android.os.Handler;
 
-public class NotePlayer extends MediaPlayer {
+public class NotePlayer {
 	
 	// originally from
 	// http://marblemice.blogspot.com/2010/04/generate-and-play-tone-in-android.html
 	// and modified by Steve Pomeroy <steve@staticfree.info>
+	// adapted to PitchCoach by Noam Samuel and Lu Huang
 	
-	private double duration; // seconds
 	private final int sampleRate = 44100;
-	private int numSamples;
-	private double freqOfTone = 440; // hz
 	private boolean paused = false;
 
 	private byte[] generatedSnd;
@@ -37,25 +35,43 @@ public class NotePlayer extends MediaPlayer {
 		super();
 	}
 	
-	
-	public void setFrequency(double frequency){
-		this.freqOfTone = frequency;
+	public double getDuration(Note[] notes)
+	{
+		double duration = 0;
+		for (Note n : notes)
+		{
+			duration += n.time;
+		}
+		return duration;
 	}
-	public void setDuration(double duration){
-		this.duration = duration;
+	
+	public void genTone(Note[] notes, short[] toneBuf)
+	{
+		double runningDuration = 0;
+		for (Note n : notes)
+		{
+			genTone(toneBuf, n.freq, runningDuration, n.time);
+			runningDuration+= n.time;
+		}
 	}
 
-	public Promise playNote(){
+	public Promise playNote(final Note[] notes){
 		Promise p = new Promise() {
 			public void go() {
 				final Promise that = this; //Don't ask why this is necessary, it's a braindead reason
 				final Thread thread = new Thread(new Runnable() {
 					public void run() {
-						genTone();
+						final double duration = getDuration(notes);
+						final int numSamples = Wave.numSamples(duration, sampleRate);
+						final short[] toneBuf = new short[numSamples];
+						
+						
+						
+						genTone(notes, toneBuf);
 						handler.post(new Runnable() {
 
 							public void run() {
-								playSound();
+								playSound(toneBuf, numSamples);
 								//Someone kill me now
 								handler.postDelayed(new Runnable() {
 
@@ -81,40 +97,31 @@ public class NotePlayer extends MediaPlayer {
 	
 	
 	public Promise playNote(double frequency, double duration){
-		this.setFrequency(frequency);
-		this.setDuration(duration);
-		return this.playNote();
-	}
-	
-	//##################
-	
-	public void playNote(Note note){	
 
+		return this.playNote(new Note[]{new Note(frequency, duration)});
 	}
 	
-	public void playNote(String note){	
-
-	}
 	
 	
 	//##################
 	
-	void genTone() {
+	void genTone(short[] generatedSnd, double freqOfTone, double startTime, double lenTime) {
 		// fill out the array
 		
 		Wave w;
+		/*
 		w = new SineWave(sampleRate, 0.5, freqOfTone).add(new SineWave(sampleRate, 0.25, freqOfTone * 2)).add(
 				new SineWave(sampleRate, 0.2, freqOfTone * 3)).add(new SineWave(sampleRate, 0.05, freqOfTone * 4)
-				).envelope(duration, 0.1);
-		this.numSamples = w.getByteLenarray(duration);
-		this.generatedSnd = new byte[numSamples];
-		w.synthWave(generatedSnd, duration);
+				).envelope(lenTime, 0.1);*/
+				
+		w = new SquareWave(sampleRate, 0.5, freqOfTone).envelope(lenTime, 0.1);
+		w.synthWave(generatedSnd, startTime, lenTime);
 	}
 
-	void playSound() {
+	void playSound(short[] generatedSnd, int numSamples) {
 		final AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
 				sampleRate, AudioFormat.CHANNEL_CONFIGURATION_MONO,
-				AudioFormat.ENCODING_PCM_16BIT, numSamples,
+				AudioFormat.ENCODING_PCM_16BIT, numSamples*4, //HACK: NumSamples seems to be too small. No clue why.
 				AudioTrack.MODE_STATIC);
 		audioTrack.write(generatedSnd, 0, generatedSnd.length);
 		audioTrack.play();

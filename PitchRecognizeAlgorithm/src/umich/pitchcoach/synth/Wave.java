@@ -12,23 +12,25 @@ public abstract class Wave {
 		return rate;
 	}
 	
-	public void synthWave(byte[] dataField, double lenInSeconds) {
+	public void synthWave(short[] dataField, double offsetInSeconds, double lenInSeconds) {
 		int numSamples = getNumSamples(lenInSeconds);
+		int beginOffset = getNumSamples(offsetInSeconds);
+		
 		for (int i = 0; i < numSamples; i++)
 		{
 			short value = (short) ((getSample(i) * 32767));
 			// in 16 bit wav PCM, first byte is the low order byte
-			dataField[i*2] = (byte) (value & 0x00ff);
-			dataField[i*2+1] = (byte) ((value & 0xff00) >>> 8);
+			dataField[beginOffset + i] = (short) value;
 		}
 	}
 	
 	public int getNumSamples(double lenInSeconds) {
-		return (int)(lenInSeconds*rate); 
+		return numSamples(lenInSeconds, rate);
 	}
 	
-	public int getByteLenarray(double lenInSeconds) {
-		return getNumSamples(lenInSeconds)*2; 
+	public static int numSamples(double lenInSeconds, int rate)
+	{
+		return (int)(lenInSeconds*rate); 
 	}
 	
 	public Wave add(Wave wave2)

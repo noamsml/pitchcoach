@@ -1,9 +1,11 @@
 package umich.pitchcoach.NotePlayer;
 
-public enum Note {
+public class Note {
+	public double time;
+	public double freq;
 	
-	A1, A2, A3, A4, B1, B2, B3, INVALID;
-	
-
-
+	public Note(double freq, double time) {
+		this.freq = freq;
+		this.time = time;
+	}
 }
