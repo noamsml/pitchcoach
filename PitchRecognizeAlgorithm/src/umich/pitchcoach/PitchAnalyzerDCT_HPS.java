@@ -79,11 +79,10 @@ public class PitchAnalyzerDCT_HPS implements IPitchAnalyzer {
 			}
 		}*/
 		int peak;
-		do {
-			peak = peakdetect.findNextPeak();
-			//if (peak != -1) System.out.format("PEAK: %f\n", floatbuf[peak]);
-		} while (peak != -1 && floatbuf[peak] < MINENERGY);
+		
+		peak = peakdetect.findNextPeak();
 		if (peak == -1) return -1;
+		if (floatbuf[peak] < MINENERGY) return -1;
 		return DCTIndexToFreq(peak, size, sampleRate);
 	}
 	
