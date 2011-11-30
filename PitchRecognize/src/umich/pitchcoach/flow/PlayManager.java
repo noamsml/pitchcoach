@@ -3,6 +3,7 @@ package umich.pitchcoach.flow;
 
 import android.content.Context;
 import android.os.Handler;
+import umich.pitchcoach.dataAdapt.IPitchSource;
 import umich.pitchcoach.demo.GraphContainer;
 import umich.pitchcoach.demo.PitchKeeper;
 import umich.pitchcoach.listeners.IRenderNotify;
@@ -10,13 +11,13 @@ import umich.pitchcoach.shared.IPitchReciever;
 import umich.pitchcoach.threadman.RenderThreadManager;
 
 abstract public class PlayManager implements IRenderNotify {
-	protected PitchKeeper pitchkeeper;
+	protected IPitchSource pitchkeeper;
 	private IPitchReciever callback;
 	private RenderThreadManager renderThreadManager;
 	protected Context context; 
 	Promise currentPlay;
 	
-	public PlayManager(Context context, PitchKeeper pitchkeeper) { //TODO: Change to eventstream or something
+	public PlayManager(Context context, IPitchSource pitchkeeper) { //TODO: Change to eventstream or something
 		this.pitchkeeper = pitchkeeper;
 		this.context = context;
 		renderThreadManager = new RenderThreadManager(new Handler(), this);
@@ -46,7 +47,7 @@ abstract public class PlayManager implements IRenderNotify {
 		currentGraph().onPitch(pitch, time);
 		if (currentGraph().isDone()) {
 			renderThreadManager.stopRenderThread();
-			currentGraph().finalize();
+			currentGraph().makeDone();
 			if (currentPlay != null) currentPlay.done();
 			currentPlay = null;
 		}

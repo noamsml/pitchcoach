@@ -28,59 +28,24 @@ import umich.pitchcoach.flow.Promise;
 import umich.pitchcoach.listeners.IRenderNotify;
 import umich.pitchcoach.listeners.OnScrollListener;
 
-public class PitchGraphActivity extends Activity {
+public class PitchGraphActivity extends PitchActivityFramework {
 
-	PitchKeeper myPitchKeeper;
-	ScrollContainer graphcont;
-	PlayManagerScroll playmanager;
-	LifeBar lifebar;
-	NotePlayer noteplayer;
 	
-	boolean returning = false;
 	
 	public static String[] singTheseNotes = new String[]{"C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3"};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.mockui);
-		lifebar = (LifeBar)findViewById(R.id.lifebar);
-		graphcont = (ScrollContainer)findViewById(R.id.scroller);
-	
-		
-		noteplayer = new NotePlayer();
 		
 		myPitchKeeper = new PitchKeeper(new ArrayList<String>(Arrays.asList(singTheseNotes)));
-		playmanager = new PlayManagerScroll(getApplicationContext(), myPitchKeeper, graphcont);
-		
-		playmanager.setCallback(new IPitchReciever() {
-			
-			@Override
-			public void receivePitch(double pitch, double timeInSeconds) {
-				updateIncidentalUI(pitch, timeInSeconds);
-			}		
-			
-		});
-		
+
+		super.onCreate(savedInstanceState);
 		
 		playmanager.begin().then(this.play()).then(new Runnable() {
 			public void run() {
 				playLoop();
 			}
 		}).go();
-		
-	}
-
-	
-	private Promise play() {
-		return new Promise() {
-			public void go() {
-				playmanager.currentGraph().setListening();
-				noteplayer.setFrequency(playmanager.currentGraph().getFrequency());
-				noteplayer.setDuration(1);
-				done();
-			}
-		}.then(noteplayer.playNote()).then(playmanager.play());
 	}
 
 
@@ -94,30 +59,6 @@ public class PitchGraphActivity extends Activity {
 				}
 			}).go();
 		}
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		noteplayer.die();
-		playmanager.pause();
-	}
-	
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		playmanager.pause();
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		
-		
-		noteplayer.riseFromDead();
-		playmanager.unpause();
-		//else playCurrentGraph();
-		returning = true;
 	}
 
 	public void updateIncidentalUI(double pitch, double timeInSeconds) {

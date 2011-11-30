@@ -3,10 +3,12 @@ package umich.pitchcoach.demo;
 import java.util.ArrayList;
 import java.util.Random;
 
+import umich.pitchcoach.dataAdapt.IPitchSource;
+
 /*
  * A class to keep pitches.
  */
-public class PitchKeeper {
+public class PitchKeeper implements IPitchSource {
 	
 	private ArrayList<String> storedPitches;
 	
@@ -19,7 +21,7 @@ public class PitchKeeper {
 	}
 	
 	// Return a random String from the storedPitches
-	public String getRandomPitch() {
+	public String getNextPitch() {
 		Random randomNumGen = new Random();
 		int numPitches = storedPitches.size();
 		int randInt = randomNumGen.nextInt(numPitches);

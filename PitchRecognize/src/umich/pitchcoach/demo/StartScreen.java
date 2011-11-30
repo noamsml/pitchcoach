@@ -18,25 +18,21 @@ public class StartScreen extends Activity {
 		setContentView(R.layout.startscreen);
 				
 		final Button sing = (Button) findViewById(R.id.singBtn);    
-		sing.setOnClickListener(new View.OnClickListener() {
+		linkToActivity(sing, PitchGraphActivity.class);
+				
+		final Button learn = (Button) findViewById(R.id.learnBtn);    
+		
+		final Button tune = (Button) findViewById(R.id.tuneBtn);    
+		
+	}
+	
+	public void linkToActivity(Button b, final Class c)
+	{
+		b.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				Intent myIntent = new Intent(view.getContext(), PitchGraphActivity.class);
+				Intent myIntent = new Intent(view.getContext(), c);
 				startActivityForResult(myIntent, 0);
 			}
 		});		
-
-		final Button learn = (Button) findViewById(R.id.learnBtn);    
-		learn.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View view) {
-			}
-		});
-
-		final Button tune = (Button) findViewById(R.id.tuneBtn);    
-		tune.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View view) {
-			}
-		});		
-
-
 	}
 }
