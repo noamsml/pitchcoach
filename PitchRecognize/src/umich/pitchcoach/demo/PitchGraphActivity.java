@@ -2,6 +2,7 @@ package umich.pitchcoach.demo;
 
 import java.util.ArrayList;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import java.util.Arrays;
 
@@ -11,6 +12,7 @@ import umich.pitchcoach.shared.IPitchReciever;
 import umich.pitchcoach.threadman.RenderThreadManager;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -30,17 +32,23 @@ import umich.pitchcoach.listeners.OnScrollListener;
 
 public class PitchGraphActivity extends PitchActivityFramework {
 
-	
-	
+
+
 	public static String[] singTheseNotes = new String[]{"C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3"};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
+
 		myPitchKeeper = new PitchKeeper(new ArrayList<String>(Arrays.asList(singTheseNotes)));
 
 		super.onCreate(savedInstanceState);
-		
+		pauseButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				renderPause();
+			}
+		});		
+
+
 		playmanager.begin().then(this.play()).then(new Runnable() {
 			public void run() {
 				playLoop();
@@ -64,9 +72,9 @@ public class PitchGraphActivity extends PitchActivityFramework {
 	public void updateIncidentalUI(double pitch, double timeInSeconds) {
 		if (playmanager.currentGraph().isCurrentlyCorrect()) this.lifebar.addLives(timeInSeconds * 15);
 		else this.lifebar.addLives(timeInSeconds * -5);
-		
+
 	}
-		
+
 	private void onDeath() {
 		AlertDialog deathAlert;
 		deathAlert = new AlertDialog.Builder(this).create();
@@ -75,34 +83,34 @@ public class PitchGraphActivity extends PitchActivityFramework {
 
 		buttonify(deathAlert, "Try Again");
 		deathAlert.show();
-		
+
 	}
-	
+
 	private void buttonify(AlertDialog dialog, String againMessage) {
 		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
 
 			@Override
 			public void onDismiss(DialogInterface arg0) {
 				finish();
-				
+
 			}
 		});
-		dialog.setButton(dialog.BUTTON_POSITIVE, againMessage, new DialogInterface.OnClickListener() {
+		dialog.setButton(AlertDialog.BUTTON_POSITIVE, againMessage, new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface arg0, int arg1) {
-				 Intent myIntent = new Intent(getApplicationContext(), PitchGraphActivity.class);
-			     startActivity(myIntent);
-				}
+				Intent myIntent = new Intent(getApplicationContext(), PitchGraphActivity.class);
+				startActivity(myIntent);
 			}
-		);
-		
-	
-		dialog.setButton(dialog.BUTTON_NEGATIVE, "Back to Menu", new DialogInterface.OnClickListener() {
+		}
+				);
+
+
+		dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Back to Menu", new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface arg0, int arg1) {
-				 finish();
+				finish();
 			}
 		});
 	}
@@ -115,14 +123,39 @@ public class PitchGraphActivity extends PitchActivityFramework {
 
 		buttonify(winAlert, "Do it again!");
 		winAlert.show();
-		
+
 	}
 
-	public void renderPause() {
-		//TODO: Manually generated method stub
+	public void renderPause() { // Use DialogFragments, perhaps?
+		super.onPause();
+		final AlertDialog pauseAlert;
+		pauseAlert = new AlertDialog.Builder(this).create();
+		pauseAlert.setTitle("Paused");
+		pauseAlert.setButton(AlertDialog.BUTTON_POSITIVE, "Restart" , new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				finish();
+				Intent myIntent = new Intent(getApplicationContext(), PitchGraphActivity.class);
+				startActivity(myIntent);
+			}
+		});
+		pauseAlert.setButton(AlertDialog.BUTTON_NEUTRAL, "Resume" , new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				pauseAlert.cancel();
+				renderUnPause();
+			}
+		});
+		pauseAlert.setButton(AlertDialog.BUTTON_NEGATIVE, "Back to Menu" , new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				finish();
+			}
+		});
+		pauseAlert.show();
 	}
-	
+
 	public void renderUnPause() {
-		//TODO: Manually generated method stub
+		super.onResume();
 	}
 }
