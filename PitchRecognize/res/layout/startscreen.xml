@@ -1,29 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/startscreenbackground"
-    android:dither="true"
-    android:gravity="top" >
-    <Button
-        android:id="@+id/PitchMButton"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="19dp"
-        android:text="Pitch Mode"
-        android:textSize="30px"
-        android:textStyle="bold"
-        android:textColor="@color/buttontext"
-        android:background="@android:color/transparent" />
-    <ImageView
-        android:layout_width="154dp"
-        android:layout_height="170dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="42dp"
-        android:dither="true"
-        android:src="@drawable/pitchcoachlogo" />
-
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:background="@drawable/blackscreen" android:dither="true"
+	android:gravity="top">
+	<Button android:id="@+id/singBtn" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:layout_alignParentRight="true"
+		 android:layout_marginTop="50sp"
+		android:layout_marginRight="10sp" android:background="@drawable/singbutton" />
+	<Button android:id="@+id/learnBtn" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:layout_alignParentRight="true"
+		android:layout_marginTop="100sp"
+		android:layout_marginRight="10sp" android:background="@drawable/learnbutton" />
+	<Button android:id="@+id/tuneBtn" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:layout_alignParentRight="true"
+		android:layout_marginTop="150sp"
+		android:layout_marginRight="10sp" android:background="@drawable/tunebutton" />
 </RelativeLayout>

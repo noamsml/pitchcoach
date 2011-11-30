@@ -165,7 +165,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 	}
 
 	public Cursor getAllPitchesOrderedLeastRecent(){
-		Cursor pitches = myDatabase.rawQuery("select * from Pitch order by 'latestPerformanceDate' ASC", null);
+		Cursor pitches = myDatabase.rawQuery("select * from Pitch order by RANDOM()", null);
 		return pitches;
 	}
 	
@@ -175,12 +175,12 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 	}
 	
 	public Cursor getAllPitchesInRange(float min, float max){
-		Cursor pitches = myDatabase.rawQuery("select * from Pitch where frequency >= "+min+" AND frequency <= "+max+" order by 'latestPerformanceDate' ASC", null);
+		Cursor pitches = myDatabase.rawQuery("select * from Pitch where frequency >= "+min+" AND frequency <= "+max+" order by RANDOM()f", null);
 		return pitches;
 	}
 	
 	public Cursor getAllLessonTypesOrderedLeastRecent(){
-		Cursor lessonTypes = myDatabase.rawQuery("select * from LessonType order by 'latestPerformanceDate' ASC", null);
+		Cursor lessonTypes = myDatabase.rawQuery("select * from LessonType order by RANDOM()", null);
 		return lessonTypes;
 	}
 	
@@ -194,5 +194,23 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 		return lessonType;
 	}
 	
+	public Cursor getLessonTypeNote(){
+		Cursor lessonType = myDatabase.rawQuery("select * from LessonType where name like '%Note%' order by ", null);
+		return lessonType;
+	}
+	
+	public Cursor getLessonTypeInterval(){
+		Cursor lessonType = myDatabase.rawQuery("select * from LessonType where name not like '%Note%' and name not like '%Chord%' and name not like '%Scale%'", null);
+		return lessonType;
+	}
+	
+	public Cursor getLessonTypeChord(){
+		Cursor lessonType = myDatabase.rawQuery("select * from LessonType where name like '%Chord%'", null);
+		return lessonType;
+	}
 
+	public Cursor getLessonTypeScale(){
+		Cursor lessonType = myDatabase.rawQuery("select * from LessonType where name like '%Scale%'", null);
+		return lessonType;
+	}
 }
