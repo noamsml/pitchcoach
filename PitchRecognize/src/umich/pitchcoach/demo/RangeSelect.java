@@ -11,8 +11,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import umich.pitchcoach.R;
+import umich.pitchcoach.RangePitchDetect;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,8 +23,8 @@ import android.widget.TextView;
 
 public class RangeSelect extends Activity {
     /** Called when the activity is first created. */
-  private FileOutputStream fos;
-  private String FILENAME="singing_range.txt";
+  public static FileOutputStream fos;
+  public static String FILENAME="singing_range.txt";
   private int minFreq, maxFreq;
   TextView thisTxt;
   @Override
@@ -63,6 +65,15 @@ public class RangeSelect extends Activity {
       }
     });
     
+    Button autoDetect = (Button) findViewById(R.id.autoRange);
+    autoDetect.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        Intent myIntent = new Intent(view.getContext(), RangePitchDetect.class);
+        startActivityForResult(myIntent, 0);
+      }
+    });
+    
     Button sopranoSelect = (Button) findViewById(R.id.sopranoBtn);    
     sopranoSelect.setOnClickListener(new OnClickListener() {
       @Override
@@ -84,6 +95,7 @@ public class RangeSelect extends Activity {
           while((ch = fis.read()) != -1)
             inb.append((char)ch);
           thisTxt.setText("'"+inb+"'"+" was read from file");
+          fis.close();
         } catch (FileNotFoundException e) {
           // TODO Auto-generated catch block
           e.printStackTrace();

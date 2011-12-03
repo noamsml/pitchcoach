@@ -53,6 +53,7 @@
 	  android:text="Alternatively, let Pitch Coach determine your range:"  />
 	  
 	 <Button
+	 	android:id="@+id/autoRange"
 	 	android:layout_marginTop="20dip"
 	 	android:layout_below="@id/SelectRangeAltTxt"
 	  	android:layout_height="wrap_content"
