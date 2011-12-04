@@ -21,8 +21,8 @@
                 android:layout_marginBottom="0dip"
                 android:layout_marginLeft="20dip"
                 android:text="Settings"
-                android:textSize="25sp"
-                android:textStyle="bold" />
+                android:textColor="#FFFFFF"
+                android:textSize="30sp" />
 
             <TextView
                 android:id="@+id/SelectRangeTxt"
@@ -33,7 +33,8 @@
                 android:layout_margin="10dip"
                 android:layout_marginLeft="20dip"
                 android:layout_marginTop="0dip"
-                android:text="Select a vocal range from below:" />
+                android:text="Select a vocal range from below:"
+                android:textSize="17.5sp" />
 
             <LinearLayout
                 android:id="@+id/selectRangesll"
@@ -85,17 +86,63 @@
                 android:layout_centerHorizontal="true"
                 android:layout_margin="10dip"
                 android:layout_marginLeft="20dip"
-                android:text="Alternatively, let PitchCoach determine your range:" />
+                android:text="Alternatively, let PitchCoach determine your range:"
+                android:textSize="17.5sp" />
 
             <Button
                 android:id="@+id/autoRange"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/SelectRangeAltTxt"
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="20dip"
+                android:layout_marginLeft="30dip"
                 android:layout_weight="1"
                 android:text="Auto Determine Range" />
+
+            <TextView
+                android:id="@+id/SelectRangeTxt"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/TitleTxt"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="10dip"
+                android:layout_marginLeft="20dip"
+                android:layout_marginTop="0dip"
+                android:text="Select difficulty"
+                android:textSize="17.5sp" />
+
+            <LinearLayout
+                android:id="@+id/selectRangesll"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/SelectRangeTxt"
+                android:layout_margin="10dip"
+                android:layout_marginLeft="20dip"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/easyBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginRight="10dip"
+                    android:background="@drawable/easybutton" />
+
+                <Button
+                    android:id="@+id/mediumBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginRight="10dip"
+                    android:background="@drawable/mediumbutton" />
+
+                <Button
+                    android:id="@+id/hardBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginRight="10dip"
+                    android:background="@drawable/hardbutton" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/changeTxt"
@@ -110,6 +157,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_margin="20dip"
+                android:layout_weight = "1"
                 android:text="Done" />
         </LinearLayout>
     </ScrollView>

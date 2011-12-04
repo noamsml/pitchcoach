@@ -102,7 +102,7 @@ public class GraphSurface extends SurfaceView {
 			patch.draw(c);
 		}
 		if (!this.silent) {
-			silenceDrawable.setBounds(new Rect(this.getWidth() - 110, this.getHeight() - 110,
+			silenceDrawable.setBounds(new Rect(this.getWidth() - 60, this.getHeight() - 60,
 					this.getWidth() - 10, this.getHeight() - 10));
 			silenceDrawable.draw(c);
 		}
