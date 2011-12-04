@@ -14,6 +14,9 @@
             android:label="@string/app_name"
 			android:screenOrientation="landscape">
         </activity>
+        <activity android:name=".RangePitchDetect"
+            android:label="@string/app_name"
+			android:screenOrientation="landscape"/>	
         <activity android:name=".test.PerfTestingActivity" android:screenOrientation="portrait" android:label="@string/test_name">
         </activity>
         <activity android:name=".demo.StartScreen" android:screenOrientation="landscape" android:label="@string/demo_name">
@@ -23,7 +26,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".demo.PitchGraphActivity"
-        	android:screenOrientation="landscape">
+        	android:screenOrientation="landscape"
+        	android:configChanges="keyboardHidden|orientation"
+        	>
+        </activity>
+        
+        <activity android:name=".demo.TutorialActivity"
+        	android:screenOrientation="landscape"
+        	android:configChanges="keyboardHidden|orientation"
+        	>
         </activity>
         <activity android:name=".data.TestEventStream" android:screenOrientation="landscape">
             <intent-filter>

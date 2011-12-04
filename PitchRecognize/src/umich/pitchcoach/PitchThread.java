@@ -38,6 +38,7 @@ public class PitchThread extends Thread {
 		
 		buflock = new ReentrantLock();
 		dumpBuffer = new circularShortBuffer(Invariants.RATE * 2); //DELME
+		this.setName("Pitch Thread " + this.getId());
 		
 	}
 	

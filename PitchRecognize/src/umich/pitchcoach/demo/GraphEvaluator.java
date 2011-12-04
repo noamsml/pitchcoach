@@ -9,8 +9,8 @@ public class GraphEvaluator {
 	double freqCorrect;
 	
 	private static double timeRightNeeded = 1.0;
-	private static double timeSpentNeeded = 10.0;
-	private static double timeSpentOK = 2.0;
+	private static double timeSpentNeeded = 3.0;
+	private static double timeSpentOK = 1.0;
 	
 	public GraphEvaluator(String pitch)
 	{
@@ -31,6 +31,7 @@ public class GraphEvaluator {
 		return 2;
 	}
 	
+	
 	public void onPitch(double pitch, double time) {
 		timeSpent += time;
 		if (LetterNotes.evalFreq(pitch, freqCorrect) == 0) {
@@ -42,5 +43,9 @@ public class GraphEvaluator {
 			if (timeRight != 0 || timeSinceRight != 0) timeSinceRight += time;
 			timeRight = 0;
 		}
+	}
+	
+	public boolean isCurrentlyCorrect() {
+		return timeRight != 0;
 	}
 }

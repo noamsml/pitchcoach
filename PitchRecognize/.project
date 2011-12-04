@@ -30,4 +30,11 @@
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>pitchcoach</name>
+			<type>2</type>
+			<location>/Applications/eclipse/Eclipse.app/Contents/MacOS/C::/Users/nathanyu/Documents/PitchCoach/pitchcoach/PitchRecognizeAlgorithm/src</location>
+		</link>
+	</linkedResources>
 </projectDescription>

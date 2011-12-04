@@ -11,7 +11,7 @@ public class FileDataTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		FileSampleSource dataSource = new FileSampleSource("/home/noam/Schoolwork/MDE/Samples/NikolaVoice.txt", Invariants.NUMSAMPLES, Invariants.BUFSIZE);
+		FileSampleSource dataSource = new FileSampleSource("/home/noam/Schoolwork/MDE/Samples/diag2.txt", Invariants.NUMSAMPLES, Invariants.BUFSIZE);
 		//#NOT USED# float data[] = new float[Invariants.BUFSIZE];
 		PitchAnalyzerDCT_HPS anal = new PitchAnalyzerDCT_HPS(Invariants.BUFSIZE);
 		//#NOT USED# int size = 0;

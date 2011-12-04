@@ -2,15 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:orientation="vertical">
-	<umich.pitchcoach.demo.ScrollContainer android:layout_height="wrap_content"
-		android:layout_width="match_parent" android:scrollbarStyle="outsideOverlay" android:id="@+id/scroller" android:layout_weight="1">
-	    
+	<umich.pitchcoach.demo.ScrollContainer
+		android:layout_height="wrap_content" android:layout_width="match_parent"
+		android:scrollbarStyle="outsideOverlay" android:id="@+id/scroller"
+		android:layout_weight="1">
+
 	</umich.pitchcoach.demo.ScrollContainer>
 
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:orientation="horizontal">
-		<umich.pitchcoach.demo.LifeBar android:id="@+id/lifebar" style="@android:style/Widget.ProgressBar.Horizontal"
-		    android:layout_width="fill_parent" android:layout_height="30dip" android:layout_margin="30dip"></umich.pitchcoach.demo.LifeBar>
+		android:orientation="horizontal" android:background="#b0b0b0">
+		<Button android:id="@+id/pauseBtn" android:layout_width="50dp"
+			android:layout_height="50dp" android:background="@drawable/pausebutton"></Button>
+		<ImageView android:id="@+id/thumbsDown"
+			android:layout_width="25dp" android:layout_height="25dp"
+			android:layout_margin="12.5dp" android:layout_alignParentBottom="true"
+			android:layout_toRightOf="@+id/pauseBtn" android:src="@drawable/thumbsdown"></ImageView>
+		<umich.pitchcoach.demo.LifeBar
+			android:id="@+id/lifebar" style="@android:style/Widget.ProgressBar.Horizontal"
+			android:layout_toLeftOf="@+id/thumbsUp" android:layout_width="375dp"
+			android:layout_height="25dp" android:layout_marginTop="12.5dp"
+			android:layout_marginBottom="12.5dp"></umich.pitchcoach.demo.LifeBar>
+		<ImageView android:id="@+id/thumbsUp" android:layout_width="25dp"
+			android:layout_height="25dp" android:layout_margin="12.5dp"
+			android:layout_alignParentBottom="true"
+			android:layout_alignParentRight="true" android:src="@drawable/thumbsup"></ImageView>
 	</LinearLayout>
 </LinearLayout>

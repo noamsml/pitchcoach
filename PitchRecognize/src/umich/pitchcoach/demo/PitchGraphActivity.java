@@ -1,118 +1,97 @@
 package umich.pitchcoach.demo;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import java.util.Arrays;
 
 import umich.pitchcoach.LetterNotes;
 import umich.pitchcoach.R;
+import umich.pitchcoach.shared.IPitchReciever;
 import umich.pitchcoach.threadman.RenderThreadManager;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import umich.pitchcoach.NotePlayer.Note;
+import umich.pitchcoach.NotePlayer.NotePlayer;
+import umich.pitchcoach.data.Event;
+import umich.pitchcoach.data.EventStream;
+import umich.pitchcoach.flow.DialogPromise;
+import umich.pitchcoach.flow.PlayManagerScroll;
+import umich.pitchcoach.flow.Promise;
 import umich.pitchcoach.listeners.IRenderNotify;
 import umich.pitchcoach.listeners.OnScrollListener;
 
-public class PitchGraphActivity extends Activity {
-
-	PitchKeeper myPitchKeeper;
-	GraphContainer currentGraph;
-	GraphContainer nextGraph;
-	
-	ScrollContainer graphcont;
-	RenderThreadManager renderThreadManager;
-	
-	LifeBar lifebar;
-
-	
-	public static String[] singTheseNotes = new String[]{"C3", "C#3", "D3", "D#3", "E3", "F3", "F#3", "G3", "G#3", "A3", "A#3", "B3"};
+public class PitchGraphActivity extends PitchActivityFramework {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
+		myEventStream = new EventStream(this);
+
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.mockui);
-		lifebar = (LifeBar)findViewById(R.id.lifebar);
-		graphcont = (ScrollContainer)findViewById(R.id.scroller);
-		this.graphcont.setOnScrollListener(new OnScrollListener() {
 
-			@Override
-			public void scrollEnd() {
-				renderThreadManager.startRenderThread(currentGraph);
-				renderUnPause();
+		playmanager.begin().then(
+				new DialogPromise(this, "Get ready to Sing!")	
+				).then(this.play()).then(new Runnable() {
+			public void run() {
+				playLoop();
 			}
-
-			@Override
-			public void scrollBack() {
-				renderThreadManager.stopRenderThread();
-				renderPause();
-			}
-
-			@Override
-			public void doneAutoScrolling() {
-				renderThreadManager.startRenderThread(currentGraph); //??
-			}
-			
-		});
-		myPitchKeeper = new PitchKeeper(new ArrayList<String>(Arrays.asList(singTheseNotes)));
-		renderThreadManager = new RenderThreadManager(new Handler(), new IRenderNotify() {
-			@Override
-			public void renderIsDone(double pitch, double time) {
-				updateIncidentalUI(pitch, time);
-			}		
-
-			
-		});
-		
-		addGraph();
-		addGraph(); //current and next
-		
+		}).go();
 	}
 
-	private void addGraph() {
-		GraphContainer theGraph = new GraphContainer(getApplicationContext(), myPitchKeeper.getRandomPitch());
-		graphcont.addElement(theGraph);
-		this.currentGraph = this.nextGraph;
-		this.nextGraph = theGraph;
-		if (this.currentGraph != null) {
-			this.currentGraph.setActive();
+
+	private void playLoop() {
+		if (lifebar.isWin()) onWin();
+		else if (lifebar.isDeath()) onDeath();
+		else {
+			addEvent();
 		}
 	}
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		renderThreadManager.stopRenderThread();
-	}
+	private Event curEvent = null;
+	Iterator<String> pitches;
+	private void addEvent() {
+		if (curEvent == null) {
+			curEvent = new Event(myEventStream.getNextEvent());
+			pitches = curEvent.pitchesToSing.iterator();
+			playmanager.addEventPart(pitches.next(), false, curEvent).then(this.play()).then(new Runnable() {
+				public void run() {
+					addEvent();
+				}
+			}).go();
+		} else {
+			if (pitches.hasNext()) {
+				playmanager.addEventPart(pitches.next(), true, curEvent).then(this.play()).then(new Runnable() {
+					public void run() {
+						addEvent();
+					}
+				}).go();
+			} else {
+				curEvent = null;
+				playLoop();
+			}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		renderThreadManager.startRenderThread(currentGraph);
+		}
 	}
 
 	public void updateIncidentalUI(double pitch, double timeInSeconds) {
-		
-		currentGraph.onPitch(pitch, timeInSeconds);
-		if (currentGraph.isDone()) {
-			renderThreadManager.stopRenderThread();
-			currentGraph.finalize();
-			if (currentGraph.getFinalEvaluation() > 0) this.lifebar.addLives(25);
-			else this.lifebar.addLives(-5);
-			
-			if (this.lifebar.isWin()) this.onWin();
-			else if (this.lifebar.isDeath()) this.onDeath();
-			else addGraph();
-		}
+		if (playmanager.currentGraph().isCurrentlyCorrect()) this.lifebar.addLives(timeInSeconds * 3);
+		else this.lifebar.addLives(timeInSeconds * -1);
+
 	}
 
 	private void onDeath() {
@@ -123,34 +102,34 @@ public class PitchGraphActivity extends Activity {
 
 		buttonify(deathAlert, "Try Again");
 		deathAlert.show();
-		
+
 	}
-	
+
 	private void buttonify(AlertDialog dialog, String againMessage) {
 		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
 
 			@Override
 			public void onDismiss(DialogInterface arg0) {
 				finish();
-				
+
 			}
 		});
-		dialog.setButton(dialog.BUTTON_POSITIVE, againMessage, new DialogInterface.OnClickListener() {
+		dialog.setButton(AlertDialog.BUTTON_POSITIVE, againMessage, new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface arg0, int arg1) {
-				 Intent myIntent = new Intent(getApplicationContext(), PitchGraphActivity.class);
-			     startActivity(myIntent);
-				}
+				Intent myIntent = new Intent(getApplicationContext(), PitchGraphActivity.class);
+				startActivity(myIntent);
 			}
-		);
-		
-	
-		dialog.setButton(dialog.BUTTON_NEGATIVE, "Back to Menu", new DialogInterface.OnClickListener() {
+		}
+				);
+
+
+		dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Back to Menu", new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface arg0, int arg1) {
-				 finish();
+				finish();
 			}
 		});
 	}
@@ -163,14 +142,6 @@ public class PitchGraphActivity extends Activity {
 
 		buttonify(winAlert, "Do it again!");
 		winAlert.show();
-		
-	}
 
-	public void renderPause() {
-		//TODO: Manually generated method stub
-	}
-	
-	public void renderUnPause() {
-		//TODO: Manually generated method stub
 	}
 }

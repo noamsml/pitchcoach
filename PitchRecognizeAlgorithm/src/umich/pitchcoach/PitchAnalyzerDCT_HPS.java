@@ -10,8 +10,7 @@ import edu.emory.mathcs.jtransforms.dct.FloatDCT_1D;
 
 public class PitchAnalyzerDCT_HPS implements IPitchAnalyzer {
 	private FloatDCT_1D dct;
-	private static final double MINENERGY = 1000; //for now
-	
+	private float MINENERGY = (float)Math.pow(10, 15);
 	
 	int size;
 	float[] floatbuf;
@@ -42,14 +41,6 @@ public class PitchAnalyzerDCT_HPS implements IPitchAnalyzer {
 		
 		buf.readData(floatbuf);
 		
-		
-		//Optimize this?
-		double sumEnergy = 0;
-		for (int i = 0; i < floatbuf.length; i++)
-		{
-			sumEnergy += Math.abs(floatbuf[i]);
-		}
-		if (sumEnergy / floatbuf.length < MINENERGY) return -1;
 		
 		hamming.applyHammingWindow(floatbuf);
 		dct.forward(floatbuf, false);
@@ -87,7 +78,11 @@ public class PitchAnalyzerDCT_HPS implements IPitchAnalyzer {
 				e.printStackTrace();
 			}
 		}*/
-		int peak = peakdetect.findNextPeak();
+		int peak;
+		
+		peak = peakdetect.findNextPeak();
+		if (peak == -1) return -1;
+		if (floatbuf[peak] < MINENERGY) return -1;
 		return DCTIndexToFreq(peak, size, sampleRate);
 	}
 	
@@ -104,17 +99,9 @@ public class PitchAnalyzerDCT_HPS implements IPitchAnalyzer {
 
 
 	private float sample_compressed(float[] buffer, int offset, int compression, int loc) {
-		/*float result = 0;
-		for (int i =0; i < compression; i++)
-		{
-			if (loc * compression + i < buffer.length)
-				result += buffer[loc * compression + i];
-		}
-		result /= compression;*/
-		
+
 		if (offset + loc * compression < buffer.length) return buffer[offset + loc*compression];
 		return 0;
-		//return result;
 	}
 
 

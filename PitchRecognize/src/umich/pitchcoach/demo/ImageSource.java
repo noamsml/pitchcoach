@@ -22,7 +22,7 @@ public class ImageSource {
 	private Paint targetPaint;
 	private Paint linePaint;
 
-	private final static double SECONDS_TO_SHOW = 10;
+	private final static double SECONDS_TO_SHOW = 3;
 	private final static double MIN_HZ = 100;
 	private final static double LOG_MINHZ = Math.log(MIN_HZ);
 	private final static double MAX_HZ = 600;
