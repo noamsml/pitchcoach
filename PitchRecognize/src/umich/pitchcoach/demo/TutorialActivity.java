@@ -98,21 +98,15 @@ public class TutorialActivity extends PitchActivityFramework{
 			new DialogPromise(this, "Good job! Notice how the line onscreen matches the note you need to sing. Let's try it a few more times.")	
 		).then(Promise.nTimes(3, new IPromiseFactory() {
 			public Promise getPromise() {
-				return playmanager.addGraph().then(playVerifyLoop());
+				return playmanager.addGraph(false).then(playVerifyLoop());
 			}
 		})).then(new DialogPromise(this, "OK! Let's try an interval!")).then(
 				new DialogPromise(this, "For intervals or scales, I'll play all the notes you need to sing, and then play the first note you need to sing again afterwards, to start you off.")).then(
-						new DialogPromise(this, "This interval is a C3 to E3 interval. Give it a try.")).then(playmanager.addGraph()).then(new Runnable() {
+						new DialogPromise(this, "This interval is a C3 to E3 interval. Give it a try.")).then(playmanager.addGraph(true)).then(new Runnable() {
 			public void run() {
 				playmanager.currentGraph().setListening();
 			}
-		}).then(playInterval()).then(playmanager.play()).then(Promise.nTimes(1, new IPromiseFactory() {
-
-			@Override
-			public Promise getPromise() {
-				return playmanager.addGraph().then(playmanager.play());
-			}
-		})).then(new DialogPromise(this, "Great job!")).then(new DialogPromise(this, "The Life Bar [tm] (Awesome name, isn't it? We thought of it all by ourselves) shows you how much life you have left. If it fills up, you win! If it empties out, you lose! Let's try playing with the life bar on.")).then(
+		}).then(playInterval()).then(playmanager.play()).then(playmanager.addGraph(false).then(playmanager.play())).then(new DialogPromise(this, "Great job!")).then(new DialogPromise(this, "The Life Bar [tm] (Awesome name, isn't it? We thought of it all by ourselves) shows you how much life you have left. If it fills up, you win! If it empties out, you lose! Let's try playing with the life bar on.")).then(
 				new Runnable() {
 					public void run() { enableLifeBar(); }
 				}
@@ -120,7 +114,7 @@ public class TutorialActivity extends PitchActivityFramework{
 
 			@Override
 			public Promise getPromise() {
-				return playmanager.addGraph().then(play());
+				return playmanager.addGraph(false).then(play());
 			}
 			
 		})).then(new DialogPromise(this, "Cool! You've just finished the entire tutorial. Congrats! Click 'OK' to go back to the home screen")).then(

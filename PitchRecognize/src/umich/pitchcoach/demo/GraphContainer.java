@@ -131,6 +131,7 @@ public class GraphContainer extends SizableElement implements IImageSourceSource
 	
 	public void setSilence(boolean setting){
 		silent = setting;
+		this.graph.setSilent(setting);
 	}
 	
 	public void setEvent(Event event){
