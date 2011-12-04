@@ -13,7 +13,6 @@ public final class R {
     public static final class drawable {
         public static final int alto1=0x7f020000;
         public static final int alto2=0x7f020001;
-<<<<<<< HEAD
         public static final int alto3=0x7f020002;
         public static final int altobutton=0x7f020003;
         public static final int background=0x7f020004;
@@ -75,62 +74,6 @@ public final class R {
         public static final int tunebutton=0x7f02003c;
         public static final int vee=0x7f02003d;
         public static final int yellow_progress=0x7f02003e;
-=======
-        public static final int altobutton=0x7f020002;
-        public static final int background=0x7f020003;
-        public static final int bass1=0x7f020004;
-        public static final int bass2=0x7f020005;
-        public static final int bassbutton=0x7f020006;
-        public static final int blackscreen=0x7f020007;
-        public static final int easy1=0x7f020008;
-        public static final int easy2=0x7f020009;
-        public static final int easybutton=0x7f02000a;
-        public static final int ex=0x7f02000b;
-        public static final int green_progress=0x7f02000c;
-        public static final int hard1=0x7f02000d;
-        public static final int hard2=0x7f02000e;
-        public static final int hardbutton=0x7f02000f;
-        public static final int icon=0x7f020010;
-        public static final int learn1=0x7f020011;
-        public static final int learn2=0x7f020012;
-        public static final int learnbutton=0x7f020013;
-        public static final int logo=0x7f020014;
-        public static final int medium1=0x7f020015;
-        public static final int medium2=0x7f020016;
-        public static final int mediumbutton=0x7f020017;
-        public static final int orange_progress=0x7f020018;
-        public static final int pause1=0x7f020019;
-        public static final int pause2=0x7f02001a;
-        public static final int pausebutton=0x7f02001b;
-        public static final int pitchcoachlogo=0x7f02001c;
-        public static final int pitchcoachlogoplain=0x7f02001d;
-        public static final int pitchcoachlogored=0x7f02001e;
-        public static final int plastic=0x7f02001f;
-        public static final int red_progress=0x7f020020;
-        public static final int settings1=0x7f020021;
-        public static final int settings2=0x7f020022;
-        public static final int settingsbutton=0x7f020023;
-        public static final int sing1=0x7f020024;
-        public static final int sing2=0x7f020025;
-        public static final int singbutton=0x7f020026;
-        public static final int smallerspeaker50=0x7f020027;
-        public static final int smallspeaker=0x7f020028;
-        public static final int soprano1=0x7f020029;
-        public static final int soprano2=0x7f02002a;
-        public static final int sopranobutton=0x7f02002b;
-        public static final int speaker=0x7f02002c;
-        public static final int startscreenbackground=0x7f02002d;
-        public static final int tenor1=0x7f02002e;
-        public static final int tenor2=0x7f02002f;
-        public static final int tenorbutton=0x7f020030;
-        public static final int thumbsdown=0x7f020031;
-        public static final int thumbsup=0x7f020032;
-        public static final int tune1=0x7f020033;
-        public static final int tune2=0x7f020034;
-        public static final int tunebutton=0x7f020035;
-        public static final int vee=0x7f020036;
-        public static final int yellow_progress=0x7f020037;
->>>>>>> ff924fc97e3ff366988402b770f69b53ff988aa5
     }
     public static final class id {
         public static final int SelectRangeAltTxt=0x7f070014;

@@ -41,6 +41,7 @@ public class PlayManagerScroll extends PlayManager {
 						}
 					};
 					final GraphContainer next = new GraphContainer(context, nextPitch);
+					next.setSilence(silent);
 					return scroller.addElement(next).then(new Runnable() {
 						public void run()
 						{

@@ -36,7 +36,7 @@ public class GraphSurface extends SurfaceView {
 		this.target = target;
 		silent = false;
 		this.targetNoteName = targetNoteName;
-		this.silenceDrawable = context.getResources().getDrawable(R.drawable.tunebutton); //FIXME
+		this.silenceDrawable = context.getResources().getDrawable(R.drawable.smallerspeaker50); //FIXME
 		initialize();
 	}
 
