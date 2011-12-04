@@ -249,13 +249,13 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 		return lessonType;
 	}
 	
-	public Cursor getLessonTypeNote(){
-		Cursor lessonType = myDatabase.rawQuery("select * from LessonType where name like '%Note%' order by ", null);
+	public Cursor getLessonTypeEasy(){
+		Cursor lessonType = myDatabase.rawQuery("select * from LessonType where name like '%Note%' order by RANDOM()", null);
 		return lessonType;
 	}
 	
-	public Cursor getLessonTypeInterval(){
-		Cursor lessonType = myDatabase.rawQuery("select * from LessonType where name not like '%Note%' and name not like '%Chord%' and name not like '%Scale%'", null);
+	public Cursor getLessonTypeMedium(){
+		Cursor lessonType = myDatabase.rawQuery("select * from LessonType where name not like '%Chord%' and name not like '%Scale%' order by RANDOM()", null);
 		return lessonType;
 	}
 	

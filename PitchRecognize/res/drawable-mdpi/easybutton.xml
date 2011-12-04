@@ -2,6 +2,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 	<item android:state_pressed="true" android:drawable="@drawable/easy2" /> <!-- pressed -->
 	<item android:state_focused="true" android:drawable="@drawable/easy2" /> <!-- focused -->
-
+	<item android:state_selected="true" android:drawable="@drawable/easy3" />
 	<item android:drawable="@drawable/easy1" /> <!-- default -->
 </selector>

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:state_pressed="true" android:drawable="@drawable/alto2" /> <!-- pressed -->
-	<item android:state_focused="true" android:drawable="@drawable/alto2" /> <!-- focused -->
 
-	<item android:drawable="@drawable/alto1" /> <!-- default -->
+    <item android:drawable="@drawable/alto2" android:state_pressed="true"/> <!-- pressed -->
+    <item android:drawable="@drawable/alto2" android:state_focused="true"/> <!-- focused -->
+    <item android:drawable="@drawable/alto3" android:state_selected="true"/>
+    <item android:drawable="@drawable/alto1"/> <!-- default -->
+
 </selector>

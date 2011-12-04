@@ -20,6 +20,7 @@ public class EventStream implements IPitchSource {
 	private final Context myContext;
 	private static DatabaseHelper myDbHelper;
 	private double minfreq, maxfreq;
+	private String difficulty;
 	private boolean rangeIsSet = false;
 	private static final double DEFAULT_MIN_FREQ = 130;
 	private static final double DEFAULT_MAX_FREQ = 523;
@@ -28,6 +29,7 @@ public class EventStream implements IPitchSource {
 	public EventStream(Context context) {
 		minfreq = DEFAULT_MIN_FREQ;
 		maxfreq = DEFAULT_MAX_FREQ;
+		difficulty = "e";
 		this.myContext = context;
 		myDbHelper = new DatabaseHelper(context);
 		try {
@@ -88,6 +90,25 @@ public class EventStream implements IPitchSource {
 		maxfreq = max;
 	}
 
+	private void setDifficultyFromFile() {
+		StringBuilder inb = new StringBuilder();
+		try {
+			FileInputStream fis = myContext.openFileInput(RangeSelect.DIFFICULTY_FILENAME);
+			int ch;
+			while((ch = fis.read()) != -1)
+				inb.append((char)ch);
+			fis.close();
+			difficulty = inb.toString();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	
 	private void setVocalRangeFromFile() {
 		StringBuilder inb = new StringBuilder();
 		try {
@@ -159,7 +180,14 @@ public class EventStream implements IPitchSource {
 
 	// Returns a Cursor whose first entity is the selected LessonType
 	private Cursor selectLesson(){
-		return myDbHelper.getAllLessonTypesOrderedRandom();
+		setDifficultyFromFile();
+		if (difficulty=="e"){
+			return myDbHelper.getLessonTypeEasy();
+		} else if (difficulty=="m"){
+			return myDbHelper.getLessonTypeMedium();
+		} else {
+			return myDbHelper.getAllLessonTypesOrderedRandom();
+		}
 	}
 
 	// Returns a Cursor whose first entity is the selected Pitch
