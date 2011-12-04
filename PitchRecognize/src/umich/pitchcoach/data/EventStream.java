@@ -54,7 +54,12 @@ public class EventStream implements IPitchSource {
 				int pitchCount = lessonType.getInt(lessonType.getColumnIndex("pitchCount"));
 				ArrayList<String> pitchesToSing = new ArrayList<String>(pitchCount);
 				ArrayList<Float> intervals = deserializeIntervalList(lessonType.getString(lessonType.getColumnIndex("intervals")));
-				Note[] notesToPlay = new Note[pitchCount+1];
+				Note[] notesToPlay;
+				if (pitchCount>1){
+					notesToPlay = new Note[pitchCount+1];
+				} else {
+					notesToPlay = new Note[pitchCount];
+				}
 				double basePitch = pitch.getDouble(pitch.getColumnIndex("frequency"));
 				pitchesToSing.add(LetterNotes.freqToNoteSpec(basePitch));
 				notesToPlay[0] = new Note(basePitch, nextEvent.duration/(double) pitchCount);
