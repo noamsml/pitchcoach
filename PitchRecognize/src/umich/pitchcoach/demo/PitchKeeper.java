@@ -3,6 +3,7 @@ package umich.pitchcoach.demo;
 import java.util.ArrayList;
 import java.util.Random;
 
+import umich.pitchcoach.data.Event;
 import umich.pitchcoach.dataAdapt.IPitchSource;
 
 /*
@@ -28,4 +29,7 @@ public class PitchKeeper implements IPitchSource {
 		return storedPitches.get(randInt);
 	}
 	
+	public Event getNextEvent() throws UnsupportedOperationException {
+		return null;
+	}	
 }

@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import umich.pitchcoach.R;
 import umich.pitchcoach.NotePlayer.NotePlayer;
+import umich.pitchcoach.data.EventStream;
 import umich.pitchcoach.dataAdapt.IPitchSource;
 import umich.pitchcoach.flow.IPromiseFactory;
 import umich.pitchcoach.flow.PlayManagerScroll;
@@ -23,7 +24,7 @@ public class PitchActivityFramework extends Activity {
 	protected PlayManagerScroll playmanager;
 	protected LifeBar lifebar;
 	protected NotePlayer noteplayer;
-	protected IPitchSource myPitchKeeper; //for now
+	protected IPitchSource myEventStream; //for now
 	protected Button pauseButton;
 	
 	@Override
@@ -36,7 +37,7 @@ public class PitchActivityFramework extends Activity {
 		pauseButton = (Button) findViewById(R.id.pauseBtn);		
 		
 		noteplayer = new NotePlayer();
-		playmanager = new PlayManagerScroll(getApplicationContext(), myPitchKeeper, graphcont);	
+		playmanager = new PlayManagerScroll(getApplicationContext(), myEventStream, graphcont);	
 		playmanager.setCallback(new IPitchReciever() {
 			
 			@Override
@@ -90,13 +91,20 @@ public class PitchActivityFramework extends Activity {
 		};
 	}
 	
-	
 	protected Promise play() {
-		return setListening().then(new IPromiseFactory() {
-			public Promise getPromise() {
-				return noteplayer.playNote(playmanager.currentGraph().getFrequency(), 1);
-			}
-		}).then(playmanager.play());
+			return setListening().then(new IPromiseFactory() {
+				public Promise getPromise(){
+					if (playmanager.currentGraph().isSilenced()){
+						return playmanager.play();
+					} else {
+						if (playmanager.currentGraph().getEvent()==null){
+							return noteplayer.playNote(playmanager.currentGraph().getFrequency(),1).then(playmanager.play());
+						} else {
+							return noteplayer.playNote(playmanager.currentGraph().getEvent().notesToPlay).then(playmanager.play());
+						}
+					}
+				}
+			});
 	}
 	
 	public void renderPause() { // Use DialogFragments, perhaps?

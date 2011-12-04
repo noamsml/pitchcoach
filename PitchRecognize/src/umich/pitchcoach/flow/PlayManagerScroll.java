@@ -1,6 +1,9 @@
 package umich.pitchcoach.flow;
 
+import java.util.Iterator;
+
 import android.content.Context;
+import umich.pitchcoach.data.Event;
 import umich.pitchcoach.dataAdapt.IPitchSource;
 import umich.pitchcoach.demo.GraphContainer;
 import umich.pitchcoach.demo.PitchKeeper;
@@ -16,6 +19,7 @@ public class PlayManagerScroll extends PlayManager {
 	{
 		super(ctx, keeper);
 		this.scroller = scroller; 
+		currentGraph = nextGraph = null;
 	}
 
 	@Override
@@ -28,7 +32,7 @@ public class PlayManagerScroll extends PlayManager {
 		//Hack
 		return new PromiseFactoryPromise(new IPromiseFactory() {
 			public Promise getPromise() {
-					String nextPitch = pitchkeeper.getNextPitch();	
+					String nextPitch = eventstream.getNextPitch();	
 					if (nextPitch == null) return new Promise() {
 						public void go() {
 							currentGraph = nextGraph;
@@ -37,7 +41,31 @@ public class PlayManagerScroll extends PlayManager {
 						}
 					};
 					final GraphContainer next = new GraphContainer(context, nextPitch);
-					
+					return scroller.addElement(next).then(new Runnable() {
+						public void run()
+						{
+							currentGraph = nextGraph;
+							nextGraph = next;
+						}
+					});
+				}
+		});
+	}
+	
+	@Override
+	public Promise addEventPart(final String nextPitch, final boolean silenced, final Event currentEvent) {
+		return new PromiseFactoryPromise(new IPromiseFactory() {
+			public Promise getPromise() {	
+					if (nextPitch == null) return new Promise() {
+						public void go() {
+							currentGraph = nextGraph;
+							nextGraph = null;
+							done();
+						}
+					};
+					final GraphContainer next = new GraphContainer(context, nextPitch);
+					next.setSilence(silenced);
+					next.setEvent(currentEvent);
 					return scroller.addElement(next).then(new Runnable() {
 						public void run()
 						{
@@ -49,10 +77,15 @@ public class PlayManagerScroll extends PlayManager {
 		});
 	}
 
+	
 	@Override
 	public GraphContainer currentGraph() {
 		return currentGraph;
 	}
 	
+	@Override
+	public GraphContainer nextGraph() {
+		return nextGraph;
+	}
 	
 }

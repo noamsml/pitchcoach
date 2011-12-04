@@ -1,79 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent">
-  <TextView
-  android:id="@+id/SelectRangeTxt"
-  android:layout_width="fill_parent"
-  android:layout_height="wrap_content"
-  android:layout_centerHorizontal="true"
-  android:layout_marginBottom="20dip"
-  android:text="Select your vocal range below:"  />
-  
-  <LinearLayout
-  	android:id="@+id/selectRangesll"
-  	android:layout_below="@id/SelectRangeTxt"
-  	android:orientation="horizontal"
-  	android:layout_width="fill_parent"
-  	android:layout_height="wrap_content">
-	  <Button
-	  	android:id="@+id/bassBtn"
-	  	android:layout_height="wrap_content"
-	  	android:layout_width="wrap_content"
-	  	android:layout_weight="1"
-	  	android:text="Bass"/>
-	  <Button
-	  	android:id="@+id/tenorBtn"
-	  	android:layout_height="wrap_content"
-	  	android:layout_width="wrap_content"
-	  	android:layout_weight="1"
-	  	android:text="Tenor"/>
-	  <Button
-	  	android:id="@+id/altoBtn"
-	  	android:layout_height="wrap_content"
-	  	android:layout_width="wrap_content"
-	  	android:layout_weight="1"
-	  	android:text="Alto"/>
-	  <Button
-	  	android:id="@+id/sopranoBtn"
-	  	android:layout_height="wrap_content"
-	  	android:layout_width="wrap_content"
-	  	android:layout_weight="1"
-	  	android:text="Soprano"/>
-  </LinearLayout>
-  
-    <TextView
-	  android:id="@+id/SelectRangeAltTxt"
-	  android:layout_marginTop="20dip"
-	  android:layout_below="@id/selectRangesll"
-	  android:layout_width="fill_parent"
-	  android:layout_height="wrap_content"
-	  android:layout_centerHorizontal="true"
-	  android:text="Alternatively, let Pitch Coach determine your range:"  />
-	  
-	 <Button
-	 	android:layout_marginTop="20dip"
-	 	android:layout_below="@id/SelectRangeAltTxt"
-	  	android:layout_height="wrap_content"
-	  	android:layout_width="wrap_content"
-	    android:layout_centerHorizontal="true"
-	  	android:layout_weight="1"
-	  	android:text="Auto Determine Range"/>
-	  	
-	 <TextView
-	 	android:id="@+id/changeTxt"
-	 	android:layout_marginTop="50dip"
-	 	android:layout_below="@id/SelectRangeAltTxt"
-	 	android:layout_width="fill_parent"
-	 	android:layout_height="wrap_content"
-	 	android:layout_centerHorizontal="true"
-	 	android:text="HIT A BUTTON" />
-	 <Button 
-	 	android:id="@+id/loadMe"
-	 	android:layout_width="wrap_content" 
-	 	android:text="Load From File" 
-	 	android:layout_height="wrap_content" 
-	 	android:layout_alignParentBottom="true"/>
-	  
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/TitleTxt"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="10dip"
+                android:layout_marginBottom="0dip"
+                android:layout_marginLeft="20dip"
+                android:text="Settings"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/SelectRangeTxt"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/TitleTxt"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="10dip"
+                android:layout_marginLeft="20dip"
+                android:layout_marginTop="0dip"
+                android:text="Select your vocal range:" />
+
+            <LinearLayout
+                android:id="@+id/selectRangesll"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/SelectRangeTxt"
+                android:layout_margin="10dip"
+                android:layout_marginLeft="20dip"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/bassBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginRight="10dip"
+                    android:background="@drawable/bassbutton" />
+
+                <Button
+                    android:id="@+id/tenorBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginRight="10dip"
+                    android:background="@drawable/tenorbutton" />
+
+                <Button
+                    android:id="@+id/altoBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginRight="10dip"
+                    android:background="@drawable/altobutton" />
+
+                <Button
+                    android:id="@+id/sopranoBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginRight="10dip"
+                    android:background="@drawable/sopranobutton" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/SelectRangeAltTxt"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/selectRangesll"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="10dip"
+                android:layout_marginLeft="20dip"
+                android:text="Alternatively, let PitchCoach determine your range:" />
+
+            <Button
+                android:id="@+id/autoRange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/SelectRangeAltTxt"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="20dip"
+                android:layout_weight="1"
+                android:text="Auto Determine Range" />
+
+            <TextView
+                android:id="@+id/changeTxt"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/SelectRangeAltTxt"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dip"
+                android:text="HIT A BUTTON" />
+
+            <Button
+                android:id="@+id/loadMe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:text="Load From File" />
+
+            <Button
+                android:id="@+id/doneBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@+id/loadMe"
+                android:text="Done" />
+        </LinearLayout>
+    </ScrollView>
+
 </RelativeLayout>

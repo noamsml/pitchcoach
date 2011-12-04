@@ -24,8 +24,10 @@ public class StartScreen extends Activity {
 		
 		linkToActivity(learn, TutorialActivity.class);
 		
-		final Button tune = (Button) findViewById(R.id.tuneBtn);    
+		final Button tune = (Button) findViewById(R.id.tuneBtn);
 		
+		final Button settings = (Button) findViewById(R.id.settingsBtn);
+		linkToActivity(settings, RangeSelect.class);
 	}
 	
 	public void linkToActivity(Button b, final Class c)
