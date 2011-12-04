@@ -26,6 +26,8 @@ public class StartScreen extends Activity {
 		
 		final Button tune = (Button) findViewById(R.id.tuneBtn);
 		
+		linkToActivity(tune, PitchTunerActivity.class);
+		
 		final Button settings = (Button) findViewById(R.id.settingsBtn);
 		linkToActivity(settings, RangeSelect.class);
 	}
