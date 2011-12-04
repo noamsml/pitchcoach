@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/startscreenbackground"
+    android:dither="true"
+    android:gravity="top" xmlns:android="http://schemas.android.com/apk/res/android">
+        
+    <LinearLayout android:id="@+id/linearLayout1" android:layout_width="match_parent" android:layout_height="match_parent" android:weightSum="1">
+        
+        <LinearLayout android:id="@+id/linearLayout2" android:layout_width="wrap_content" android:layout_height="match_parent" android:orientation="vertical" android:layout_weight="0.50">
+        	<umich.pitchcoach.demo.PitchTuner
+    		android:id="@+id/pitchTuner"
+   			android:layout_width="wrap_content" android:layout_weight="0.61" android:layout_height="116dp">
+   			</umich.pitchcoach.demo.PitchTuner>
+        </LinearLayout>
+        
+        <LinearLayout android:id="@+id/linearLayout3" android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_weight="0.50" android:orientation="vertical" android:weightSum="1">
+            <LinearLayout android:id="@+id/linearLayout4" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_weight="0.50">
+         		<TextView android:layout_height="wrap_content" android:id="@+id/Tuner_Pitch_Text" android:text="TextView" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_width="wrap_content"></TextView>
+   	    		<TextView android:layout_height="wrap_content" android:id="@+id/Tuner_Mean_Text" android:text="TextView" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_width="wrap_content"></TextView>
+            	<TextView android:layout_height="wrap_content" android:id="@+id/Tuner_Deviation_Text" android:text="TextView" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_width="wrap_content"></TextView>
+            	
+            </LinearLayout>
+        </LinearLayout>
+        
+        
+    </LinearLayout>
+   
+    	
+    	
+    	
+</RelativeLayout>
+
+
+
+
+
+    
+    
+    
+    
+    
+
+
+
+
+

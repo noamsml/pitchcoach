@@ -49,5 +49,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>>
         </activity>
+        <activity android:name=".demo.ActivityScreen" android:screenOrientation="landscape"></activity>
+        <activity android:name=".demo.PitchTunerActivity"></activity>
     </application>
 </manifest>
