@@ -33,7 +33,7 @@
                 android:layout_margin="10dip"
                 android:layout_marginLeft="20dip"
                 android:layout_marginTop="0dip"
-                android:text="Select your vocal range:" />
+                android:text="Select a vocal range from below:" />
 
             <LinearLayout
                 android:id="@+id/selectRangesll"
@@ -93,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/SelectRangeAltTxt"
                 android:layout_centerHorizontal="true"
-                android:layout_margin="20dip"
+                android:layout_marginLeft="20dip"
                 android:layout_weight="1"
                 android:text="Auto Determine Range" />
 
@@ -102,23 +102,14 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/SelectRangeAltTxt"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dip"
-                android:text="HIT A BUTTON" />
-
-            <Button
-                android:id="@+id/loadMe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:text="Load From File" />
+                android:layout_centerHorizontal="true" />
 
             <Button
                 android:id="@+id/doneBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_toRightOf="@+id/loadMe"
+                android:layout_margin="20dip"
                 android:text="Done" />
         </LinearLayout>
     </ScrollView>

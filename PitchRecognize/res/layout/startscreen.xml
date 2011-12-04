@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:background="@drawable/blackscreen" android:dither="true"
-	android:gravity="top">
+	android:background="#000000" android:gravity="top">
+	<ImageView android:id="@+id/logo" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:layout_alignParentLeft="true"
+		android:layout_alignParentBottom="true" android:layout_marginLeft="20sp"
+		android:layout_marginBottom="55sp" android:src="@drawable/pitchcoachlogoplain" />
 	<Button android:id="@+id/singBtn" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:layout_alignParentRight="true"
 		android:layout_marginTop="50sp" android:layout_marginRight="10sp"

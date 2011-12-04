@@ -100,8 +100,8 @@ public class RangeSelect extends Activity {
     	  finish();
       }
     });
-
     
+    /*
     Button loadMe = (Button) findViewById(R.id.loadMe);    
     loadMe.setOnClickListener(new OnClickListener() {
       @Override
@@ -122,12 +122,13 @@ public class RangeSelect extends Activity {
           e.printStackTrace();
         }
       }
-    });
+    });*/
   }
+        
   private void writeContent(int minFreq, int maxFreq) {
     try {
       String toWrite = Integer.toString(minFreq)+" "+Integer.toString(maxFreq);
-      thisTxt.setText("'"+toWrite+"' written to file");
+      //thisTxt.setText("'"+toWrite+"' written to file");
       fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
       fos.write(toWrite.getBytes());
       fos.close();
