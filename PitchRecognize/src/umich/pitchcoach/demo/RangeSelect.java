@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import umich.pitchcoach.R;
 import umich.pitchcoach.RangePitchDetect;
+import umich.pitchcoach.NotePlayer.NotePlayer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -26,11 +27,14 @@ public class RangeSelect extends Activity {
   public static FileOutputStream fos;
   public static String FILENAME="singing_range.txt";
   private int minFreq, maxFreq;
+  private NotePlayer noteplayer;
+  
   TextView thisTxt;
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
+    noteplayer = new NotePlayer();
+    
     setContentView(R.layout.rangeselect);
     
     thisTxt = (TextView) findViewById(R.id.changeTxt);
@@ -41,6 +45,7 @@ public class RangeSelect extends Activity {
       public void onClick(View view) {
         minFreq = 82; // E2
         maxFreq = 330; // E4
+        noteplayer.playNote(minFreq, 1).then(noteplayer.playNote(maxFreq, 1)).go();
         writeContent(minFreq, maxFreq);
       }
     });
@@ -51,6 +56,7 @@ public class RangeSelect extends Activity {
       public void onClick(View view) {
         minFreq = 130; // C3
         maxFreq = 523; // C5
+        noteplayer.playNote(minFreq, 1).then(noteplayer.playNote(maxFreq, 1)).go();
         writeContent(minFreq, maxFreq);
       }
     });
@@ -61,6 +67,7 @@ public class RangeSelect extends Activity {
       public void onClick(View view) {
         minFreq = 196; // G3
         maxFreq = 660; // E5
+        noteplayer.playNote(minFreq, 1).then(noteplayer.playNote(maxFreq, 1)).go();
         writeContent(minFreq, maxFreq);
       }
     });
@@ -80,9 +87,19 @@ public class RangeSelect extends Activity {
       public void onClick(View view) {
         minFreq = 262; // C4
         maxFreq = 1047; // C6
+        noteplayer.playNote(minFreq, 1).then(noteplayer.playNote(maxFreq, 1)).go();
         writeContent(minFreq, maxFreq);
       }
     });
+    
+    Button done = (Button) findViewById(R.id.doneBtn);    
+    done.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View view) {
+    	  finish();
+      }
+    });
+
     
     Button loadMe = (Button) findViewById(R.id.loadMe);    
     loadMe.setOnClickListener(new OnClickListener() {
