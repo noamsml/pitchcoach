@@ -75,7 +75,7 @@ public class GraphContainer extends SizableElement implements IImageSourceSource
 		int evalVal;
 		evalVal = eval.getFinalEvaluation();
 		graph.setTint(0x88ffffff);
-		
+		// TODO Auto-generated method stub
 		if (evalVal == 0) {
 			graph.setPatch(R.drawable.ex);
 		}
@@ -112,6 +112,11 @@ public class GraphContainer extends SizableElement implements IImageSourceSource
 	
 	public boolean isCurrentlyCorrect() {
 		return eval.isCurrentlyCorrect();
+	}
+	
+	public void reset() {
+		this.eval = new GraphEvaluator(this.targetPitch);
+		this.graph.reset();
 	}
 	
 }

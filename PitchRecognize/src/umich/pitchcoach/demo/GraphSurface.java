@@ -101,5 +101,9 @@ public class GraphSurface extends SurfaceView {
 		c.drawText(this.targetNoteName, 30, 30, whitePaint);
 		
 	}
+
+	public void reset() {
+		this.imagesource = new ImageSource(this.getWidth(), this.getHeight(), this.target);
+	}
 	
 }

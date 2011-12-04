@@ -11,6 +11,7 @@ import umich.pitchcoach.flow.IPromiseFactory;
 import umich.pitchcoach.flow.Promise;
 import umich.pitchcoach.flow.PromiseFactoryPromise;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 public class TutorialActivity extends PitchActivityFramework{
@@ -43,12 +44,45 @@ public class TutorialActivity extends PitchActivityFramework{
 		});
 	}
 	
+	//Note: this might be over-abstracting it :P
+	public Promise verifyLoop(final IPromiseFactory fact) {
+		final Activity that = this;
+		return new PromiseFactoryPromise(new IPromiseFactory() {
+			public Promise getPromise() {
+				if (playmanager.currentGraph().isDone()) {
+					if (playmanager.currentGraph().getFinalEvaluation() > 0) 
+						return new Promise();
+					else 
+						return new DialogPromise(that, "Not quite. Let's try again").then(new Runnable() {
+							public void run() 
+							{
+								playmanager.currentGraph().reset();
+							}
+						}).then(fact.getPromise()).then(this);
+				}	
+				else 
+					return fact.getPromise().then(this);
+
+			}
+		});
+	}
+	
+	public Promise playVerifyLoop()
+	{
+		return verifyLoop(new IPromiseFactory() {
+			public Promise getPromise() {
+				return play();
+			}
+		});
+	};
+	
 	public Promise tutorial() {
+		final Activity that = this;
 		return playmanager.begin().then(
 			new DialogPromise(this, "Welcome to pitchcoach!")	
-		).then(setListening()).then(this.playScale()).then(playmanager.play()).then(Promise.nTimes(3, new IPromiseFactory() {
+		).then(playVerifyLoop()).then(Promise.nTimes(3, new IPromiseFactory() {
 			public Promise getPromise() {
-				return playmanager.addGraph().then(play());
+				return playmanager.addGraph().then(playVerifyLoop()).then(new DialogPromise(that, "Good job!"));
 			}
 		})).then(new DialogPromise(this, "Cool! You've just finished the entire tutorial. Congrats! Click 'OK' to go back to the home screen")).then(
 					new Runnable() {
