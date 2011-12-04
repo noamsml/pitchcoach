@@ -24,11 +24,11 @@ public class PlayManagerScroll extends PlayManager {
 
 	@Override
 	public Promise begin() {
-		return addGraph().then(addGraph());
+		return addGraph(false).then(addGraph(false));
 	}
 
 	@Override
-	public Promise addGraph() {
+	public Promise addGraph(final boolean silent) {
 		//Hack
 		return new PromiseFactoryPromise(new IPromiseFactory() {
 			public Promise getPromise() {

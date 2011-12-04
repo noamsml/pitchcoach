@@ -115,7 +115,8 @@ public class RangePitchDetect extends Activity implements IPitchReciever {
                     int intLow = (int)roundToNearest(secLowestPitch,6);
                     int intHigh = (int)roundToNearest(secHighestPitch,6);
                     writeContent(intLow,intHigh);
-                    setContentView(R.layout.startscreen);
+                    
+                    finish();
                }
            })
            .setNegativeButton("Try again", new DialogInterface.OnClickListener() {

@@ -1,5 +1,6 @@
 package umich.pitchcoach.demo;
 
+import umich.pitchcoach.R;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -15,9 +16,10 @@ public class GraphSurface extends SurfaceView {
 	protected double target;
 	protected Paint tint;
 	protected Drawable patch;
+	protected Drawable silenceDrawable;
 	protected String targetNoteName;
 	protected Paint whitePaint;
-	
+	protected boolean silent;
 	
 	public void makeLive()
 	{
@@ -32,7 +34,9 @@ public class GraphSurface extends SurfaceView {
 	public GraphSurface(Context context, double target, String targetNoteName) {
 		super(context);
 		this.target = target;
+		silent = false;
 		this.targetNoteName = targetNoteName;
+		this.silenceDrawable = context.getResources().getDrawable(R.drawable.tunebutton); //FIXME
 		initialize();
 	}
 
@@ -97,9 +101,23 @@ public class GraphSurface extends SurfaceView {
 					this.getWidth()/2 + 50, this.getHeight()/2 + 50));
 			patch.draw(c);
 		}
+		if (!this.silent) {
+			silenceDrawable.setBounds(new Rect(this.getWidth() - 60, this.getHeight() - 60,
+					this.getWidth() - 10, this.getHeight() - 10));
+			silenceDrawable.draw(c);
+		}
 		
 		c.drawText(this.targetNoteName, 30, 30, whitePaint);
 		
+	}
+	
+	public void setSilent(boolean silence)
+	{
+		this.silent = silence;
+	}
+
+	public void reset() {
+		this.imagesource = new ImageSource(this.getWidth(), this.getHeight(), this.target);
 	}
 	
 }

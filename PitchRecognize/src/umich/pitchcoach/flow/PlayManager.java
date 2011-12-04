@@ -26,7 +26,7 @@ abstract public class PlayManager implements IRenderNotify {
 	}
 	
 	public abstract Promise begin();
-	public abstract Promise addGraph();
+	public abstract Promise addGraph(boolean silent);
 	public abstract Promise addEventPart(String nextPitch, boolean silenced, Event currentEvent);
 	public abstract GraphContainer currentGraph();
 	public abstract GraphContainer nextGraph();

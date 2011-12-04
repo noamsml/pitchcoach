@@ -140,6 +140,7 @@ public class RangeSelect extends Activity {
 		
 		loadSelected();
 	}
+	
 	private void loadSelected(){
 		StringBuilder inb = new StringBuilder();
 		try {
@@ -185,8 +186,8 @@ public class RangeSelect extends Activity {
 	}
 
 
-
-	/*
+    
+    /*
     Button loadMe = (Button) findViewById(R.id.loadMe);    
     loadMe.setOnClickListener(new OnClickListener() {
       @Override
