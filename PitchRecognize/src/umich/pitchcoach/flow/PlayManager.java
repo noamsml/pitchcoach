@@ -3,6 +3,8 @@ package umich.pitchcoach.flow;
 
 import android.content.Context;
 import android.os.Handler;
+import umich.pitchcoach.data.Event;
+import umich.pitchcoach.data.EventStream;
 import umich.pitchcoach.dataAdapt.IPitchSource;
 import umich.pitchcoach.demo.GraphContainer;
 import umich.pitchcoach.demo.PitchKeeper;
@@ -11,21 +13,23 @@ import umich.pitchcoach.shared.IPitchReciever;
 import umich.pitchcoach.threadman.RenderThreadManager;
 
 abstract public class PlayManager implements IRenderNotify {
-	protected IPitchSource pitchkeeper;
+	protected IPitchSource eventstream;
 	private IPitchReciever callback;
 	private RenderThreadManager renderThreadManager;
 	protected Context context; 
 	Promise currentPlay;
 	
-	public PlayManager(Context context, IPitchSource pitchkeeper) { //TODO: Change to eventstream or something
-		this.pitchkeeper = pitchkeeper;
+	public PlayManager(Context context, IPitchSource eventstream) {
+		this.eventstream = eventstream;
 		this.context = context;
 		renderThreadManager = new RenderThreadManager(new Handler(), this);
 	}
 	
 	public abstract Promise begin();
-	public abstract Promise addGraph(); 
+	public abstract Promise addGraph();
+	public abstract Promise addEventPart(String nextPitch, boolean silenced, Event currentEvent);
 	public abstract GraphContainer currentGraph();
+	public abstract GraphContainer nextGraph();
 	
 	public Promise play() {
 		return new Promise() {
@@ -60,7 +64,6 @@ abstract public class PlayManager implements IRenderNotify {
 	
 	public void unpause() {
 		if (currentPlay != null) renderThreadManager.startRenderThread(currentGraph());
-	}
-	
+	}	
 	
 }

@@ -2,6 +2,8 @@ package umich.pitchcoach.demo;
 
 import umich.pitchcoach.LetterNotes;
 import umich.pitchcoach.R;
+import umich.pitchcoach.data.Event;
+import umich.pitchcoach.data.EventStream;
 import umich.pitchcoach.listeners.IImageSourceSource;
 import umich.pitchcoach.listeners.SizableElement;
 import android.content.Context;
@@ -17,6 +19,9 @@ public class GraphContainer extends SizableElement implements IImageSourceSource
 	private String targetPitch;
 	private GraphEvaluator eval;
 	private double targetFreq;
+	
+	private Event currentEvent;
+	private boolean silent = false; // Play notes for this graph or not
 	
 	public GraphContainer(Context context, String targetPitch) {
 		super(context);
@@ -85,6 +90,7 @@ public class GraphContainer extends SizableElement implements IImageSourceSource
 		else {
 			graph.setPatch(R.drawable.vee);
 		}
+		EventStream.submitEventPerformance(targetPitch, currentEvent, (long) evalVal);
 	}
 	
 	public int getFinalEvaluation() {
@@ -114,4 +120,20 @@ public class GraphContainer extends SizableElement implements IImageSourceSource
 		return eval.isCurrentlyCorrect();
 	}
 	
+	public boolean isSilenced(){
+		return silent;
+	}
+	
+	public void setSilence(boolean setting){
+		silent = setting;
+	}
+	
+	public void setEvent(Event event){
+		currentEvent = new Event(event);
+	}
+	
+	public Event getEvent(){
+		return currentEvent;
+	}
+			
 }

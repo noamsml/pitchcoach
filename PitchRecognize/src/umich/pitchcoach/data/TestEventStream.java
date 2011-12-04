@@ -1,7 +1,9 @@
 package umich.pitchcoach.data;
 
 import java.io.IOException;
+import java.util.Iterator;
 
+import umich.pitchcoach.LetterNotes;
 import umich.pitchcoach.R;
 import umich.pitchcoach.demo.PitchGraphActivity;
 import android.app.Activity;
@@ -23,8 +25,13 @@ public class TestEventStream extends Activity {
 		
 		nextEvent.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				Event myEvent = myStream.nextEvent();
-				pitchText.setText("Name: "+myEvent.name);
+				Event myEvent = myStream.getNextEvent();
+				String pitchList = "";
+				Iterator<String> pitchIterator = myEvent.pitchesToSing.iterator();
+				while (pitchIterator.hasNext()){
+					pitchList+=(" "+pitchIterator.next());
+				}
+				pitchText.setText("Name: "+ myEvent.name+"\nPitch(es):"+ pitchList);
 			}
 		});
 		

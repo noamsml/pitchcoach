@@ -4,7 +4,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.Timestamp;
+import java.util.Date;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -118,11 +121,11 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 	}
 
 	public void openDataBase() throws SQLException{
-
 		//Open the database
 		String myPath = DB_PATH + DB_NAME;
-		myDatabase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-
+		if (myDatabase==null || !myDatabase.isOpen()){
+			myDatabase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
+		}
 	}
 
 	@Override
@@ -163,9 +166,26 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 		Cursor dataCount = myDatabase.rawQuery("select * from Performance", null);
 		return dataCount.getCount();
 	}
+	
+	public Cursor getPitchById(long id){
+		Cursor pitch = myDatabase.rawQuery("select * from Pitch where _id = "+id, null);
+		return pitch;
+	}
 
-	public Cursor getAllPitchesOrderedLeastRecent(){
+
+	public long getPitchIdFromFreq(double freq){
+		Cursor pitches = myDatabase.rawQuery("select * from Pitch where frequency = "+freq, null);
+		pitches.moveToFirst();
+		return pitches.getLong(pitches.getColumnIndex("_id"));
+	}
+	
+	public Cursor getAllPitchesOrderedRandom(){
 		Cursor pitches = myDatabase.rawQuery("select * from Pitch order by RANDOM()", null);
+		return pitches;
+	}
+	
+	public Cursor getAllPitchesOrderedLeastRecent(){
+		Cursor pitches = myDatabase.rawQuery("select * from Pitch order by 'latestPerformanceDate' ASC", null);
 		return pitches;
 	}
 	
@@ -174,13 +194,48 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 		return pitches;
 	}
 	
-	public Cursor getAllPitchesInRange(float min, float max){
-		Cursor pitches = myDatabase.rawQuery("select * from Pitch where frequency >= "+min+" AND frequency <= "+max+" order by RANDOM()f", null);
+	public Cursor getAllPitchesInRange(double min, double max){
+		Cursor pitches = myDatabase.rawQuery("select * from Pitch where frequency >= "+min+" AND frequency <= "+max+" order by RANDOM()", null);
 		return pitches;
 	}
 	
-	public Cursor getAllLessonTypesOrderedLeastRecent(){
+	public Cursor getRecentPitchesInRange(double min, double max){
+		Cursor pitches = myDatabase.rawQuery("select * from Pitch where frequency >= "+min+" AND frequency <= "+max+" order by latestPerformanceDate asc", null);
+		return pitches;
+	}
+
+	
+	public void updateLessonType(long id, long perfId, double averageRating, long perfCount, String date){
+		ContentValues pv = new ContentValues();
+		pv.put("latestPerformance", perfId);
+		pv.put("averageRating", averageRating);
+		pv.put("performanceCount", perfCount);
+		pv.put("latestPerformanceDate", date);
+		myDatabase.update("LessonType", pv, "_id=?", new String[]{""+id});
+	}
+	
+	public void updatePitch(long id, long perfId, double averageRating, long perfCount, String date){
+		ContentValues pv = new ContentValues();
+		pv.put("latestPerformance", perfId);
+		pv.put("averageRating", averageRating);
+		pv.put("performanceCount", perfCount);
+		pv.put("latestPerformanceDate", date);
+		myDatabase.update("Pitch", pv, "_id=?", new String[]{""+id});
+	}
+
+	
+	public Cursor getLessonTypeById(long id){
+		Cursor lessonTypes = myDatabase.rawQuery("select * from LessonType where _id = "+id, null);
+		return lessonTypes;
+	}
+	
+	public Cursor getAllLessonTypesOrderedRandom(){
 		Cursor lessonTypes = myDatabase.rawQuery("select * from LessonType order by RANDOM()", null);
+		return lessonTypes;
+	}
+	
+	public Cursor getAllLessonTypesOrderedLeastRecent(){
+		Cursor lessonTypes = myDatabase.rawQuery("select * from LessonType order by 'latestPerformanceDate' asc", null);
 		return lessonTypes;
 	}
 	
@@ -212,5 +267,14 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 	public Cursor getLessonTypeScale(){
 		Cursor lessonType = myDatabase.rawQuery("select * from LessonType where name like '%Scale%'", null);
 		return lessonType;
+	}
+	
+	public long addPerformance(long lessonId, long pitchId, double rating){
+		ContentValues performancevalues = new ContentValues();
+		performancevalues.put("rating", rating);
+		performancevalues.put("lessonType", lessonId);
+		performancevalues.put("pitch", pitchId);
+		performancevalues.put("performanceDate", new Timestamp(new Date().getTime()).toString());
+		return myDatabase.insert("Performance", null, performancevalues);
 	}
 }

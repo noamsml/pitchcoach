@@ -19,7 +19,7 @@ public class TutorialActivity extends PitchActivityFramework{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
-		myPitchKeeper = new PitchSequence(new String[]{"C#3", "E3", "C4", "C3"});
+		myEventStream = new PitchSequence(new String[]{"C#3", "E3", "C4", "C3"});
 
 		super.onCreate(savedInstanceState);
 		lifebar.setVisibility(lifebar.INVISIBLE);

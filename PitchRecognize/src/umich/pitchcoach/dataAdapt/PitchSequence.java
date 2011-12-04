@@ -2,6 +2,8 @@ package umich.pitchcoach.dataAdapt;
 
 import java.util.ArrayList;
 
+import umich.pitchcoach.data.Event;
+
 public class PitchSequence implements IPitchSource {
 	private String[] pitches;
 	int loc;
@@ -17,5 +19,9 @@ public class PitchSequence implements IPitchSource {
 		if (loc == pitches.length) return null;
 		return pitches[loc++];
 	}
-
+	
+	public Event getNextEvent() throws UnsupportedOperationException {
+		return null;
+	}
+	
 }
