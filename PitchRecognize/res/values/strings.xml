@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hello">Hello World, PitchRecogActivity!</string>
-    <string name="app_name">PitchRecognize</string>
+    <string name="app_name">PitchCoach</string>
     <string name="test_name">PitchCoach Testing Utility</string>
     <string name="demo_name">PitchCoach Demo App</string>
 </resources>
