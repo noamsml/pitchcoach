@@ -19,6 +19,7 @@ public class PitchAnalyzerDCT_HPS implements IPitchAnalyzer {
 	//private static final double SEARCH_HIGH = 5000;
 	IPeakDetector peakdetect;
 	HammingWindow hamming; 
+	SpikeEliminator spikeelim;
 	
 	public PitchAnalyzerDCT_HPS(int size)
 	{
@@ -28,6 +29,7 @@ public class PitchAnalyzerDCT_HPS implements IPitchAnalyzer {
 		floatbuf_copy = new float[size];
 		peakdetect = new PeakDetectorRunningMaxRMS();
 		hamming = new HammingWindow(size);
+		spikeelim = new SpikeEliminator(Math.pow(LetterNotes.stepVal, 6));
 	}
 
 	
@@ -83,7 +85,7 @@ public class PitchAnalyzerDCT_HPS implements IPitchAnalyzer {
 		peak = peakdetect.findNextPeak();
 		if (peak == -1) return -1;
 		if (floatbuf[peak] < MINENERGY) return -1;
-		return DCTIndexToFreq(peak, size, sampleRate);
+		return spikeelim.getSmoothedSample(DCTIndexToFreq(peak, size, sampleRate));
 	}
 	
 	
