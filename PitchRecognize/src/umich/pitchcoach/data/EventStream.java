@@ -49,38 +49,45 @@ public class EventStream implements IPitchSource {
 			setVocalRangeFromFile();
 			Cursor pitch = myDbHelper.getAllPitchesInRange(minfreq, maxFreqWithInterval(nextEvent.maxInterval));
 			if (pitch.moveToFirst()){
-				nextEvent.lessonId = lessonType.getLong(lessonType.getColumnIndex("_id"));
-				nextEvent.pitchId = pitch.getLong(pitch.getColumnIndex("_id"));
-				nextEvent.name = pitch.getString(pitch.getColumnIndex("name"))+" "+lessonType.getString(lessonType.getColumnIndex("name"));
-				nextEvent.duration = lessonType.getInt(lessonType.getColumnIndex("duration"));
-				int pitchCount = lessonType.getInt(lessonType.getColumnIndex("pitchCount"));
-				ArrayList<String> pitchesToSing = new ArrayList<String>(pitchCount);
-				ArrayList<Float> intervals = deserializeIntervalList(lessonType.getString(lessonType.getColumnIndex("intervals")));
-				Note[] notesToPlay;
-				if (pitchCount>1){
-					notesToPlay = new Note[pitchCount+1];
-				} else {
-					notesToPlay = new Note[pitchCount];
-				}
-				double basePitch = pitch.getDouble(pitch.getColumnIndex("frequency"));
-				pitchesToSing.add(LetterNotes.freqToNoteSpec(basePitch));
-				notesToPlay[0] = new Note(basePitch, nextEvent.duration/(double) pitchCount);
-				for (int i = 1; i < pitchCount; i++){
-					int steps = (int) (intervals.get(i)*2);
-					double freq = basePitch*Math.pow(LetterNotes.stepVal,steps); 
-					pitchesToSing.add(LetterNotes.freqToNoteSpec(freq));
-					notesToPlay[i] = new Note(freq, nextEvent.duration/(double) pitchCount);
-				}
-				if (pitchCount > 1){
-					notesToPlay[pitchCount] = new Note(basePitch, 1);
-				}
-				nextEvent.notesToPlay = notesToPlay;
-				nextEvent.pitchesToSing = pitchesToSing;
+				setEvent(nextEvent, lessonType, pitch);
+			} else {
+				getNextEvent();
 			}
 		}
 		myDbHelper.close();
 		return nextEvent;
 	}
+	
+	private void setEvent(Event nextEvent, Cursor lessonType, Cursor pitch){
+		nextEvent.lessonId = lessonType.getLong(lessonType.getColumnIndex("_id"));
+		nextEvent.pitchId = pitch.getLong(pitch.getColumnIndex("_id"));
+		nextEvent.name = pitch.getString(pitch.getColumnIndex("name"))+" "+lessonType.getString(lessonType.getColumnIndex("name"));
+		nextEvent.duration = lessonType.getInt(lessonType.getColumnIndex("duration"));
+		int pitchCount = lessonType.getInt(lessonType.getColumnIndex("pitchCount"));
+		ArrayList<String> pitchesToSing = new ArrayList<String>(pitchCount);
+		ArrayList<Float> intervals = deserializeIntervalList(lessonType.getString(lessonType.getColumnIndex("intervals")));
+		Note[] notesToPlay;
+		if (pitchCount>1){
+			notesToPlay = new Note[pitchCount+1];
+		} else {
+			notesToPlay = new Note[pitchCount];
+		}
+		double basePitch = pitch.getDouble(pitch.getColumnIndex("frequency"));
+		pitchesToSing.add(LetterNotes.freqToNoteSpec(basePitch));
+		notesToPlay[0] = new Note(basePitch, nextEvent.duration/(double) pitchCount);
+		for (int i = 1; i < pitchCount; i++){
+			int steps = (int) (intervals.get(i)*2);
+			double freq = basePitch*Math.pow(LetterNotes.stepVal,steps); 
+			pitchesToSing.add(LetterNotes.freqToNoteSpec(freq));
+			notesToPlay[i] = new Note(freq, nextEvent.duration/(double) pitchCount);
+		}
+		if (pitchCount > 1){
+			notesToPlay[pitchCount] = new Note(basePitch, 1);
+		}
+		nextEvent.notesToPlay = notesToPlay;
+		nextEvent.pitchesToSing = pitchesToSing;
+	}
+	
 
 	public void setVocalRange(double min, double max) {
 		if (!rangeIsSet) {
@@ -181,14 +188,33 @@ public class EventStream implements IPitchSource {
 	// Returns a Cursor whose first entity is the selected LessonType
 	private Cursor selectLesson(){
 		setDifficultyFromFile();
-		if (difficulty=="e"){
+		if (difficulty.equalsIgnoreCase("e")){
 			return myDbHelper.getLessonTypeEasy();
-		} else if (difficulty=="m"){
+		} else if (difficulty.equalsIgnoreCase("m")){
 			return myDbHelper.getLessonTypeMedium();
 		} else {
 			return myDbHelper.getAllLessonTypesOrderedRandom();
 		}
 	}
+	
+	public Cursor easyTest(){
+		myDbHelper.openDataBase();
+		return myDbHelper.getLessonTypeEasy();
+	}
+
+	public Cursor medTest(){
+		myDbHelper.openDataBase();
+		return myDbHelper.getLessonTypeMedium();
+	}
+	
+	public Cursor hardTest(){
+		myDbHelper.openDataBase();
+		return myDbHelper.getAllLessonTypesOrderedRandom();
+	}
+
+
+
+	
 
 	// Returns a Cursor whose first entity is the selected Pitch
 	private Cursor selectPitch(){

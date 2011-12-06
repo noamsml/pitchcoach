@@ -66,7 +66,7 @@ public class PitchGraphActivity extends PitchActivityFramework {
 	Iterator<String> pitches;
 	private void addEvent() {
 		if (curEvent == null) {
-			do { //HACK NATHAN FIX YOUR SHIT
+			do {
 				curEvent = new Event(myEventStream.getNextEvent());
 				if (curEvent.pitchesToSing == null) Log.d("PitchCoach", "Warning: null detected"); 
 			} while (curEvent.pitchesToSing == null);
