@@ -68,7 +68,7 @@ public class PitchGraphActivity extends PitchActivityFramework {
 		if (curEvent == null) {
 			do { //HACK NATHAN FIX YOUR SHIT
 				curEvent = new Event(myEventStream.getNextEvent());
-				if (curEvent.pitchesToSing == null) Log.d("PitchCoach", "Warning: null detected");
+				if (curEvent.pitchesToSing == null) Log.d("PitchCoach", "Warning: null detected"); 
 			} while (curEvent.pitchesToSing == null);
 			pitches = curEvent.pitchesToSing.iterator();
 			playmanager.addEventPart(pitches.next(), false, curEvent).then(this.play()).then(new Runnable() {
