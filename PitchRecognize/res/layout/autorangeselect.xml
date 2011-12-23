@@ -4,6 +4,19 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:weightSum="1">
-    <TextView android:layout_height="wrap_content" android:id="@+id/autoPitchText" android:text="3 more seconds!" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_width="wrap_content"></TextView>
-     <TextView android:layout_height="wrap_content" android:id="@+id/autopitchamt" android:text="Start singing!" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_width="wrap_content"></TextView>
+    <TextView android:layout_height="wrap_content" android:id="@+id/autoPitchText" android:text="Sing for 3 Seconds" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_width="wrap_content"></TextView>
+
+    <ProgressBar
+        android:id="@+id/singBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="416dp"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/autopitchamt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start singing!"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
     </LinearLayout>

@@ -14,10 +14,6 @@
 		android:layout_height="wrap_content" android:layout_alignParentRight="true"
 		android:layout_marginTop="100sp" android:layout_marginRight="10sp"
 		android:background="@drawable/learnbutton" />
-	<Button android:id="@+id/tuneBtn" android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:layout_alignParentRight="true"
-		android:layout_marginTop="150sp" android:layout_marginRight="10sp"
-		android:background="@drawable/tunebutton" />
 	<Button android:id="@+id/settingsBtn" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:layout_alignParentRight="true"
 		android:layout_marginTop="200sp" android:layout_marginRight="10sp"

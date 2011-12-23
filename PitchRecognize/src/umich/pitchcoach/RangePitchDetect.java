@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class RangePitchDetect extends Activity implements IPitchReciever {
@@ -26,7 +27,8 @@ public class RangePitchDetect extends Activity implements IPitchReciever {
 	private double secHighestPitch = 20;
 	private double timer = 0.0;
 	private char lowHigh = 'l';
-
+	private ProgressBar progress;
+		
 
 	private double roundToNearest(double val, double to)
 	{
@@ -40,25 +42,25 @@ public class RangePitchDetect extends Activity implements IPitchReciever {
 		pitchDisplay = (TextView)findViewById(R.id.autopitchamt);
 		timeLeft = (TextView)findViewById(R.id.autoPitchText);
 		pitchService = new PitchThreadSpawn();
-
+		progress = (ProgressBar)findViewById(R.id.singBar);
+		progress.setMax(100);
+		progress.setProgress(0);
 
 		handler = new Handler();
 	}
 
 	@Override
 	public void receivePitch(double pitch, double time) {
-		pitchDisplay.setText(Double.toString(
-				roundToNearest(pitch,6)
+		pitchDisplay.setText(
+				LetterNotes.freqToNoteSpec(pitch)
 				//pitch
-				));
+				);
 
 		timer = timer + time;
-		if(timer < 2.0 && timer >= 1.0)
-			timeLeft.setText("2 more seconds!");
-		else if(timer <= 3.0 && timer >= 2.0)
-			timeLeft.setText("1 more second!");
-		else if (timer > 3.0) {
-			timeLeft.setText("0 more seconds!");
+		
+		progress.setProgress((int)(timer/3.0 * 100));
+		
+		if (timer > 3.0) {
 			if(lowHigh == 'l')
 				dialogAndReset(secLowestPitch);
 			else
@@ -82,10 +84,10 @@ public class RangePitchDetect extends Activity implements IPitchReciever {
 
 	private void dialogAndReset(double pitch) {
 		timer = 0;
-		timeLeft.setText("3 more seconds!");
+		progress.setProgress(0);
 		pitchService.stopPitchService();
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage("The lowest pitch you sang is "+roundToNearest(pitch,6)+ " Hz. Continue to your high range?")
+		builder.setMessage("The lowest pitch you sang is "+LetterNotes.freqToNoteSpec(pitch)+ ". Continue to your high range?")
 		.setCancelable(false)
 		.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
@@ -122,7 +124,7 @@ public class RangePitchDetect extends Activity implements IPitchReciever {
 				}
 			});
 		} else {
-			builder.setMessage("The highest pitch you sang is "+roundToNearest(pitch,6)+ " Hz. Are you finished?")
+			builder.setMessage("The highest pitch you sang is "+LetterNotes.freqToNoteSpec(pitch)+ ". Are you finished?")
 			.setCancelable(false)
 			.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {

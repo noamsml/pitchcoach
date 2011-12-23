@@ -83,7 +83,7 @@ public class NotePlayer {
 										else thingsToDo.add(that);
 									}
 									
-								}, (int)(duration*1000));
+								}, (int)(duration*1000 + 100));
 							}
 						});
 					}
@@ -110,12 +110,12 @@ public class NotePlayer {
 		// fill out the array
 		
 		Wave w;
-		/*
+		
 		w = new SineWave(sampleRate, 0.5, freqOfTone).add(new SineWave(sampleRate, 0.25, freqOfTone * 2)).add(
 				new SineWave(sampleRate, 0.2, freqOfTone * 3)).add(new SineWave(sampleRate, 0.05, freqOfTone * 4)
-				).envelope(lenTime, 0.1);*/
+				).envelope(lenTime, 0.1);
 				
-		w = new SquareWave(sampleRate, 0.5, freqOfTone).envelope(lenTime, 0.1);
+		//w = new SquareWave(sampleRate, 0.5, freqOfTone).envelope(lenTime, 0.1);
 		w.synthWave(generatedSnd, startTime, lenTime);
 	}
 
