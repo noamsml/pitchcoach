@@ -39,4 +39,4 @@ I might try to do a better overview of the code later, but it's been over a year
 
 ## License
 
-The JTransforms code is under MPL/LGPL/GPL. Since I merely link with it, and don't include it directly, I can have most any license I want (?). Since that is the case, I prefer the famous "beer license": I hope you enjoy my code, and if you ever see me around, you're welcome to buy me a beer sometime.
+The JTransforms code is under MPL/LGPL/GPL. Since I merely link with it, and don't include it directly, I can have most any license I want (?). Since that is the case, I prefer the famous "beer license": I hope you enjoy our code, and if you ever see us around, you're welcome to buy us a beer sometime.
