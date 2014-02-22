@@ -53,6 +53,7 @@ public class PitchThread extends Thread {
 		}
 		
 		audioRec.stop();
+		audioRec.release();
 	}
 	
 	public void onPitch(final double pitch, final double duration)
