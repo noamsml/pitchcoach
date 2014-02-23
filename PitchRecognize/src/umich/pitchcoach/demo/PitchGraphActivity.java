@@ -44,19 +44,19 @@ public class PitchGraphActivity extends PitchActivityFramework {
 
 		super.onCreate(savedInstanceState);
 
-		playmanager.begin().then(
-				new DialogPromise(this, "Get ready to Sing!")	
-				).then(this.play()).then(new Runnable() {
-			public void run() {
-				playLoop();
-			}
-		}).go();
+		playmanager.begin().then(new DialogPromise(this, "Get ready to Sing!"))
+				.then(this.play()).then(new Runnable() {
+					public void run() {
+						playLoop();
+					}
+				}).go();
 	}
 
-
 	private void playLoop() {
-		if (lifebar.isWin()) onWin();
-		else if (lifebar.isDeath()) onDeath();
+		if (lifebar.isWin())
+			onWin();
+		else if (lifebar.isDeath())
+			onDeath();
 		else {
 			addEvent();
 		}
@@ -64,25 +64,29 @@ public class PitchGraphActivity extends PitchActivityFramework {
 
 	private Event curEvent = null;
 	Iterator<String> pitches;
+
 	private void addEvent() {
 		if (curEvent == null) {
 			do {
 				curEvent = new Event(myEventStream.getNextEvent());
-				if (curEvent.pitchesToSing == null) Log.d("PitchCoach", "Warning: null detected"); 
+				if (curEvent.pitchesToSing == null)
+					Log.d("PitchCoach", "Warning: null detected");
 			} while (curEvent.pitchesToSing == null);
 			pitches = curEvent.pitchesToSing.iterator();
-			playmanager.addEventPart(pitches.next(), false, curEvent).then(this.play()).then(new Runnable() {
-				public void run() {
-					addEvent();
-				}
-			}).go();
+			playmanager.addEventPart(pitches.next(), false, curEvent)
+					.then(this.play()).then(new Runnable() {
+						public void run() {
+							addEvent();
+						}
+					}).go();
 		} else {
 			if (pitches.hasNext()) {
-				playmanager.addEventPart(pitches.next(), true, curEvent).then(this.play()).then(new Runnable() {
-					public void run() {
-						addEvent();
-					}
-				}).go();
+				playmanager.addEventPart(pitches.next(), true, curEvent)
+						.then(this.play()).then(new Runnable() {
+							public void run() {
+								addEvent();
+							}
+						}).go();
 			} else {
 				curEvent = null;
 				playLoop();
@@ -92,15 +96,18 @@ public class PitchGraphActivity extends PitchActivityFramework {
 	}
 
 	public void updateIncidentalUI(double pitch, double timeInSeconds) {
-		if (playmanager.currentGraph().isCurrentlyCorrect()) this.lifebar.addLives(timeInSeconds * 3);
-		else this.lifebar.addLives(timeInSeconds * -1);
+		if (playmanager.currentGraph().isCurrentlyCorrect())
+			this.lifebar.addLives(timeInSeconds * 3);
+		else
+			this.lifebar.addLives(timeInSeconds * -1);
 
 	}
 
 	private void onDeath() {
 		AlertDialog deathAlert;
 		deathAlert = new AlertDialog.Builder(this).create();
-		deathAlert.setMessage("You ran out of life. Might wanna keep that day job.");
+		deathAlert
+				.setMessage("You ran out of life. Might wanna keep that day job.");
 		deathAlert.setTitle("You died");
 
 		buttonify(deathAlert, "Try Again");
@@ -117,24 +124,25 @@ public class PitchGraphActivity extends PitchActivityFramework {
 
 			}
 		});
-		dialog.setButton(AlertDialog.BUTTON_POSITIVE, againMessage, new DialogInterface.OnClickListener() {
+		dialog.setButton(AlertDialog.BUTTON_POSITIVE, againMessage,
+				new DialogInterface.OnClickListener() {
 
-			@Override
-			public void onClick(DialogInterface arg0, int arg1) {
-				Intent myIntent = new Intent(getApplicationContext(), PitchGraphActivity.class);
-				startActivity(myIntent);
-			}
-		}
-				);
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						Intent myIntent = new Intent(getApplicationContext(),
+								PitchGraphActivity.class);
+						startActivity(myIntent);
+					}
+				});
 
+		dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Back to Menu",
+				new DialogInterface.OnClickListener() {
 
-		dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Back to Menu", new DialogInterface.OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface arg0, int arg1) {
-				finish();
-			}
-		});
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						finish();
+					}
+				});
 	}
 
 	private void onWin() {

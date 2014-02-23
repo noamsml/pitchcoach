@@ -1,6 +1,5 @@
 package umich.pitchcoach.flow;
 
-
 import android.content.Context;
 import android.os.Handler;
 import umich.pitchcoach.data.Event;
@@ -16,21 +15,26 @@ abstract public class PlayManager implements IRenderNotify {
 	protected IPitchSource eventstream;
 	private IPitchReciever callback;
 	private RenderThreadManager renderThreadManager;
-	protected Context context; 
+	protected Context context;
 	Promise currentPlay;
-	
+
 	public PlayManager(Context context, IPitchSource eventstream) {
 		this.eventstream = eventstream;
 		this.context = context;
 		renderThreadManager = new RenderThreadManager(new Handler(), this);
 	}
-	
+
 	public abstract Promise begin();
+
 	public abstract Promise addGraph(boolean silent);
-	public abstract Promise addEventPart(String nextPitch, boolean silenced, Event currentEvent);
+
+	public abstract Promise addEventPart(String nextPitch, boolean silenced,
+			Event currentEvent);
+
 	public abstract GraphContainer currentGraph();
+
 	public abstract GraphContainer nextGraph();
-	
+
 	public Promise play() {
 		return new Promise() {
 			public void go() {
@@ -39,10 +43,9 @@ abstract public class PlayManager implements IRenderNotify {
 				currentPlay = this;
 			}
 		};
-	} 
-	
-	public void setCallback(IPitchReciever callback)
-	{
+	}
+
+	public void setCallback(IPitchReciever callback) {
 		this.callback = callback;
 	}
 
@@ -52,18 +55,20 @@ abstract public class PlayManager implements IRenderNotify {
 		if (currentGraph().isDone()) {
 			renderThreadManager.stopRenderThread();
 			currentGraph().makeDone();
-			if (currentPlay != null) currentPlay.done();
+			if (currentPlay != null)
+				currentPlay.done();
 			currentPlay = null;
 		}
 		this.callback.receivePitch(pitch, time);
 	}
-	
+
 	public void pause() {
 		renderThreadManager.stopRenderThread();
 	}
-	
+
 	public void unpause() {
-		if (currentPlay != null) renderThreadManager.startRenderThread(currentGraph());
-	}	
-	
+		if (currentPlay != null)
+			renderThreadManager.startRenderThread(currentGraph());
+	}
+
 }

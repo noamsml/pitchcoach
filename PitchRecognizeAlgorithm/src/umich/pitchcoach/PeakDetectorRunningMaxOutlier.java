@@ -1,18 +1,16 @@
 package umich.pitchcoach;
 
-
 abstract public class PeakDetectorRunningMaxOutlier implements IPeakDetector {
 	float[] data;
 	int offset;
 	int endoffset;
 	int currentLoc;
-	private static final int SAMPLES_THRES=20;
-	
-	private int sampthres(int loc)
-	{
+	private static final int SAMPLES_THRES = 20;
+
+	private int sampthres(int loc) {
 		return SAMPLES_THRES;
 	}
-	
+
 	@Override
 	public void prepareData(float[] data, int offset, int endoffset) {
 		this.data = data;
@@ -24,24 +22,21 @@ abstract public class PeakDetectorRunningMaxOutlier implements IPeakDetector {
 	@Override
 	public int findNextPeak() {
 		int currentMax = this.currentLoc;
-		while (currentLoc < endoffset)
-		{
-			if (data[currentLoc] >= data[currentMax])
-			{
+		while (currentLoc < endoffset) {
+			if (data[currentLoc] >= data[currentMax]) {
 				currentMax = currentLoc;
-				
+
 			}
-			
-			if (currentLoc - currentMax > sampthres(currentMax) && isOutlier(data[currentMax]))
-			{
+
+			if (currentLoc - currentMax > sampthres(currentMax)
+					&& isOutlier(data[currentMax])) {
 				return currentMax;
-				
+
 			}
 			currentLoc++;
 		}
 		return -1;
 	}
 
-	
 	abstract protected boolean isOutlier(float data);
 }

@@ -11,7 +11,6 @@ import android.widget.ProgressBar;
 
 public class LifeBar extends ProgressBar {
 
-	
 	private double lives;
 
 	public LifeBar(Context context, AttributeSet attributes) {
@@ -24,40 +23,47 @@ public class LifeBar extends ProgressBar {
 
 	@Override
 	public void setProgressDrawable(Drawable d) {
-		//Thanks to the magic of StackOverflow for this one
+		// Thanks to the magic of StackOverflow for this one
 		if (this.getProgressDrawable() != null) {
 			Rect bounds = this.getProgressDrawable().getBounds();
 			super.setProgressDrawable(d);
 			this.getProgressDrawable().setBounds(bounds);
-		}
-		else super.setProgressDrawable(d);
+		} else
+			super.setProgressDrawable(d);
 	}
 
 	@Override
 	public synchronized void setProgress(int progress) {
-		if (progress < 20) this.setProgressDrawable(getContext().getResources().getDrawable(R.drawable.red_progress));
-		else if (progress < 50) this.setProgressDrawable(getContext().getResources().getDrawable(R.drawable.orange_progress));
-		else if (progress < 70) this.setProgressDrawable(getContext().getResources().getDrawable(R.drawable.yellow_progress));
-		else this.setProgressDrawable(getContext().getResources().getDrawable(R.drawable.green_progress));
+		if (progress < 20)
+			this.setProgressDrawable(getContext().getResources().getDrawable(
+					R.drawable.red_progress));
+		else if (progress < 50)
+			this.setProgressDrawable(getContext().getResources().getDrawable(
+					R.drawable.orange_progress));
+		else if (progress < 70)
+			this.setProgressDrawable(getContext().getResources().getDrawable(
+					R.drawable.yellow_progress));
+		else
+			this.setProgressDrawable(getContext().getResources().getDrawable(
+					R.drawable.green_progress));
 		super.setProgress(progress);
-		
+
 	}
-	
-	public boolean isWin()
-	{
+
+	public boolean isWin() {
 		return this.getProgress() >= 100;
 	}
-	
-	public boolean isDeath() 
-	{
+
+	public boolean isDeath() {
 		return this.getProgress() <= 0;
 	}
-	
-	public void addLives(double d)
-	{
+
+	public void addLives(double d) {
 		this.lives += d;
-		if (this.lives < 0) this.lives = 0;
-		else if (this.lives > 100) this.lives = 100;
-		this.setProgress((int)this.lives);
+		if (this.lives < 0)
+			this.lives = 0;
+		else if (this.lives > 100)
+			this.lives = 100;
+		this.setProgress((int) this.lives);
 	}
 }

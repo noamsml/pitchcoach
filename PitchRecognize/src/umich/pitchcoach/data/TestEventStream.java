@@ -14,8 +14,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class TestEventStream extends Activity {
-	
+
 	private TextView pitchText;
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -29,21 +30,24 @@ public class TestEventStream extends Activity {
 			public void onClick(View view) {
 				Event myEvent = myStream.getNextEvent();
 				String results = "";
-				if (myStream.easyTest()!=null) results+="easy PASS ";
-				if (myStream.medTest()!=null) results+="med PASS ";
-				if (myStream.hardTest()!=null) results+="hard PASS";
+				if (myStream.easyTest() != null)
+					results += "easy PASS ";
+				if (myStream.medTest() != null)
+					results += "med PASS ";
+				if (myStream.hardTest() != null)
+					results += "hard PASS";
 				pitchText.setText(results);
 			}
 		});
 
 	}
 
-	public void readEvent(Event myEvent){				
+	public void readEvent(Event myEvent) {
 		String pitchList = "";
 		Iterator<String> pitchIterator = myEvent.pitchesToSing.iterator();
-		while (pitchIterator.hasNext()){
-			pitchList+=(" "+pitchIterator.next());
+		while (pitchIterator.hasNext()) {
+			pitchList += (" " + pitchIterator.next());
 		}
-		pitchText.setText("Name: "+ myEvent.name+"\nPitch(es):"+ pitchList);
+		pitchText.setText("Name: " + myEvent.name + "\nPitch(es):" + pitchList);
 	}
 }

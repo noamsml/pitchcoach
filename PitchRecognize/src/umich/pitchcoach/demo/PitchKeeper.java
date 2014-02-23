@@ -10,17 +10,17 @@ import umich.pitchcoach.dataAdapt.IPitchSource;
  * A class to keep pitches.
  */
 public class PitchKeeper implements IPitchSource {
-	
+
 	private ArrayList<String> storedPitches;
-	
+
 	// Store a List of Strings
-	public PitchKeeper(ArrayList<String> pitches){
-		storedPitches =  new ArrayList<String>(pitches.size());
+	public PitchKeeper(ArrayList<String> pitches) {
+		storedPitches = new ArrayList<String>(pitches.size());
 		for (String pitch : pitches) {
 			storedPitches.add(new String(pitch));
 		}
 	}
-	
+
 	// Return a random String from the storedPitches
 	public String getNextPitch() {
 		Random randomNumGen = new Random();
@@ -28,8 +28,8 @@ public class PitchKeeper implements IPitchSource {
 		int randInt = randomNumGen.nextInt(numPitches);
 		return storedPitches.get(randInt);
 	}
-	
+
 	public Event getNextEvent() throws UnsupportedOperationException {
 		return null;
-	}	
+	}
 }

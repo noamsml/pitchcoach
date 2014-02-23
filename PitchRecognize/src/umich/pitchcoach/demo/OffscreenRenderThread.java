@@ -17,10 +17,10 @@ public class OffscreenRenderThread extends Thread implements IPitchReciever {
 	public Lock handlerLock;
 	public Condition handlerCond;
 	public Handler receivingHandler;
-	public IRenderNotify renderNotify; 
-	
-	public OffscreenRenderThread(Handler receivingHandler, IRenderNotify renderNotify, IImageSourceSource sourceSource)
-	{
+	public IRenderNotify renderNotify;
+
+	public OffscreenRenderThread(Handler receivingHandler,
+			IRenderNotify renderNotify, IImageSourceSource sourceSource) {
 		handlerLock = new ReentrantLock();
 		handlerCond = handlerLock.newCondition();
 		this.receivingHandler = receivingHandler;
@@ -28,7 +28,8 @@ public class OffscreenRenderThread extends Thread implements IPitchReciever {
 		this.sourceSource = sourceSource;
 		this.setName("Render Thread " + this.getId());
 	}
-		@Override
+
+	@Override
 	public void run() {
 		Looper.prepare();
 		handlerLock.lock();
@@ -39,13 +40,13 @@ public class OffscreenRenderThread extends Thread implements IPitchReciever {
 	}
 
 	@Override
-	public synchronized void receivePitch(final double pitch, final double timeInSeconds) {
+	public synchronized void receivePitch(final double pitch,
+			final double timeInSeconds) {
 		final ImageSource image = getImage();
-		if (image != null) 
-		{
+		if (image != null) {
 			image.addDatapoint(pitch, timeInSeconds);
 		}
-		
+
 		receivingHandler.post(new Runnable() {
 
 			@Override
@@ -53,19 +54,21 @@ public class OffscreenRenderThread extends Thread implements IPitchReciever {
 				sourceSource.updateImage();
 				renderNotify.renderIsDone(pitch, timeInSeconds);
 			}
-			
+
 		});
-		
+
 	}
-	
+
 	private ImageSource getImage() {
-		if (this.sourceSource == null) return null;
+		if (this.sourceSource == null)
+			return null;
 		return this.sourceSource.getImageSource();
 	}
-	
-	public synchronized void setRenderElement(IImageSourceSource imageSourceSource) {
-		this.sourceSource =  imageSourceSource;
-		
+
+	public synchronized void setRenderElement(
+			IImageSourceSource imageSourceSource) {
+		this.sourceSource = imageSourceSource;
+
 	}
 
 }

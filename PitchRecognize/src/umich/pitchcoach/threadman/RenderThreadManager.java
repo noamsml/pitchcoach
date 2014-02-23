@@ -15,34 +15,36 @@ public class RenderThreadManager {
 	private Handler appHandler;
 	private IRenderNotify renderNotify;
 	private IImageSourceSource sourceSource;
-	
-	public RenderThreadManager(Handler h, IRenderNotify r)
-	{
+
+	public RenderThreadManager(Handler h, IRenderNotify r) {
 		this.appHandler = h;
 		this.renderNotify = r;
 		this.pitchservice = new PitchThreadSpawn();
 		renderThread = null;
 	}
-	
+
 	public void setRenderElement(IImageSourceSource sourceSource) {
 		this.sourceSource = sourceSource;
-		if (renderThread != null) renderThread.setRenderElement(sourceSource);
+		if (renderThread != null)
+			renderThread.setRenderElement(sourceSource);
 	}
 
 	public void diagnostics() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void startRenderThread(IImageSourceSource sourceSource) {
 		Log.v("RenderThread", "started " + sourceSource.toString());
-		//Figure out this clusterfuck sometime
-		if (renderThread == null)  { //LAMEFIX: Starting render thread multiple times doesn't work
+		// Figure out this clusterfuck sometime
+		if (renderThread == null) { // LAMEFIX: Starting render thread multiple
+									// times doesn't work
 			Log.v("RenderThread", "start allowed");
-			renderThread = new OffscreenRenderThread(this.appHandler, this.renderNotify, sourceSource);
+			renderThread = new OffscreenRenderThread(this.appHandler,
+					this.renderNotify, sourceSource);
 			renderThread.start();
-			
-			//ANDROID IS FUCKING RETARDED
+
+			// ANDROID IS FUCKING RETARDED
 			renderThread.handlerLock.lock();
 			while (renderThread.handler == null) {
 				try {
@@ -55,18 +57,19 @@ public class RenderThreadManager {
 			renderThread.handlerLock.unlock();
 		}
 	}
-	
+
 	public void stopRenderThread() {
 		Log.v("RenderThread", "stopped");
 		pitchservice.stopPitchService();
-		if (renderThread != null) renderThread.handler.post(new Runnable () {
+		if (renderThread != null)
+			renderThread.handler.post(new Runnable() {
 
-			@Override
-			public void run() {
-				Looper.myLooper().quit();
-			}
-			
-		});
+				@Override
+				public void run() {
+					Looper.myLooper().quit();
+				}
+
+			});
 		renderThread = null;
 	}
 }

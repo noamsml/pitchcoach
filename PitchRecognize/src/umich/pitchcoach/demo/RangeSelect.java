@@ -25,18 +25,20 @@ import android.widget.TextView;
 public class RangeSelect extends Activity {
 	/** Called when the activity is first created. */
 	public static FileOutputStream fos;
-	public static String FILENAME="singing_range.txt";
-	public static String DIFFICULTY_FILENAME="difficulty.txt";
+	public static String FILENAME = "singing_range.txt";
+	public static String DIFFICULTY_FILENAME = "difficulty.txt";
 	private int minFreq, maxFreq;
 	private NotePlayer noteplayer;
-	private Button bassSelect, tenorSelect, altoSelect, sopranoSelect, autoDetect, easySelect, mediumSelect, hardSelect, done;
+	private Button bassSelect, tenorSelect, altoSelect, sopranoSelect,
+			autoDetect, easySelect, mediumSelect, hardSelect, done;
 
 	private static String BASS_RANGE = "82 330";
 	private static String TENOR_RANGE = "130 523";
 	private static String ALTO_RANGE = "196 660";
 	private static String SOPRANO_RANGE = "262 1047";
-	
+
 	TextView thisTxt;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,49 +48,53 @@ public class RangeSelect extends Activity {
 
 		thisTxt = (TextView) findViewById(R.id.changeTxt);
 
-		bassSelect = (Button) findViewById(R.id.bassBtn);    
+		bassSelect = (Button) findViewById(R.id.bassBtn);
 		bassSelect.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				minFreq = 82; // E2
 				maxFreq = 330; // E4
-				noteplayer.playNote(minFreq, 1).then(noteplayer.playNote(maxFreq, 1)).go();
+				noteplayer.playNote(minFreq, 1)
+						.then(noteplayer.playNote(maxFreq, 1)).go();
 				writeContent(BASS_RANGE, FILENAME);
 				setVocalRange(bassSelect);
 			}
 		});
 
-		tenorSelect = (Button) findViewById(R.id.tenorBtn);    
+		tenorSelect = (Button) findViewById(R.id.tenorBtn);
 		tenorSelect.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				minFreq = 130; // C3
 				maxFreq = 523; // C5
-				noteplayer.playNote(minFreq, 1).then(noteplayer.playNote(maxFreq, 1)).go();
+				noteplayer.playNote(minFreq, 1)
+						.then(noteplayer.playNote(maxFreq, 1)).go();
 				writeContent(TENOR_RANGE, FILENAME);
 				setVocalRange(tenorSelect);
 			}
 		});
 
-		altoSelect = (Button) findViewById(R.id.altoBtn);    
+		altoSelect = (Button) findViewById(R.id.altoBtn);
 		altoSelect.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				minFreq = 196; // G3
 				maxFreq = 660; // E5
-				noteplayer.playNote(minFreq, 1).then(noteplayer.playNote(maxFreq, 1)).go();
+				noteplayer.playNote(minFreq, 1)
+						.then(noteplayer.playNote(maxFreq, 1)).go();
 				writeContent(ALTO_RANGE, FILENAME);
 				setVocalRange(altoSelect);
 			}
 		});
-		
-		sopranoSelect = (Button) findViewById(R.id.sopranoBtn);    
+
+		sopranoSelect = (Button) findViewById(R.id.sopranoBtn);
 		sopranoSelect.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				minFreq = 262; // C4
 				maxFreq = 1047; // C6
-				noteplayer.playNote(minFreq, 1).then(noteplayer.playNote(maxFreq, 1)).go();
+				noteplayer.playNote(minFreq, 1)
+						.then(noteplayer.playNote(maxFreq, 1)).go();
 				writeContent(SOPRANO_RANGE, FILENAME);
 				setVocalRange(sopranoSelect);
 			}
@@ -98,12 +104,13 @@ public class RangeSelect extends Activity {
 		autoDetect.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Intent myIntent = new Intent(view.getContext(), RangePitchDetect.class);
+				Intent myIntent = new Intent(view.getContext(),
+						RangePitchDetect.class);
 				startActivityForResult(myIntent, 0);
 			}
 		});
 
-		done = (Button) findViewById(R.id.doneBtn);    
+		done = (Button) findViewById(R.id.doneBtn);
 		done.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -111,7 +118,7 @@ public class RangeSelect extends Activity {
 			}
 		});
 
-		easySelect = (Button) findViewById(R.id.easyBtn);    
+		easySelect = (Button) findViewById(R.id.easyBtn);
 		easySelect.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -120,7 +127,7 @@ public class RangeSelect extends Activity {
 			}
 		});
 
-		mediumSelect = (Button) findViewById(R.id.mediumBtn);    
+		mediumSelect = (Button) findViewById(R.id.mediumBtn);
 		mediumSelect.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -129,7 +136,7 @@ public class RangeSelect extends Activity {
 			}
 		});
 
-		hardSelect = (Button) findViewById(R.id.hardBtn);    
+		hardSelect = (Button) findViewById(R.id.hardBtn);
 		hardSelect.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -137,40 +144,42 @@ public class RangeSelect extends Activity {
 				setDifficulty(hardSelect);
 			}
 		});
-		
+
 		loadSelected();
 	}
-	
-	private void loadSelected(){
+
+	private void loadSelected() {
 		StringBuilder inb = new StringBuilder();
 		try {
 			FileInputStream fis = openFileInput(DIFFICULTY_FILENAME);
 			int ch;
-			while((ch = fis.read()) != -1)
-				inb.append((char)ch);
-			if (inb.toString().length()==0 || inb.toString().equalsIgnoreCase("e")){
+			while ((ch = fis.read()) != -1)
+				inb.append((char) ch);
+			if (inb.toString().length() == 0
+					|| inb.toString().equalsIgnoreCase("e")) {
 				setDifficulty(easySelect);
-			} else if (inb.toString().equalsIgnoreCase("m")){
+			} else if (inb.toString().equalsIgnoreCase("m")) {
 				setDifficulty(mediumSelect);
-			} else if (inb.toString().equalsIgnoreCase("h")){
+			} else if (inb.toString().equalsIgnoreCase("h")) {
 				setDifficulty(hardSelect);
 			} else {
 				setDifficulty(easySelect);
 			}
 			fis.close();
 			fis = openFileInput(FILENAME);
-			
+
 			inb = new StringBuilder();
-			while((ch = fis.read()) != -1)
-				inb.append((char)ch);
-			
-			if (inb.toString().length()==0 || inb.toString().equalsIgnoreCase(BASS_RANGE)){
+			while ((ch = fis.read()) != -1)
+				inb.append((char) ch);
+
+			if (inb.toString().length() == 0
+					|| inb.toString().equalsIgnoreCase(BASS_RANGE)) {
 				setVocalRange(bassSelect);
-			} else if (inb.toString().equalsIgnoreCase(TENOR_RANGE)){
+			} else if (inb.toString().equalsIgnoreCase(TENOR_RANGE)) {
 				setVocalRange(tenorSelect);
-			} else if (inb.toString().equalsIgnoreCase(ALTO_RANGE)){
+			} else if (inb.toString().equalsIgnoreCase(ALTO_RANGE)) {
 				setVocalRange(altoSelect);
-			} else if (inb.toString().equalsIgnoreCase(SOPRANO_RANGE)){
+			} else if (inb.toString().equalsIgnoreCase(SOPRANO_RANGE)) {
 				setVocalRange(sopranoSelect);
 			} else {
 			}
@@ -185,33 +194,20 @@ public class RangeSelect extends Activity {
 		}
 	}
 
+	/*
+	 * Button loadMe = (Button) findViewById(R.id.loadMe);
+	 * loadMe.setOnClickListener(new OnClickListener() {
+	 * 
+	 * @Override public void onClick(View view) { StringBuilder inb = new
+	 * StringBuilder(); try { FileInputStream fis = openFileInput(FILENAME); int
+	 * ch; while((ch = fis.read()) != -1) inb.append((char)ch);
+	 * thisTxt.setText("'"+inb+"'"+" was read from file"); fis.close(); } catch
+	 * (FileNotFoundException e) { // TODO Auto-generated catch block
+	 * e.printStackTrace(); } catch (IOException e) { // TODO Auto-generated
+	 * catch block e.printStackTrace(); } } });
+	 */
 
-    
-    /*
-    Button loadMe = (Button) findViewById(R.id.loadMe);    
-    loadMe.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        StringBuilder inb = new StringBuilder();
-        try {
-          FileInputStream fis = openFileInput(FILENAME);
-          int ch;
-          while((ch = fis.read()) != -1)
-            inb.append((char)ch);
-          thisTxt.setText("'"+inb+"'"+" was read from file");
-          fis.close();
-        } catch (FileNotFoundException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (IOException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        }
-      }
-    });*/
-
-
-	private void setVocalRange(Button desiredRange){
+	private void setVocalRange(Button desiredRange) {
 		bassSelect.setSelected(false);
 		sopranoSelect.setSelected(false);
 		tenorSelect.setSelected(false);
@@ -219,13 +215,12 @@ public class RangeSelect extends Activity {
 		desiredRange.setSelected(true);
 	}
 
-	private void setDifficulty(Button desiredDifficulty){
+	private void setDifficulty(Button desiredDifficulty) {
 		easySelect.setSelected(false);
 		mediumSelect.setSelected(false);
 		hardSelect.setSelected(false);
 		desiredDifficulty.setSelected(true);
 	}
-
 
 	private void writeContent(String toWrite, String filename) {
 		try {

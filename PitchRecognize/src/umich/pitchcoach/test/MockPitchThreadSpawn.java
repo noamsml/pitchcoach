@@ -12,20 +12,21 @@ public class MockPitchThreadSpawn implements IPitchServiceController {
 	private MockPitchThread thread;
 	private int resid;
 	private Resources resources;
-	
+
 	public MockPitchThreadSpawn(int resid, Resources resources) {
 		thread = null;
 		this.resid = resid;
 		this.resources = resources;
 	}
-	
+
 	@Override
 	public void startPitchService(IPitchReciever callback, Handler handler) {
 		if (thread != null) {
 			stopPitchService();
-			Log.w("Pitch Service Controller", "Pitch service started while another pitch service is running. This is bad practice.");
+			Log.w("Pitch Service Controller",
+					"Pitch service started while another pitch service is running. This is bad practice.");
 		}
-		
+
 		thread = new MockPitchThread(resources.getXml(resid), callback, handler);
 		thread.start();
 

@@ -16,7 +16,7 @@ public class SpikeEliminationVerifier {
 		System.out.println(elim.getSmoothedSample(2.6f));
 		System.out.println(elim.getSmoothedSample(0.5f));
 		System.out.println(elim.getSmoothedSample(0.7f));
-		System.out.println(elim.getSmoothedSample(0.4f));	
+		System.out.println(elim.getSmoothedSample(0.4f));
 	}
 
 }

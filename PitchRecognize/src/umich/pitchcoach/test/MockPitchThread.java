@@ -14,29 +14,26 @@ public class MockPitchThread extends Thread {
 	IPitchReciever notifyRecv;
 	Handler receivingHandler;
 	XmlResourceParser xmlFile;
-	
-	//float[] dataBuffer;
+
+	// float[] dataBuffer;
 	public final int RATE = 44100;
 	public final int NUMSAMPLES = 256;
 	public boolean done;
-	
-	public MockPitchThread(XmlResourceParser xmlFile, IPitchReciever notifyRecv, Handler receivingHandler)	
-	{
+
+	public MockPitchThread(XmlResourceParser xmlFile,
+			IPitchReciever notifyRecv, Handler receivingHandler) {
 		this.notifyRecv = notifyRecv;
 		done = false;
-		this.receivingHandler = receivingHandler; 
+		this.receivingHandler = receivingHandler;
 		this.xmlFile = xmlFile;
-		
+
 	}
-	
+
 	public void run() {
 		try {
-			while (xmlFile.getEventType() != XmlPullParser.END_DOCUMENT)
-			{
-				if (xmlFile.getEventType() == XmlPullParser.START_TAG)
-				{
-					if (xmlFile.getName().equals("event"))
-					{
+			while (xmlFile.getEventType() != XmlPullParser.END_DOCUMENT) {
+				if (xmlFile.getEventType() == XmlPullParser.START_TAG) {
+					if (xmlFile.getName().equals("event")) {
 						handleEvent(xmlFile);
 					}
 				}
@@ -48,81 +45,65 @@ public class MockPitchThread extends Thread {
 			Log.e("MockPitchThread", "IO Error");
 		} catch (InterruptedException e) {
 			return;
-		}	
+		}
 	}
-	
-	//Note: This XML parser sucks
-	private void handleEvent(XmlPullParser xmlFile) throws XmlPullParserException, IOException, InterruptedException
-	{
+
+	// Note: This XML parser sucks
+	private void handleEvent(XmlPullParser xmlFile)
+			throws XmlPullParserException, IOException, InterruptedException {
 		String currentTagName = null;
 		int type = 1;
 		double pitch = 0;
 		double duration = 0;
-		
+
 		xmlFile.next();
-		while (true)
-		{
-			if (xmlFile.getEventType() == XmlPullParser.START_TAG)
-			{
+		while (true) {
+			if (xmlFile.getEventType() == XmlPullParser.START_TAG) {
 				currentTagName = xmlFile.getName();
-			}
-			else if (xmlFile.getEventType() == XmlPullParser.TEXT)
-			{
-				if (currentTagName.equals("type"))
-				{
-					if (xmlFile.getText().equals("pitch"))
-					{
+			} else if (xmlFile.getEventType() == XmlPullParser.TEXT) {
+				if (currentTagName.equals("type")) {
+					if (xmlFile.getText().equals("pitch")) {
 						type = 1;
 					}
 				}
-				
-				else if (currentTagName.equals("val"))
-				{
+
+				else if (currentTagName.equals("val")) {
 					pitch = Double.parseDouble(xmlFile.getText());
 				}
-				
-				else if (currentTagName.equals("length"))
-				{
+
+				else if (currentTagName.equals("length")) {
 					duration = Double.parseDouble(xmlFile.getText());
 				}
-			}
-			else if (xmlFile.getEventType() == XmlPullParser.END_TAG)
-			{
-				//Totally bad practice. Sue me.
-				if (xmlFile.getName().equals("event"))
-				{
+			} else if (xmlFile.getEventType() == XmlPullParser.END_TAG) {
+				// Totally bad practice. Sue me.
+				if (xmlFile.getName().equals("event")) {
 					break;
 				}
 			}
 			xmlFile.next();
 		}
-		
+
 		execEvent(type, pitch, duration);
 	}
-	
-	
-	private void execEvent(int type, double pitch, double duration) throws InterruptedException {
-		switch (type)
-		{
+
+	private void execEvent(int type, double pitch, double duration)
+			throws InterruptedException {
+		switch (type) {
 		case 1:
 			Thread.sleep(Math.round(duration * 1000));
 			onPitch(pitch, duration);
 		}
 	}
 
-	public void onPitch(final double pitch, final double length)
-	{
+	public void onPitch(final double pitch, final double length) {
 		receivingHandler.post(new Runnable() {
 
 			@Override
 			public void run() {
 				notifyRecv.receivePitch(pitch, length);
 			}
-			
-			
+
 		});
 	}
-	
-	
-	
+
 }

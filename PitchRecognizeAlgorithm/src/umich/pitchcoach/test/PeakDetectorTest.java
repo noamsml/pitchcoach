@@ -1,6 +1,5 @@
 package umich.pitchcoach.test;
 
-
 import umich.pitchcoach.*;
 
 public class PeakDetectorTest {
@@ -14,13 +13,11 @@ public class PeakDetectorTest {
 		float[] data = new float[1002];
 		sampleSource.readData(data);
 		int peak;
-		
+
 		detector.prepareData(data, 0, data.length);
-		while ((peak = detector.findNextPeak()) != -1)
-		{
+		while ((peak = detector.findNextPeak()) != -1) {
 			System.out.println(peak);
 		}
-		
 
 	}
 

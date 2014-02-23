@@ -14,11 +14,11 @@ public class PlayManagerScroll extends PlayManager {
 	private ScrollContainer scroller;
 	private GraphContainer currentGraph;
 	private GraphContainer nextGraph;
-		
-	public PlayManagerScroll(Context ctx, IPitchSource keeper, ScrollContainer scroller)
-	{
+
+	public PlayManagerScroll(Context ctx, IPitchSource keeper,
+			ScrollContainer scroller) {
 		super(ctx, keeper);
-		this.scroller = scroller; 
+		this.scroller = scroller;
 		currentGraph = nextGraph = null;
 	}
 
@@ -29,64 +29,66 @@ public class PlayManagerScroll extends PlayManager {
 
 	@Override
 	public Promise addGraph(final boolean silent) {
-		//Hack
+		// Hack
 		return new PromiseFactoryPromise(new IPromiseFactory() {
 			public Promise getPromise() {
-					String nextPitch = eventstream.getNextPitch();	
-					if (nextPitch == null) return new Promise() {
+				String nextPitch = eventstream.getNextPitch();
+				if (nextPitch == null)
+					return new Promise() {
 						public void go() {
 							currentGraph = nextGraph;
 							nextGraph = null;
 							done();
 						}
 					};
-					final GraphContainer next = new GraphContainer(context, nextPitch);
-					next.setSilence(silent);
-					return scroller.addElement(next).then(new Runnable() {
-						public void run()
-						{
-							currentGraph = nextGraph;
-							nextGraph = next;
-						}
-					});
-				}
-		});
-	}
-	
-	@Override
-	public Promise addEventPart(final String nextPitch, final boolean silenced, final Event currentEvent) {
-		return new PromiseFactoryPromise(new IPromiseFactory() {
-			public Promise getPromise() {	
-					if (nextPitch == null) return new Promise() {
-						public void go() {
-							currentGraph = nextGraph;
-							nextGraph = null;
-							done();
-						}
-					};
-					final GraphContainer next = new GraphContainer(context, nextPitch);
-					next.setSilence(silenced);
-					next.setEvent(currentEvent);
-					return scroller.addElement(next).then(new Runnable() {
-						public void run()
-						{
-							currentGraph = nextGraph;
-							nextGraph = next;
-						}
-					});
-				}
+				final GraphContainer next = new GraphContainer(context,
+						nextPitch);
+				next.setSilence(silent);
+				return scroller.addElement(next).then(new Runnable() {
+					public void run() {
+						currentGraph = nextGraph;
+						nextGraph = next;
+					}
+				});
+			}
 		});
 	}
 
-	
+	@Override
+	public Promise addEventPart(final String nextPitch, final boolean silenced,
+			final Event currentEvent) {
+		return new PromiseFactoryPromise(new IPromiseFactory() {
+			public Promise getPromise() {
+				if (nextPitch == null)
+					return new Promise() {
+						public void go() {
+							currentGraph = nextGraph;
+							nextGraph = null;
+							done();
+						}
+					};
+				final GraphContainer next = new GraphContainer(context,
+						nextPitch);
+				next.setSilence(silenced);
+				next.setEvent(currentEvent);
+				return scroller.addElement(next).then(new Runnable() {
+					public void run() {
+						currentGraph = nextGraph;
+						nextGraph = next;
+					}
+				});
+			}
+		});
+	}
+
 	@Override
 	public GraphContainer currentGraph() {
 		return currentGraph;
 	}
-	
+
 	@Override
 	public GraphContainer nextGraph() {
 		return nextGraph;
 	}
-	
+
 }

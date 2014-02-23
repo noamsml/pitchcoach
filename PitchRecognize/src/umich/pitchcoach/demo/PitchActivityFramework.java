@@ -24,64 +24,62 @@ public class PitchActivityFramework extends Activity {
 	protected PlayManagerScroll playmanager;
 	protected LifeBar lifebar;
 	protected NotePlayer noteplayer;
-	protected IPitchSource myEventStream; //for now
+	protected IPitchSource myEventStream; // for now
 	protected Button pauseButton;
-	
+
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mockui);
-		lifebar = (LifeBar)findViewById(R.id.lifebar);
-		graphcont = (ScrollContainer)findViewById(R.id.scroller);
-		pauseButton = (Button) findViewById(R.id.pauseBtn);		
-		
+		lifebar = (LifeBar) findViewById(R.id.lifebar);
+		graphcont = (ScrollContainer) findViewById(R.id.scroller);
+		pauseButton = (Button) findViewById(R.id.pauseBtn);
+
 		noteplayer = new NotePlayer();
-		playmanager = new PlayManagerScroll(getApplicationContext(), myEventStream, graphcont);	
+		playmanager = new PlayManagerScroll(getApplicationContext(),
+				myEventStream, graphcont);
 		playmanager.setCallback(new IPitchReciever() {
-			
+
 			@Override
 			public void receivePitch(double pitch, double timeInSeconds) {
 				updateIncidentalUI(pitch, timeInSeconds);
-			}		
-			
+			}
+
 		});
-		
+
 		pauseButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				renderPause();
 			}
-		});		
+		});
 
 	}
-	
-	protected void updateIncidentalUI(double pitch, double time)
-	{
+
+	protected void updateIncidentalUI(double pitch, double time) {
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
 		noteplayer.die();
 		playmanager.pause();
-		
+
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		playmanager.pause();
 	}
 
-	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		noteplayer.riseFromDead();
 		playmanager.unpause();
-		//else playCurrentGraph();
+		// else playCurrentGraph();
 	}
-	
+
 	protected Promise setListening() {
 		return new Promise() {
 			public void go() {
@@ -90,61 +88,71 @@ public class PitchActivityFramework extends Activity {
 			}
 		};
 	}
-	
+
 	protected Promise play() {
-			return setListening().then(new IPromiseFactory() {
-				public Promise getPromise(){
-					if (playmanager.currentGraph().isSilenced()){
-						return playmanager.play();
+		return setListening().then(new IPromiseFactory() {
+			public Promise getPromise() {
+				if (playmanager.currentGraph().isSilenced()) {
+					return playmanager.play();
+				} else {
+					if (playmanager.currentGraph().getEvent() == null) {
+						return noteplayer.playNote(
+								playmanager.currentGraph().getFrequency(), 1)
+								.then(playmanager.play());
 					} else {
-						if (playmanager.currentGraph().getEvent()==null){
-							return noteplayer.playNote(playmanager.currentGraph().getFrequency(),1).then(playmanager.play());
-						} else {
-							return noteplayer.playNote(playmanager.currentGraph().getEvent().notesToPlay).then(playmanager.play());
-						}
+						return noteplayer
+								.playNote(
+										playmanager.currentGraph().getEvent().notesToPlay)
+								.then(playmanager.play());
 					}
 				}
-			});
+			}
+		});
 	}
-	
+
 	public void renderPause() { // Use DialogFragments, perhaps?
-		
+
 		noteplayer.die();
 		playmanager.pause();
-		
+
 		final AlertDialog pauseAlert;
 		pauseAlert = new AlertDialog.Builder(this).create();
 		pauseAlert.setTitle("Paused");
 		final Activity that = this;
-		pauseAlert.setButton(AlertDialog.BUTTON_POSITIVE, "Restart" , new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface arg0, int arg1) {
-				finish();
-				Intent myIntent = new Intent(getApplicationContext(), that.getClass());
-				startActivity(myIntent);
-			}
-		});
-		pauseAlert.setButton(AlertDialog.BUTTON_NEUTRAL, "Resume" , new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface arg0, int arg1) {
-				pauseAlert.cancel();
-				renderUnPause();
-			}
-		});
-		pauseAlert.setOnDismissListener(new DialogInterface.OnDismissListener() {
-			
-			@Override
-			public void onDismiss(DialogInterface dialog) {
-				renderUnPause();
-			}
-		});
-		
-		pauseAlert.setButton(AlertDialog.BUTTON_NEGATIVE, "Back to Menu" , new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface arg0, int arg1) {
-				finish();
-			}
-		});
+		pauseAlert.setButton(AlertDialog.BUTTON_POSITIVE, "Restart",
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						finish();
+						Intent myIntent = new Intent(getApplicationContext(),
+								that.getClass());
+						startActivity(myIntent);
+					}
+				});
+		pauseAlert.setButton(AlertDialog.BUTTON_NEUTRAL, "Resume",
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						pauseAlert.cancel();
+						renderUnPause();
+					}
+				});
+		pauseAlert
+				.setOnDismissListener(new DialogInterface.OnDismissListener() {
+
+					@Override
+					public void onDismiss(DialogInterface dialog) {
+						renderUnPause();
+					}
+				});
+
+		pauseAlert.setButton(AlertDialog.BUTTON_NEGATIVE, "Back to Menu",
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						finish();
+					}
+				});
 		pauseAlert.show();
 	}
 
